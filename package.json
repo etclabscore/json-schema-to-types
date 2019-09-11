@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint --fix -p .",
-    "test": "npm run lint && jest --coverage"
+    "test": "npm run lint && jest --coverage --verbose"
   },
   "author": "",
   "license": "Apache-2.0",

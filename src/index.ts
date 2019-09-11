@@ -12,11 +12,10 @@ export class JsonSchemaToTypes {
     // 1. apply title where title is missing. Use content hash
     const schemaWithTitles = this.ensureSchemaTitles(s);
 
-    // 2. collect and ref all sub schemas
+    // 2. collect and ref all sub schemas (also uniques them)
     const reffedSchemas = this.collectAndRefSchemas(schemaWithTitles);
 
-    // 3. unique schemas
-    // 4.
+    // 3.
   }
 
   private getDefaultTitleForSchema(schema: Schema): string {
