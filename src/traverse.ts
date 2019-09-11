@@ -1,27 +1,43 @@
 import { Schema } from "@open-rpc/meta-schema";
 
 export type MutationFunction = (schema: Schema) => Schema;
+export interface TraverseOptions {
+  skipFirstMutation: boolean;
+}
 
-export default function traverse(schema: Schema, mutation: MutationFunction) {
-  const mutatableSchema: Schema = { ...schema };
+export const defaultOptions: TraverseOptions = {
+  skipFirstMutation: false,
+};
 
-  const rec = (s: Schema) => traverse(s, mutation);
+export default function traverse(
+  schema: Schema,
+  mutation: MutationFunction,
+  traverseOptions = defaultOptions,
+  depth = 0,
+) {
+  const mutableSchema: Schema = { ...schema };
+
+  const rec = (s: Schema) => traverse(s, mutation, traverseOptions, depth + 1);
 
   if (schema.anyOf) {
-    mutatableSchema.anyOf = schema.anyOf.map(rec);
+    mutableSchema.anyOf = schema.anyOf.map(rec);
   } else if (schema.allOf) {
-    mutatableSchema.allOf = schema.allOf.map(rec);
+    mutableSchema.allOf = schema.allOf.map(rec);
   } else if (schema.oneOf) {
-    mutatableSchema.oneOf = schema.oneOf.map(rec);
+    mutableSchema.oneOf = schema.oneOf.map(rec);
   } else if (schema.items) {
-    mutatableSchema.items = schema.items instanceof Array ? schema.items.map(rec) : traverse(schema.items, mutation);
+    mutableSchema.items = schema.items instanceof Array ? schema.items.map(rec) : traverse(schema.items, mutation);
   } else if (schema.properties) {
-    mutatableSchema.properties = Object.keys(schema.properties)
+    mutableSchema.properties = Object.keys(schema.properties)
       .reduce(
         (r: Schema, v: string) => ({ ...r, ...{ [v]: rec(schema.properties[v]) } }),
         {},
       );
   }
 
-  return mutation(mutatableSchema);
+  if (traverseOptions.skipFirstMutation === true && depth === 0) {
+    return mutableSchema;
+  } else {
+    return mutation(mutableSchema);
+  }
 }
