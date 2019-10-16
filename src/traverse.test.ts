@@ -12,17 +12,20 @@ describe("traverse", () => {
   });
 
   describe("basic functionality", () => {
-    const test = (prop: string, useVal = false) => {
+    const test = (prop: string, useVal?: any) => {
       const a = {};
       const b = {};
       const testSchema: any = {};
-      testSchema[prop] = useVal === false ? [a, b] : useVal;
+      testSchema[prop] = useVal ? useVal : [a, b];
       const mockMutation = jest.fn((mockS) => mockS);
 
       traverse(testSchema, mockMutation);
 
-      expect(mockMutation).toHaveBeenCalledWith(a);
-      if (useVal) { expect(mockMutation).toHaveBeenCalledWith(useVal); }
+      if (useVal) {
+        expect(mockMutation).toHaveBeenCalledWith(useVal);
+      } else {
+        expect(mockMutation).toHaveBeenCalledWith(a);
+      }
     };
 
     ["anyOf", "oneOf", "allOf"].forEach((prop) => {
@@ -30,7 +33,7 @@ describe("traverse", () => {
     });
 
     it("traverses items when items is ordered list", () => test("items"));
-    it("traverses items when items constrained to single schema", () => test("items", false));
+    it("traverses items when items constrained to single schema", () => test("items", { a: {}, b: {} }));
     it("traverses properties", () => {
       const testSchema: any = {
         properties: {

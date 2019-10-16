@@ -26,7 +26,11 @@ export default function traverse(
   } else if (schema.oneOf) {
     mutableSchema.oneOf = schema.oneOf.map(rec);
   } else if (schema.items) {
-    mutableSchema.items = schema.items instanceof Array ? schema.items.map(rec) : traverse(schema.items, mutation);
+    if (schema.items instanceof Array) {
+      mutableSchema.items = schema.items.map(rec);
+    } else {
+      mutableSchema.items = traverse(schema.items, mutation);
+    }
   } else if (schema.properties) {
     mutableSchema.properties = Object.keys(schema.properties)
       .reduce(

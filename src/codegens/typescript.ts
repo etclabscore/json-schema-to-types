@@ -1,40 +1,40 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen } from "./codegen-interface";
+import traverse from "../traverse";
 
-export default class Typescript implements CodeGen {
-
-  constructor(private schema: Schema) { }
-
-  public getTypes(schema: Schema) {
+export default class Typescript extends CodeGen {
+  public getTypes() {
     let prefix = "";
     let typing = "";
 
-    switch (schema.type) {
+    switch (this.schema.type) {
       case "boolean":
         prefix = "type";
-        typing = `boolean`;
+        typing = "boolean";
         break;
       case "null":
         prefix = "type";
-        typing = `null`;
+        typing = "null";
         break;
       case "number":
       case "integer":
         prefix = "type";
-        typing = `number`;
+        typing = "number";
+        if (this.schema.enum) { typing = this.handleEnum(); }
         break;
       case "string":
         prefix = "type";
-        typing = `string`;
+        typing = "string";
+        if (this.schema.enum) { typing = this.handleEnum(); }
         break;
       case "array":
         prefix = "type";
         let typedArray = "";
         let tupleItems = "";
-        if (schema.items instanceof Array) {
-          tupleItems = this.getJoinedTitles(schema.anyOf);
-        } else if (schema.items !== undefined) {
-          typedArray = schema.items.title;
+        if (this.schema.items instanceof Array) {
+          tupleItems = this.getJoinedTitles(this.schema.items);
+        } else if (this.schema.items !== undefined) {
+          typedArray = this.refToName(this.schema.items);
         } else {
           typedArray = "any";
         }
@@ -42,29 +42,43 @@ export default class Typescript implements CodeGen {
         break;
       case "object":
         prefix = "interface";
-        const propertyTypings = Object.keys(schema.properties).reduce((typings: string[], key: string) => {
-          return [...typings, `  ${key}: schema.properties[key].title`];
+        if (this.schema.properties === undefined) {
+          typing = "{ [key: string]: any }";
+          break;
+        }
+        const propertyTypings = Object.keys(this.schema.properties).reduce((typings: string[], key: string) => {
+          return [...typings, `  ${key}: ${this.refToName(this.schema.properties[key])};`];
         }, []);
         typing = [`{`, ...propertyTypings, "}"].join("\n");
         break;
       default:
-        if (schema.anyOf || schema.oneOf) {
+        if (this.schema.anyOf || this.schema.oneOf) {
           prefix = "type";
-          typing = this.getJoinedTitles(schema.anyOf, "| ");
-        } else if (schema.allOf) {
+          const schemas = this.schema.anyOf === undefined ? this.schema.oneOf : this.schema.anyOf;
+          typing = this.getJoinedTitles(schemas, " | ");
+        } else if (this.schema.allOf) {
           prefix = "type";
-          typing = this.getJoinedTitles(schema.anyOf, "& ");
-        } else if (schema.type === undefined) {
+          typing = this.getJoinedTitles(this.schema.allOf, " & ");
+        } else {
           prefix = "type";
-          typing = `any`;
+          typing = "any";
         }
         break;
     }
 
-    return `${prefix} ${schema.title} ${prefix === "type" ? "=" : ""} ${typing} `;
+    return [
+      `export ${prefix} ${this.schema.title}`,
+      prefix === "type" ? " = " : " ",
+      typing,
+      prefix === "type" ? ";" : "",
+    ].join("");
   }
 
-  private getJoinedTitles(schemas: Schema[], seperator = ", ") {
-    return schemas.map(({ title }: Schema) => title).join(seperator);
+  private handleEnum(): string {
+    const typeOf = this.schema.type === "string" ? "string" : "number";
+    return this.schema.enum
+      .filter((s: any) => typeof s === typeOf)
+      .map((s: string) => typeOf === "string" ? `"${s}"` : s)
+      .join(" | ");
   }
 }

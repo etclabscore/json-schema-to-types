@@ -4,64 +4,61 @@ import mapValues from "lodash.mapvalues";
 import compact from "lodash.compact";
 import flatten from "lodash.flatten";
 import traverse from "./traverse";
+import TypescriptGenerator from "./codegens/typescript";
+import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 
 const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
 const schemaSortComparator = (s1: Schema, s2: Schema) => s1.title > s2.title;
-
 const sortKeys = (o: any) => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
-
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
-
-export class NoTitleError extends Error {
-  constructor(schema: Schema, subSchemaKey: string, subschema: Schema) {
-    super([
-      "Title is required on subschemas.",
-      "Without title, identical schemas would return differing names.",
-      "",
-      "Schema in question:",
-      JSON.stringify(schema),
-      "",
-      "Key containing problematic subschema:",
-      subSchemaKey,
-      "",
-      "offending subschema:",
-      JSON.stringify(subschema),
-    ].join("\n"));
-  }
-}
-
+const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 export class JsonSchemaToTypes {
+  public megaSchema: Schema;
 
   constructor(s: Schema) {
-    // 1. apply title where title is missing. Use content hash
     const schemaWithTitles = this.ensureSchemaTitles(s);
+    this.megaSchema = this.collectAndRefSchemas(schemaWithTitles);
+  }
 
-    // 2. collect and ref all sub schemas (also uniques them)
-    const reffedSchemas = this.collectAndRefSchemas(schemaWithTitles);
+  public toTypescript() {
+    const allTypes = [];
+    allTypes.push(new TypescriptGenerator(this.megaSchema).getTypes());
 
-    // 3.
+    Object.entries(this.megaSchema.definitions)
+      .forEach(([name, schema]: [string, any]) => allTypes.push(new TypescriptGenerator(schema).getTypes()));
+    return allTypes.join("\n").trim();
   }
 
   public getDefaultTitleForSchema(schema: Schema): Schema {
     if (schema.title) { return schema; }
-    console.log(schema); // tslint:disable-line
-    let prefix = schema.type;
+
+    const subSchemaTitleErrors = ensureSubschemaTitles(schema);
+    if (subSchemaTitleErrors.length > 0) {
+      subSchemaTitleErrors.forEach((e) => console.error);
+      throw subSchemaTitleErrors[0];
+    }
+
+    let prefix = schema.type || "any_";
 
     ["anyOf", "oneOf", "allOf"].forEach((k) => {
       if (schema[k]) {
         schema[k] = schema[k].sort(schemaSortComparator);
-        prefix = `${k} _${schema[k].map(({ title }: Schema) => title).join("_")} `;
+        prefix = `${k}_${schema[k].map(({ title }: Schema) => title).join("_")}_`;
       }
     });
 
     if (schema.type === "object" && schema.properties) {
       schema.properties = sortKeys(schema.properties);
-      prefix = `objectOf_${joinTitles(Object.values(schema.properties))}`;
+      prefix = `objectOf_${joinTitles(Object.values(schema.properties))}_`;
     }
 
-    if (schema.type === "array" && schema.items instanceof Array === false) {
-      schema.items = sortKeys(schema.items);
-      prefix = `orderedSetOf_${joinTitles(schema.items)}`;
+    if (schema.type === "array") {
+      if (schema.items instanceof Array === false) {
+        schema.items = sortKeys(schema.items);
+        prefix = `unorderedSetOf_${schema.items.title}`;
+      } else {
+        prefix = `unorderedSetOf_${joinTitles(schema.items)}`;
+      }
     }
 
     if (schema.enum) {
@@ -71,9 +68,9 @@ export class JsonSchemaToTypes {
     const definitions = schema.definitions;
     schema.definitions = undefined;
 
-    const hash = createHash("sha1").update(JSON.stringify(schema)).digest("base64").slice(0, 8);
-
-    return { ...schema, title: `${prefix}${hash}`, definitions };
+    const hash = createHash("sha1").update(JSON.stringify(schema)).digest("base64");
+    const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
+    return { ...schema, title: `${prefix}${friendlyHash}`, definitions };
   }
 
   private ensureSchemaTitles(s: Schema) {
@@ -85,11 +82,12 @@ export class JsonSchemaToTypes {
     return {
       ...traverse(schema, (subSchema: Schema) => {
         definitions[subSchema.title] = subSchema;
-        return { $ref: `#/definitions/${subSchema.title} ` };
+        return { $ref: `#/definitions/${subSchema.title}` };
       }, { skipFirstMutation: true }),
       definitions,
     };
   }
+
 }
 
 export default JsonSchemaToTypes;

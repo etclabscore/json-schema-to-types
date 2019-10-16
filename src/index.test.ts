@@ -1,4 +1,4 @@
-import JsonSchemaToTypes, { NoTitleError } from "./index";
+import JsonSchemaToTypes from "./index";
 
 describe("JsonSchemaToTypes", () => {
 
@@ -11,35 +11,50 @@ describe("JsonSchemaToTypes", () => {
       expect(result).toBe(testSchema);
     });
 
+    it("can be instantiated with a schema with subschemas", () => {
+      const t = new JsonSchemaToTypes({
+        type: "object",
+        properties: {
+          foo: { type: "string" },
+          bar: { type: "string" },
+        },
+      });
+      expect(t.megaSchema.definitions.stringWxzVcTo3).toBeDefined();
+    });
+
+    it("can output to typescript", () => {
+      expect(transpiler.toTypescript()).toEqual("export type any_vyGp6PvF = any;");
+    });
+
     describe("subschemas must have titles themselves", () => {
       it("anyOf", () => {
         expect(() => transpiler.getDefaultTitleForSchema({
           anyOf: [{ title: "abc" }, {}],
-        })).toThrow(NoTitleError);
+        })).toThrow(Error);
       });
 
       it("allOf", () => {
         expect(() => transpiler.getDefaultTitleForSchema({
           allOf: [{ title: "abc" }, {}],
-        })).toThrow(NoTitleError);
+        })).toThrow(Error);
       });
 
       it("oneOf", () => {
         expect(() => transpiler.getDefaultTitleForSchema({
           oneOf: [{ title: "abc" }, {}],
-        })).toThrow(NoTitleError);
+        })).toThrow(Error);
       });
 
       it("items", () => {
         expect(() => transpiler.getDefaultTitleForSchema({
           items: [{ title: "abc" }, {}],
-        })).toThrow(NoTitleError);
+        })).toThrow(Error);
       });
 
       it("properties", () => {
         expect(() => transpiler.getDefaultTitleForSchema({
           properties: { a: { title: "abc" }, b: {} },
-        })).toThrow(NoTitleError);
+        })).toThrow(Error);
       });
     });
 
@@ -101,7 +116,7 @@ describe("JsonSchemaToTypes", () => {
           .toEqual(transpiler.getDefaultTitleForSchema(t2));
       });
 
-      it("when array is an object (single schema), property ordering does not matter", () => {
+      it("when array items is an object (single schema), property ordering does not matter", () => {
         const a = { type: "integer", title: "foo" };
         const b = { title: "foo", type: "integer" };
 
