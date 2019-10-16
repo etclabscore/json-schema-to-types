@@ -2,29 +2,32 @@ import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen } from "./codegen-interface";
 import traverse from "../traverse";
 
-export default class Typescript extends CodeGen {
+export default class Rust extends CodeGen {
   public getTypesForSchema(schema: Schema): string {
     let prefix = "";
     let typing = "";
+    let macros = "";
 
     switch (schema.type) {
       case "boolean":
         prefix = "type";
-        typing = "boolean";
+        typing = "bool";
         break;
       case "null":
         prefix = "type";
-        typing = "null";
+        typing = "serde_json::Value";
         break;
       case "number":
+        prefix = "type";
+        typing = "f64";
       case "integer":
         prefix = "type";
-        typing = "number";
+        typing = "i64";
         if (schema.enum) { typing = this.handleEnum(schema); }
         break;
       case "string":
         prefix = "type";
-        typing = "string";
+        typing = "String";
         if (schema.enum) { typing = this.handleEnum(schema); }
         break;
       case "array":
@@ -41,7 +44,7 @@ export default class Typescript extends CodeGen {
         typing = `${typedArray}[${tupleItems}]`;
         break;
       case "object":
-        prefix = "interface";
+        prefix = "struct";
         if (schema.properties === undefined) {
           typing = "{ [key: string]: any }";
           break;
@@ -67,11 +70,16 @@ export default class Typescript extends CodeGen {
     }
 
     return [
-      `export ${prefix} ${schema.title}`,
+      macros,
+      `pub ${prefix} ${schema.title}`,
       prefix === "type" ? " = " : " ",
       typing,
       prefix === "type" ? ";" : "",
     ].join("");
+  }
+
+  private getCodePrefix() {
+    return "extern crate serde_json";
   }
 
   private handleEnum(schema: Schema): string {

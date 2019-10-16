@@ -3,8 +3,30 @@ import { Schema } from "@open-rpc/meta-schema";
 export abstract class CodeGen {
   constructor(protected schema: Schema) { }
 
-  public getTypes() {
+  public getTypesForSchema(schema: Schema): string {
     throw new Error("must be implemented by subclass");
+  }
+
+  public getTypes() {
+    return [
+      this.getTypesForRootSchema(),
+      this.getTypesForDefinitions(),
+    ].join("\n").trim();
+  }
+
+  public getTypesForRootSchema() {
+    return this.getTypesForSchema(this.schema);
+  }
+
+  public getTypesForDefinitions() {
+    if (!this.schema.definitions) { return ""; }
+
+    const allTypes: string[] = [];
+
+    Object.entries(this.schema.definitions)
+      .forEach(([name, schema]: [string, any]) => allTypes.push(this.getTypesForSchema(schema)));
+
+    return allTypes.join("\n").trim();
   }
 
   protected refToName(schema: Schema) {

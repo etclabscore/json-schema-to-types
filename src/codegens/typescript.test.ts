@@ -83,7 +83,11 @@ describe("codegen: typescript", () => {
           bar: { title: "bar", type: "string" },
         },
       });
-      expect(generator.getTypes()).toBe("export type testerooskies = [foo, bar];");
+      expect(generator.getTypes()).toBe([
+        "export type testerooskies = [foo, bar];",
+        "export type foo = string;",
+        "export type bar = string;",
+      ].join("\n"));
     });
 
     it("unordered array", () => {
@@ -93,7 +97,10 @@ describe("codegen: typescript", () => {
         items: { $ref: "#/definitions/foo" },
         definitions: { foo: { title: "foo", type: "string" } },
       });
-      expect(generator.getTypes()).toBe("export type testerooskies = foo[];");
+      expect(generator.getTypes()).toBe([
+        "export type testerooskies = foo[];",
+        "export type foo = string;",
+      ].join("\n"));
     });
   });
 
@@ -121,6 +128,8 @@ describe("codegen: typescript", () => {
         "  fooThing: foo;",
         "  barThing: bar;",
         "}",
+        "export type foo = string;",
+        "export type bar = string;",
       ].join("\n"));
     });
   });
@@ -139,14 +148,18 @@ describe("codegen: typescript", () => {
         },
 
       });
-      expect(generator.getTypes()).toBe("export type anyOfFoo = foo | bar;");
+      expect(generator.getTypes()).toBe([
+        "export type anyOfFoo = foo | bar;",
+        "export type foo = string;",
+        "export type bar = string;",
+      ].join("\n"));
     });
   });
 
   describe("oneOf", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({
-        title: "anyOfFoo",
+        title: "oneOfFoo",
         oneOf: [
           { $ref: "#/definitions/foo" },
           { $ref: "#/definitions/bar" },
@@ -156,14 +169,18 @@ describe("codegen: typescript", () => {
           bar: { title: "bar", type: "string" },
         },
       });
-      expect(generator.getTypes()).toBe("export type anyOfFoo = foo | bar;");
+      expect(generator.getTypes()).toBe([
+        "export type oneOfFoo = foo | bar;",
+        "export type foo = string;",
+        "export type bar = string;",
+      ].join("\n"));
     });
   });
 
   describe("allOf", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({
-        title: "anyOfFoo",
+        title: "allOfFoo",
         allOf: [
           { $ref: "#/definitions/foo" },
           { $ref: "#/definitions/bar" },
@@ -173,7 +190,11 @@ describe("codegen: typescript", () => {
           bar: { title: "bar", type: "string" },
         },
       });
-      expect(generator.getTypes()).toBe("export type anyOfFoo = foo & bar;");
+      expect(generator.getTypes()).toBe([
+        "export type allOfFoo = foo & bar;",
+        "export type foo = string;",
+        "export type bar = string;",
+      ].join("\n"));
     });
   });
 

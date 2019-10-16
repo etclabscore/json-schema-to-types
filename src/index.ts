@@ -21,12 +21,8 @@ export class JsonSchemaToTypes {
   }
 
   public toTypescript() {
-    const allTypes = [];
-    allTypes.push(new TypescriptGenerator(this.megaSchema).getTypes());
+    return new TypescriptGenerator(this.megaSchema).getTypes();
 
-    Object.entries(this.megaSchema.definitions)
-      .forEach(([name, schema]: [string, any]) => allTypes.push(new TypescriptGenerator(schema).getTypes()));
-    return allTypes.join("\n").trim();
   }
 
   public getDefaultTitleForSchema(schema: Schema): Schema {
