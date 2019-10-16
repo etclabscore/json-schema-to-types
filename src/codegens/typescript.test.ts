@@ -34,7 +34,7 @@ describe("codegen: typescript", () => {
 
   describe("integer", () => {
     it("base case", () => {
-      const generator = new TypescriptGenerator({ title: "testerooskies", type: "number" });
+      const generator = new TypescriptGenerator({ title: "testerooskies", type: "integer" });
       expect(generator.getTypes()).toBe("export type testerooskies = number;");
     });
 

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { promisify } from "util";
 import { Schema } from "@open-rpc/meta-schema";
 import JsonSchemaToTypes from "../index";
-const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1);
+import { capitalize } from "../utils";
 
 describe.only("Integration tests", () => {
   const testCaseDir = `${__dirname}/test-cases`;

@@ -1,80 +1,101 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen } from "./codegen-interface";
 import traverse from "../traverse";
+import { capitalize } from "../utils";
+
+interface TypeIntermediateRepresentation {
+  macros: string;
+  prefix: string;
+  typing: string;
+}
 
 export default class Rust extends CodeGen {
   public getTypesForSchema(schema: Schema): string {
-    let prefix = "";
-    let typing = "";
-    let macros = "";
+    let typeIR = {
+      prefix: "",
+      typing: "",
+      macros: "",
+    };
 
     switch (schema.type) {
       case "boolean":
-        prefix = "type";
-        typing = "bool";
+        typeIR.prefix = "type";
+        typeIR.typing = "bool";
         break;
+
       case "null":
-        prefix = "type";
-        typing = "serde_json::Value";
+        typeIR.prefix = "type";
+        typeIR.typing = "serde_json::Value";
         break;
+
       case "number":
-        prefix = "type";
-        typing = "f64";
+        typeIR.prefix = "type";
+        typeIR.typing = "f64";
+        // not exactly sure how to best handle enums on numbers in rust.
+        // if (schema.enum) { typeIR.typing = this.handleEnum(schema); }
+        break;
+
       case "integer":
-        prefix = "type";
-        typing = "i64";
-        if (schema.enum) { typing = this.handleEnum(schema); }
+        typeIR.prefix = "type";
+        typeIR.typing = "i64";
+        // not exactly sure how to best handle enums on numbers in rust.
+        // if (schema.enum) { typeIR.typing = this.handleEnum(schema); }
         break;
+
       case "string":
-        prefix = "type";
-        typing = "String";
-        if (schema.enum) { typing = this.handleEnum(schema); }
+        typeIR.prefix = "type";
+        typeIR.typing = "String";
+        if (schema.enum) { typeIR = this.buildStringEnum(schema); }
         break;
+
       case "array":
-        prefix = "type";
+        typeIR.prefix = "type";
         let typedArray = "";
-        let tupleItems = "";
+        const tupleItems = "";
         if (schema.items instanceof Array) {
-          tupleItems = this.getJoinedTitles(schema.items);
+          typeIR.typing = `(${this.getJoinedTitles(schema.items)})`;
+          break;
         } else if (schema.items !== undefined) {
           typedArray = this.refToName(schema.items);
         } else {
-          typedArray = "any";
+          typedArray = "serde_json::Value";
         }
-        typing = `${typedArray}[${tupleItems}]`;
+        typeIR.typing = `Vec<${typedArray}>`;
         break;
+
       case "object":
-        prefix = "struct";
         if (schema.properties === undefined) {
-          typing = "{ [key: string]: any }";
+          typeIR.prefix = "type";
+          typeIR.typing = "HashMap<String, Option<serde_json::Value>>";
           break;
         }
-        const propertyTypings = Object.keys(schema.properties).reduce((typings: string[], key: string) => {
-          return [...typings, `  ${key}: ${this.refToName(schema.properties[key])};`];
-        }, []);
-        typing = [`{`, ...propertyTypings, "}"].join("\n");
+        typeIR = this.buildStruct(schema);
         break;
+
       default:
         if (schema.anyOf || schema.oneOf) {
-          prefix = "type";
-          const schemas = schema.anyOf === undefined ? schema.oneOf : schema.anyOf;
-          typing = this.getJoinedTitles(schemas, " | ");
+          typeIR = this.buildEnum(schema.anyOf ? schema.anyOf : schema.oneOf);
         } else if (schema.allOf) {
-          prefix = "type";
-          typing = this.getJoinedTitles(schema.allOf, " & ");
+          const mergedSchema = schema.allOf
+            .filter((s: Schema) => s.type === "object")
+            .reduce((merged: Schema, s: Schema) => ({ ...merged, ...s }), {}); // this is flawed because allOf could be refs, and we dont want to follow them. Gonna need to find a different way to make this one work....
+          mergedSchema.title = schema.title;
+          console.log(mergedSchema);//tslint:disable-line
+          typeIR = this.buildStruct(mergedSchema);
         } else {
-          prefix = "type";
-          typing = "any";
+          typeIR.prefix = "type";
+          typeIR.typing = "serde_json::Value";
         }
         break;
     }
 
     return [
-      macros,
-      `pub ${prefix} ${schema.title}`,
-      prefix === "type" ? " = " : " ",
-      typing,
-      prefix === "type" ? ";" : "",
+      typeIR.macros,
+      typeIR.macros ? "\n" : "",
+      `pub ${typeIR.prefix} ${schema.title}`,
+      typeIR.prefix === "type" ? " = " : " ",
+      typeIR.typing,
+      typeIR.prefix === "type" ? ";" : "",
     ].join("");
   }
 
@@ -82,11 +103,43 @@ export default class Rust extends CodeGen {
     return "extern crate serde_json";
   }
 
-  private handleEnum(schema: Schema): string {
-    const typeOf = schema.type === "string" ? "string" : "number";
-    return schema.enum
-      .filter((s: any) => typeof s === typeOf)
-      .map((s: string) => typeOf === "string" ? `"${s}"` : s)
-      .join(" | ");
+  private handleNumberEnum(schema: Schema): string {
+    throw new Error("not yet implemented");
+  }
+
+  private buildStringEnum(schema: Schema): TypeIntermediateRepresentation {
+    const enumFields = schema.enum
+      .filter((s: any) => typeof s === "string")
+      .map((s: string) => [`  #[serde(rename = ${s})]`, `  ${capitalize(s)},`].join("\n"));
+
+    return {
+      macros: "#[derive(Serialize, Deserialize)]",
+      prefix: "enum",
+      typing: ["{", ...enumFields, "}"].join("\n"),
+    };
+  }
+
+  private buildStruct(s: Schema): any {
+    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
+      return [...typings, `  pub(crate) ${key}: ${this.refToName(s.properties[key])},`];
+    }, []);
+
+    return {
+      prefix: "struct",
+      typing: [`{`, ...propertyTypings, "}"].join("\n"),
+      macros: "#[derive(Serialize, Deserialize)]",
+    };
+  }
+
+  private buildEnum(s: Schema[]): any {
+    return {
+      macros: "#[derive(Serialize, Deserialize)]",
+      prefix: "enum",
+      typing: [
+        "{",
+        this.getJoinedTitles(s, ",\n").split("\n").map((l) => `  ${l}`).join("\n"),
+        "}",
+      ].join("\n"),
+    };
   }
 }

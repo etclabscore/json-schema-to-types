@@ -12,6 +12,7 @@ const schemaSortComparator = (s1: Schema, s2: Schema) => s1.title > s2.title;
 const sortKeys = (o: any) => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
+
 export class JsonSchemaToTypes {
   public megaSchema: Schema;
 
