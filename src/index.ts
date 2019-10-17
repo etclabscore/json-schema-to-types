@@ -5,6 +5,7 @@ import compact from "lodash.compact";
 import flatten from "lodash.flatten";
 import traverse from "./traverse";
 import TypescriptGenerator from "./codegens/typescript";
+import RustGenerator from "./codegens/rust";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 
 const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
@@ -23,7 +24,16 @@ export class JsonSchemaToTypes {
 
   public toTypescript() {
     return new TypescriptGenerator(this.megaSchema).getTypes();
+  }
+  public toTs() {
+    return this.toTypescript();
+  }
 
+  public toRust() {
+    return new RustGenerator(this.megaSchema).getTypes();
+  }
+  public toRs() {
+    return this.toRust();
   }
 
   public getDefaultTitleForSchema(schema: Schema): Schema {
