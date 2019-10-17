@@ -76,7 +76,8 @@ export default class Rust extends CodeGen {
         if (schema.anyOf || schema.oneOf) {
           typeIR = this.buildEnum(schema.anyOf ? schema.anyOf : schema.oneOf);
         } else if (schema.allOf) {
-          // this is flawed because allOf could be refs, and we dont want to follow them. Gonna need to find a different way to make this one work....
+          // this is flawed because allOf could be refs, and we dont want to follow them.
+          // Gonna need to find a different way to make this one work...
           const mergedSchema = schema.allOf
             .filter((s: Schema) => s.type === "object")
             .reduce((merged: Schema, s: Schema) => ({ ...merged, ...s }), {});

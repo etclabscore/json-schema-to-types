@@ -18,7 +18,7 @@ describe.only("Integration tests", () => {
     describe(lang, () => {
       Object.entries(testCases).forEach(([name, schema]: any) => {
         it(`test case ${name}`, () => {
-          const result = fs.readFileSync(`${resultsDir}/${lang}/${name}.ts`, "utf8").trim();
+          const result = fs.readFileSync(`${resultsDir}/${lang}/${name}.${lang}`, "utf8").trim();
           const transpiler = new JsonSchemaToTypes(schema) as any;
           expect(transpiler[`to${capitalize(lang)}`]()).toBe(result);
         });
