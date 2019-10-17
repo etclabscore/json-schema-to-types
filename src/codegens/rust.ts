@@ -11,7 +11,7 @@ interface TypeIntermediateRepresentation {
 
 export default class Rust extends CodeGen {
   public getTypesForSchema(schema: Schema): string {
-    let typeIR = {
+    let typeIR: TypeIntermediateRepresentation = {
       prefix: "",
       typing: "",
       macros: "",
@@ -78,12 +78,12 @@ export default class Rust extends CodeGen {
         } else if (schema.allOf) {
           // this is flawed because allOf could be refs, and we dont want to follow them.
           // Gonna need to find a different way to make this one work...
-          const mergedSchema = schema.allOf
-            .filter((s: Schema) => s.type === "object")
-            .reduce((merged: Schema, s: Schema) => ({ ...merged, ...s }), {});
-          mergedSchema.title = schema.title;
-          console.log(mergedSchema);//tslint:disable-line
-          typeIR = this.buildStruct(mergedSchema);
+          // const mergedSchema = schema.allOf
+          //   .filter((s: Schema) => s.type === "object")
+          //   .reduce((merged: Schema, s: Schema) => ({ ...merged, ...s }), {});
+          // mergedSchema.title = schema.title;
+          typeIR.prefix = "type";
+          typeIR.typing = "HashMap<String, Option<serde_json::Value>>";
         } else {
           typeIR.prefix = "type";
           typeIR.typing = "serde_json::Value";
@@ -112,7 +112,7 @@ export default class Rust extends CodeGen {
   private buildStringEnum(schema: Schema): TypeIntermediateRepresentation {
     const enumFields = schema.enum
       .filter((s: any) => typeof s === "string")
-      .map((s: string) => [`  #[serde(rename = ${s})]`, `  ${capitalize(s)},`].join("\n"));
+      .map((s: string) => [`    #[serde(rename = ${s})]`, `    ${capitalize(s)},`].join("\n"));
 
     return {
       macros: "#[derive(Serialize, Deserialize)]",
@@ -121,9 +121,9 @@ export default class Rust extends CodeGen {
     };
   }
 
-  private buildStruct(s: Schema): any {
+  private buildStruct(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      return [...typings, `  pub(crate) ${key}: ${this.refToName(s.properties[key])},`];
+      return [...typings, `    pub(crate) ${key}: ${this.refToName(s.properties[key])},`];
     }, []);
 
     return {
@@ -133,13 +133,13 @@ export default class Rust extends CodeGen {
     };
   }
 
-  private buildEnum(s: Schema[]): any {
+  private buildEnum(s: Schema[]): TypeIntermediateRepresentation {
     return {
       macros: "#[derive(Serialize, Deserialize)]",
       prefix: "enum",
       typing: [
         "{",
-        this.getJoinedTitles(s, ",\n").split("\n").map((l) => `  ${l}`).join("\n"),
+        this.getJoinedTitles(s, ",\n").split("\n").map((l) => `    ${l}`).join("\n"),
         "}",
       ].join("\n"),
     };

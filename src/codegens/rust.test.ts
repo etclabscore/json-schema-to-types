@@ -1,7 +1,7 @@
 import RustGenerator from "./rust";
 import { Schema } from "@open-rpc/meta-schema";
 
-describe.only("codegen: rust", () => {
+describe("codegen: rust", () => {
   describe("booleans", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "boolean" });
@@ -64,12 +64,12 @@ describe.only("codegen: rust", () => {
       expect(generator.getTypes()).toBe([
         "#[derive(Serialize, Deserialize)]",
         "pub enum testerooskies {",
-        "  #[serde(rename = foo)]",
-        "  Foo,",
-        "  #[serde(rename = bar)]",
-        "  Bar,",
-        "  #[serde(rename = baz)]",
-        "  Baz,",
+        "    #[serde(rename = foo)]",
+        "    Foo,",
+        "    #[serde(rename = bar)]",
+        "    Bar,",
+        "    #[serde(rename = baz)]",
+        "    Baz,",
         "}",
       ].join("\n"));
     });
@@ -137,8 +137,8 @@ describe.only("codegen: rust", () => {
       expect(generator.getTypes()).toBe([
         "#[derive(Serialize, Deserialize)]",
         "pub struct testerooskies {",
-        "  pub(crate) fooThing: foo,",
-        "  pub(crate) barThing: bar,",
+        "    pub(crate) fooThing: foo,",
+        "    pub(crate) barThing: bar,",
         "}",
         "pub type foo = String;",
         "pub type bar = String;",
@@ -158,13 +158,12 @@ describe.only("codegen: rust", () => {
           foo: { title: "foo", type: "string" },
           bar: { title: "bar", type: "string" },
         },
-
       });
       expect(generator.getTypes()).toBe([
         "#[derive(Serialize, Deserialize)]",
         "pub enum anyOfFoo {",
-        "  foo,",
-        "  bar",
+        "    foo,",
+        "    bar",
         "}",
         "pub type foo = String;",
         "pub type bar = String;",
@@ -188,8 +187,8 @@ describe.only("codegen: rust", () => {
       expect(generator.getTypes()).toBe([
         "#[derive(Serialize, Deserialize)]",
         "pub enum oneOfFoo {",
-        "  foo,",
-        "  bar",
+        "    foo,",
+        "    bar",
         "}",
         "pub type foo = String;",
         "pub type bar = String;",
@@ -206,12 +205,12 @@ describe.only("codegen: rust", () => {
           { $ref: "#/definitions/bar" },
         ],
         definitions: {
-          foo: { title: "foo", type: "object", properties: { a: { title: "a", type: "number" } } },
-          bar: { title: "bar", type: "object", properties: { b: { title: "b", type: "number" } } },
+          foo: { title: "foo", type: "string" },
+          bar: { title: "bar", type: "string" },
         },
       });
       expect(generator.getTypes()).toBe([
-        "pub type allOfFoo = foo & bar;",
+        "pub type allOfFoo = HashMap<String, Option<serde_json::Value>>;",
         "pub type foo = String;",
         "pub type bar = String;",
       ].join("\n"));
