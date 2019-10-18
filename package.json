@@ -1,5 +1,5 @@
 {
-  "name": "@etclabscore/pristine-typescript",
+  "name": "@etclabscore/json-schema-to-types",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
@@ -22,12 +22,6 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "@open-rpc/meta-schema": "^1.5.3",
-    "@types/lodash.compact": "^3.0.6",
-    "@types/lodash.flatten": "^4.4.6",
-    "@types/lodash.mapvalues": "^4.6.6",
-    "lodash.compact": "^3.0.1",
-    "lodash.flatten": "^4.4.0",
-    "lodash.mapvalues": "^4.6.0"
+    "@open-rpc/meta-schema": "^1.5.3"
   }
 }

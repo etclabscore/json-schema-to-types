@@ -1,8 +1,5 @@
 import { createHash } from "crypto";
 import { Schema } from "@open-rpc/meta-schema";
-import mapValues from "lodash.mapvalues";
-import compact from "lodash.compact";
-import flatten from "lodash.flatten";
 import traverse from "./traverse";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
