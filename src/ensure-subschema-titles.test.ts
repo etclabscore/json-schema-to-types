@@ -1,5 +1,4 @@
-import JsonSchemaToTypes, { NoTitleError } from "./index";
-import { ensureSubschemaTitles } from "./ensure-subschema-titles";
+import { ensureSubschemaTitles, NoTitleError } from "./ensure-subschema-titles";
 
 describe("ensureSubschemaTitles", () => {
   it("anyOf", () => {
