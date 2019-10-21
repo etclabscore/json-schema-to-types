@@ -101,12 +101,8 @@ export default class Rust extends CodeGen {
     ].join("");
   }
 
-  private getCodePrefix() {
+  public getCodePrefix() {
     return "extern crate serde_json";
-  }
-
-  private handleNumberEnum(schema: Schema): string {
-    throw new Error("not yet implemented");
   }
 
   private buildStringEnum(schema: Schema): TypeIntermediateRepresentation {

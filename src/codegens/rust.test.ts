@@ -2,6 +2,12 @@ import RustGenerator from "./rust";
 import { Schema } from "@open-rpc/meta-schema";
 
 describe("codegen: rust", () => {
+
+  it("implements getCodePrefix", () => {
+    const generator = new RustGenerator({ title: "testerooskies", type: "boolean" });
+    expect(generator.getCodePrefix()).toBe("extern crate serde_json");
+  });
+
   describe("booleans", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "boolean" });
