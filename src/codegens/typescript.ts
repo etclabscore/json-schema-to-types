@@ -1,80 +1,129 @@
 import { Schema } from "@open-rpc/meta-schema";
-import { CodeGen } from "./codegen-interface";
+import { CodeGen, TypeIntermediateRepresentation } from "./codegen-interface";
 import traverse from "../traverse";
 
 export default class Typescript extends CodeGen {
-  public getTypesForSchema(schema: Schema): string {
-    let prefix = "";
-    let typing = "";
-
-    switch (schema.type) {
-      case "boolean":
-        prefix = "type";
-        typing = "boolean";
-        break;
-      case "null":
-        prefix = "type";
-        typing = "null";
-        break;
-      case "number":
-      case "integer":
-        prefix = "type";
-        typing = "number";
-        if (schema.enum) { typing = this.handleEnum(schema); }
-        break;
-      case "string":
-        prefix = "type";
-        typing = "string";
-        if (schema.enum) { typing = this.handleEnum(schema); }
-        break;
-      case "array":
-        prefix = "type";
-        let typedArray = "";
-        let tupleItems = "";
-        if (schema.items instanceof Array) {
-          tupleItems = this.getJoinedTitles(schema.items);
-        } else if (schema.items !== undefined) {
-          typedArray = this.refToName(schema.items);
-        } else {
-          typedArray = "any";
-        }
-        typing = `${typedArray}[${tupleItems}]`;
-        break;
-      case "object":
-        prefix = "interface";
-        if (schema.properties === undefined) {
-          typing = "{ [key: string]: any }";
-          break;
-        }
-        const propertyTypings = Object.keys(schema.properties).reduce((typings: string[], key: string) => {
-          return [...typings, `  ${key}: ${this.refToName(schema.properties[key])};`];
-        }, []);
-        typing = [`{`, ...propertyTypings, "}"].join("\n");
-        break;
-      default:
-        if (schema.anyOf || schema.oneOf) {
-          prefix = "type";
-          const schemas = schema.anyOf === undefined ? schema.oneOf : schema.anyOf;
-          typing = this.getJoinedTitles(schemas, " | ");
-        } else if (schema.allOf) {
-          prefix = "type";
-          typing = this.getJoinedTitles(schema.allOf, " & ");
-        } else {
-          prefix = "type";
-          typing = "any";
-        }
-        break;
-    }
-
+  public getCodePrefix() {
+    return "";
+  }
+  protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
     return [
-      `export ${prefix} ${schema.title}`,
-      prefix === "type" ? " = " : " ",
-      typing,
-      prefix === "type" ? ";" : "",
+      `export ${ir.prefix} ${s.title}`,
+      ir.prefix === "type" ? " = " : " ",
+      ir.typing,
+      ir.prefix === "type" ? ";" : "",
     ].join("");
   }
 
-  private handleEnum(schema: Schema): string {
+  protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "boolean", macros: "" };
+  }
+
+  protected handleNull(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "null", macros: "" };
+  }
+
+  protected handleNumber(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "number", macros: "" };
+  }
+
+  protected handleInteger(s: Schema): TypeIntermediateRepresentation {
+    return this.handleNumber(s);
+  }
+
+  protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
+    return {
+      macros: "",
+      prefix: "type",
+      typing: this.buildEnum(s),
+    };
+  }
+
+  protected handleString(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "string", macros: "" };
+  }
+
+  protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
+    return {
+      macros: "",
+      prefix: "type",
+      typing: this.buildEnum(s),
+    };
+  }
+
+  protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
+    return {
+      macros: "",
+      prefix: "type",
+      typing: `[${this.getJoinedTitles(s.items)}]`,
+    };
+  }
+
+  protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
+    return {
+      macros: "",
+      prefix: "type",
+      typing: `${this.refToName(s.items)}[]`,
+    };
+  }
+
+  protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
+    return {
+      macros: "",
+      prefix: "type",
+      typing: `any[]`,
+    };
+  }
+
+  protected handleObject(s: Schema): TypeIntermediateRepresentation {
+    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
+      return [...typings, `  ${key}: ${this.refToName(s.properties[key])};`];
+    }, []);
+
+    return {
+      macros: "",
+      prefix: "interface",
+      typing: [`{`, ...propertyTypings, "}"].join("\n"),
+    };
+  }
+
+  protected handleUntypedObject(schema: Schema): TypeIntermediateRepresentation {
+    return {
+      macros: "",
+      prefix: "interface",
+      typing: "{ [key: string]: any }",
+    };
+  }
+
+  protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: this.getJoinedTitles(s.anyOf, " | "),
+      macros: "",
+    };
+  }
+
+  protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: this.getJoinedTitles(s.allOf, " & "),
+      macros: "",
+    };
+  }
+
+  protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: this.getJoinedTitles(s.oneOf, " | "),
+      macros: "",
+    };
+  }
+
+  protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "any", macros: "" };
+  }
+
+  private buildEnum(schema: Schema): string {
     const typeOf = schema.type === "string" ? "string" : "number";
     return schema.enum
       .filter((s: any) => typeof s === typeOf)

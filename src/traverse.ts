@@ -1,7 +1,17 @@
 import { Schema } from "@open-rpc/meta-schema";
 
+/**
+ * Signature of the mutation method passed to traverse.
+ */
 export type MutationFunction = (schema: Schema) => Schema;
+
+/**
+ * The options you can use when traversing.
+ */
 export interface TraverseOptions {
+  /**
+   * Set this to true if you don't want to call the mutator function on the root schema.
+   */
   skipFirstMutation: boolean;
 }
 
@@ -9,6 +19,17 @@ export const defaultOptions: TraverseOptions = {
   skipFirstMutation: false,
 };
 
+/**
+ * Traverse all subschema of a schema, calling the mutator function with each.
+ * The mutator is called on leaf nodes first.
+ *
+ * @param schema the schema to traverse
+ * @param mutation the function to pass each node in the subschema tree.
+ * @param traverseOptions a set of options for traversal.
+ * @param depth For internal use. Tracks the current recursive depth in the tree. This is used to implement
+ *              some of the options.
+ *
+ */
 export default function traverse(
   schema: Schema,
   mutation: MutationFunction,

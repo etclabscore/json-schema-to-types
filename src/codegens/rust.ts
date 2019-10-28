@@ -1,114 +1,58 @@
 import { Schema } from "@open-rpc/meta-schema";
-import { CodeGen } from "./codegen-interface";
+import { CodeGen, TypeIntermediateRepresentation } from "./codegen-interface";
 import traverse from "../traverse";
 import { capitalize } from "../utils";
 
-interface TypeIntermediateRepresentation {
-  macros: string;
-  prefix: string;
-  typing: string;
-}
-
 export default class Rust extends CodeGen {
-  public getTypesForSchema(schema: Schema): string {
-    let typeIR: TypeIntermediateRepresentation = {
-      prefix: "",
-      typing: "",
-      macros: "",
-    };
-
-    switch (schema.type) {
-      case "boolean":
-        typeIR.prefix = "type";
-        typeIR.typing = "bool";
-        break;
-
-      case "null":
-        typeIR.prefix = "type";
-        typeIR.typing = "serde_json::Value";
-        break;
-
-      case "number":
-        typeIR.prefix = "type";
-        typeIR.typing = "f64";
-        // not exactly sure how to best handle enums on numbers in rust.
-        // if (schema.enum) { typeIR.typing = this.handleEnum(schema); }
-        break;
-
-      case "integer":
-        typeIR.prefix = "type";
-        typeIR.typing = "i64";
-        // not exactly sure how to best handle enums on numbers in rust.
-        // if (schema.enum) { typeIR.typing = this.handleEnum(schema); }
-        break;
-
-      case "string":
-        typeIR.prefix = "type";
-        typeIR.typing = "String";
-        if (schema.enum) { typeIR = this.buildStringEnum(schema); }
-        break;
-
-      case "array":
-        typeIR.prefix = "type";
-        let typedArray = "";
-        const tupleItems = "";
-        if (schema.items instanceof Array) {
-          typeIR.typing = `(${this.getJoinedTitles(schema.items)})`;
-          break;
-        } else if (schema.items !== undefined) {
-          typedArray = this.refToName(schema.items);
-        } else {
-          typedArray = "serde_json::Value";
-        }
-        typeIR.typing = `Vec<${typedArray}>`;
-        break;
-
-      case "object":
-        if (schema.properties === undefined) {
-          typeIR.prefix = "type";
-          typeIR.typing = "HashMap<String, Option<serde_json::Value>>";
-          break;
-        }
-        typeIR = this.buildStruct(schema);
-        break;
-
-      default:
-        if (schema.anyOf || schema.oneOf) {
-          typeIR = this.buildEnum(schema.anyOf ? schema.anyOf : schema.oneOf);
-        } else if (schema.allOf) {
-          // this is flawed because allOf could be refs, and we dont want to follow them.
-          // Gonna need to find a different way to make this one work...
-          // const mergedSchema = schema.allOf
-          //   .filter((s: Schema) => s.type === "object")
-          //   .reduce((merged: Schema, s: Schema) => ({ ...merged, ...s }), {});
-          // mergedSchema.title = schema.title;
-          typeIR.prefix = "type";
-          typeIR.typing = "HashMap<String, Option<serde_json::Value>>";
-        } else {
-          typeIR.prefix = "type";
-          typeIR.typing = "serde_json::Value";
-        }
-        break;
-    }
-
-    return [
-      typeIR.macros,
-      typeIR.macros ? "\n" : "",
-      `pub ${typeIR.prefix} ${schema.title}`,
-      typeIR.prefix === "type" ? " = " : " ",
-      typeIR.typing,
-      typeIR.prefix === "type" ? ";" : "",
-    ].join("");
-  }
-
   public getCodePrefix() {
     return "extern crate serde_json";
   }
 
-  private buildStringEnum(schema: Schema): TypeIntermediateRepresentation {
-    const enumFields = schema.enum
-      .filter((s: any) => typeof s === "string")
-      .map((s: string) => [`    #[serde(rename = ${s})]`, `    ${capitalize(s)},`].join("\n"));
+  protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
+    return [
+      ir.macros,
+      ir.macros ? "\n" : "",
+      `pub ${ir.prefix} ${s.title}`,
+      ir.prefix === "type" ? " = " : " ",
+      ir.typing,
+      ir.prefix === "type" ? ";" : "",
+    ].join("");
+  }
+
+  protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "bool", macros: "" };
+  }
+
+  protected handleNull(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "serde_json::Value", macros: "" };
+  }
+
+  protected handleNumber(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "f64", macros: "" };
+  }
+
+  protected handleInteger(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "i64", macros: "" };
+  }
+
+  /**
+   * Currently I dont know of a good way to handle this with rust.
+   */
+  protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
+    if (s.type === "integer") {
+      return this.handleInteger(s);
+    }
+    return this.handleNumber(s);
+  }
+
+  protected handleString(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "String", macros: "" };
+  }
+
+  protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
+    const enumFields = s.enum
+      .filter((enumField: any) => typeof enumField === "string")
+      .map((enumField: string) => [`    #[serde(rename = ${enumField})]`, `    ${capitalize(enumField)},`].join("\n"));
 
     return {
       macros: "#[derive(Serialize, Deserialize)]",
@@ -117,7 +61,31 @@ export default class Rust extends CodeGen {
     };
   }
 
-  private buildStruct(s: Schema): TypeIntermediateRepresentation {
+  protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: `(${this.getJoinedTitles(s.items)})`,
+      macros: "",
+    };
+  }
+
+  protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: `Vec<${this.refToName(s.items)}>`,
+      macros: "",
+    };
+  }
+
+  protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: `Vec<serde_json::Value>`,
+      macros: "",
+    };
+  }
+
+  protected handleObject(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
       return [...typings, `    pub(crate) ${key}: ${this.refToName(s.properties[key])},`];
     }, []);
@@ -127,6 +95,33 @@ export default class Rust extends CodeGen {
       typing: [`{`, ...propertyTypings, "}"].join("\n"),
       macros: "#[derive(Serialize, Deserialize)]",
     };
+  }
+
+  protected handleUntypedObject(schema: Schema): TypeIntermediateRepresentation {
+    return {
+      prefix: "type",
+      typing: "HashMap<String, Option<serde_json::Value>>",
+      macros: "",
+    };
+  }
+
+  protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
+    return this.buildEnum(s.anyOf);
+  }
+
+  /**
+   * I dont have a great way of doing this one either. The best I can do is call it an untyped object
+   */
+  protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
+    return this.handleUntypedObject(s);
+  }
+
+  protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
+    return this.buildEnum(s.oneOf);
+  }
+
+  protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
+    return { prefix: "type", typing: "serde_json::Value", macros: "" };
   }
 
   private buildEnum(s: Schema[]): TypeIntermediateRepresentation {
