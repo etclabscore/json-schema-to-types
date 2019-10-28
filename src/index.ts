@@ -11,6 +11,9 @@ const sortKeys = (o: any) => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 
+/**
+ * Provides a high-level interface for getting typings given a schema.
+ */
 export class JsonSchemaToTypes {
   public megaSchema: Schema;
 
@@ -19,20 +22,72 @@ export class JsonSchemaToTypes {
     this.megaSchema = this.collectAndRefSchemas(schemaWithTitles);
   }
 
+  /**
+   * Returns the types in Typescript
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Typescript
+   * @category TargetCodeGenerator
+   *
+   */
   public toTypescript() {
-    return new TypescriptGenerator(this.megaSchema).getTypes();
+    return new TypescriptGenerator(this.megaSchema).transpile();
   }
+
+  /**
+   * Alias to [[JsonSchemaToTypes.toTypescript]]
+   *
+   * @category Typescript
+   * @category TargetCodeGenerator
+   *
+   */
   public toTs() {
     return this.toTypescript();
   }
 
+  /**
+   * Returns the types in Rust
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Rust
+   * @category TargetCodeGenerator
+   *
+   */
   public toRust() {
-    return new RustGenerator(this.megaSchema).getTypes();
+    return new RustGenerator(this.megaSchema).transpile();
   }
-  public toRs() {
+
+  /**
+   * Returns the types in Rust
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Rust
+   * @category TargetCodeGenerator
+   *
+   */
+  public toRs(): string {
     return this.toRust();
   }
 
+  /**
+   * Returns the schema where if the schema.title is not set, a title will be generated based on the contents
+   * of the schema. The properties of the schema are sorted such that the names are deterministic based on the
+   * content of the schema. That being said, expect that any subtle change to the schema will result in a unique title.
+   * If you've included titles on your schema, ensure that the titles are unique for their contents. If they are not,
+   * ask yourself this: "why do two different schemas have the same name?".
+   *
+   * @param schema The JSON Schema to ensure has a title. If the schema is a composite schema (contains
+   *                subschema(s)), the subschemas must already have titles.
+   * @returns A new schema object that has all the fields of the one passed in, and a title if it didn't
+   *          already have one.
+   *
+   * @category Utils
+   * @category SchemaImprover
+   *
+   */
   public getDefaultTitleForSchema(schema: Schema): Schema {
     if (schema.title) { return schema; }
 
@@ -77,14 +132,39 @@ export class JsonSchemaToTypes {
     return { ...schema, title: `${prefix}${friendlyHash}`, definitions };
   }
 
+  /**
+   * Returns a copy of the schema (deep) where if any subschema does not have a title, one will be created.
+   * The subschemas can be considered a tree of schemas, and in this case, we are resolving titles on the leaves
+   * of the tree. Think depth first traversal, but where the internal nodes' titles are not resolved until
+   * it's entire subtree is complete.
+   *
+   * @param s The schema to ensure has names for it and all subschemas of it.
+   *
+   * @returns Deep schema copy of the input schema where the schema and all sub schemas have titles.
+   *
+   * @category Utils
+   * @category SchemaImprover
+   *
+   */
   private ensureSchemaTitles(s: Schema) {
     return traverse(s, this.getDefaultTitleForSchema);
   }
 
-  private collectAndRefSchemas(schema: Schema): Schema {
+  /**
+   * Returns the schema where all subschemas have been replaced with $refs and added to definitions
+   *
+   * @param s The schema to ensure has names for it and all subschemas of it.
+   *
+   * @returns Deep schema copy of the input schema where the schema and all sub schemas have titles.
+   *
+   * @category Utils
+   * @category SchemaImprover
+   *
+   */
+  private collectAndRefSchemas(s: Schema): Schema {
     const definitions: any = {};
     return {
-      ...traverse(schema, (subSchema: Schema) => {
+      ...traverse(s, (subSchema: Schema) => {
         definitions[subSchema.title] = subSchema;
         return { $ref: `#/definitions/${subSchema.title}` };
       }, { skipFirstMutation: true }),

@@ -1,5 +1,8 @@
 import { Schema } from "@open-rpc/meta-schema";
 
+/**
+ * Structures a nice error message
+ */
 export class NoTitleError extends Error {
   constructor(schema: Schema, subSchemaKey: string, subschema: Schema) {
     super([
@@ -18,6 +21,9 @@ export class NoTitleError extends Error {
   }
 }
 
+/**
+ * Check all subschemas of the passed in schema to ensure that they have a title.
+ */
 export const ensureSubschemaTitles = (s: Schema): NoTitleError[] => {
   const errors = [];
 

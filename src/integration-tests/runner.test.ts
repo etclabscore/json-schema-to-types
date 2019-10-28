@@ -4,7 +4,7 @@ import { Schema } from "@open-rpc/meta-schema";
 import JsonSchemaToTypes from "../index";
 import { capitalize } from "../utils";
 
-describe.only("Integration tests", () => {
+describe("Integration tests", () => {
   const testCaseDir = `${__dirname}/test-cases`;
   const testCaseFilenames: string[] = fs.readdirSync(testCaseDir);
   const testCases = testCaseFilenames.reduce((m, caseFilename) => ({
