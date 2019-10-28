@@ -9,6 +9,7 @@ Features:
    - Typescript
    - Rust
  - Generates titles for schemas that are missing them
+ - Run in browser / node
 
 ## Installing
 
