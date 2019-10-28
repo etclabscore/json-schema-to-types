@@ -6,6 +6,9 @@ export interface TypeIntermediateRepresentation {
   typing: string;
 }
 
+/**
+ * Base class for all code generators.
+ */
 export abstract class CodeGen {
   constructor(protected schema: Schema) { }
 
