@@ -9,6 +9,9 @@ export interface TypeIntermediateRepresentation {
 export abstract class CodeGen {
   constructor(protected schema: Schema) { }
 
+  /**
+   * Given a schema, it will generate code for both the schema and the schemas in its definitions section
+   */
   public transpile() {
     const rootSchemaTypes = this.generate(this.schema, this.toIR(this.schema));
     const defsSchemaTypes: string[] = [];
