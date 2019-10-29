@@ -1,0 +1,19 @@
+[
+  {
+    "title": "pets",
+    "description": "a bunch of pets",
+    "type": "array",
+    "items": {
+      "oneOf": [
+        { "title": "Man" },
+        { "title": "Bear" },
+        { "title": "Pig" }
+      ]
+    }
+  },
+  {
+    "description": "simplest test case",
+    "type": "string"
+  },
+  { "title": "Man" }
+]
