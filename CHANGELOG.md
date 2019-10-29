@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/etclabscore/json-schema-to-types/compare/1.0.1...1.1.0) (2019-10-29)
+
+
+### Bug Fixes
+
+* update readme with batching feature ([5762d95](https://github.com/etclabscore/json-schema-to-types/commit/5762d95a94a463656a8034af840702f9881de0ae))
+
+
+### Features
+
+* add batch schema support ([17ce188](https://github.com/etclabscore/json-schema-to-types/commit/17ce188400f53b82473f2917a714ccdd8b3ea5c5)), closes [#16](https://github.com/etclabscore/json-schema-to-types/issues/16)
+
 ## [1.0.1](https://github.com/etclabscore/json-schema-to-types/compare/1.0.0...1.0.1) (2019-10-29)
 
 
