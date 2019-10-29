@@ -17,9 +17,11 @@ const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 export class JsonSchemaToTypes {
   public megaSchema: Schema;
 
-  constructor(s: Schema) {
-    const schemaWithTitles = this.ensureSchemaTitles(s);
-    this.megaSchema = this.collectAndRefSchemas(schemaWithTitles);
+  constructor(s: Schema | Schema[]) {
+    const inputSchema = s instanceof Array ? s : [s];
+    const schemaWithTitles = inputSchema.map((ss) => this.ensureSchemaTitles(ss));
+    const reffed = schemaWithTitles.map((ss) => this.collectAndRefSchemas(ss));
+    this.megaSchema = this.combineSchemas(reffed);
   }
 
   /**
@@ -172,6 +174,23 @@ export class JsonSchemaToTypes {
     };
   }
 
+  private combineSchemas(s: Schema[]): Schema {
+    const combined = { ...s[0] };
+    combined.definitions = {
+      ...combined.definitions,
+      ...s.slice(1).reduce((def, schema) => {
+        const schemaCopy = { ...schema };
+        delete schemaCopy.definitions;
+
+        return {
+          ...def,
+          ...schema.definitions,
+          [schema.title]: schemaCopy,
+        };
+      }, {}),
+    };
+    return combined;
+  }
 }
 
 export default JsonSchemaToTypes;
