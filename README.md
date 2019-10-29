@@ -4,10 +4,11 @@ This is a JSON-Schema transpiler. It converts a JSON Schema into types for vario
 
 Features:
 
- - Zero external dependencies
  - Supports the following languages:
    - Typescript
    - Rust
+ - Zero external dependencies
+ - Supports merging multiple JSONSchema into one set of types
  - Generates titles for schemas that are missing them
  - Run in browser / node
 
