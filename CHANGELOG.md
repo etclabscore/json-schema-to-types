@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/etclabscore/json-schema-to-types/compare/1.0.0...1.0.1) (2019-10-29)
+
+
+### Bug Fixes
+
+* gh pages docs broken ([b3639d9](https://github.com/etclabscore/json-schema-to-types/commit/b3639d95143d1febca8891e04f44d8305841eabd))
+
 # 1.0.0 (2019-10-28)
 
 
