@@ -1,1 +1,3 @@
-pub type stringxdEiCCNL = String;
+extern crate serde_json;
+
+pub type StringXdEiCCNL = String;

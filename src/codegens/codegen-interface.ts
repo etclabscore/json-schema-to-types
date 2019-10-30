@@ -1,4 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
+import { capitalize, languageSafeName } from "../utils";
 
 export interface TypeIntermediateRepresentation {
   macros: string;
@@ -30,7 +31,16 @@ export abstract class CodeGen {
       ...defsSchemaTypes,
     ].join("\n").trim();
   }
-  public abstract getCodePrefix(schema: Schema): string;
+
+  /**
+   * Generic title transform that gives a title without special characters or spaces. It may be overriden if
+   * this implementation does not suffice.
+   */
+  public getSafeTitle(title: string): string {
+    return languageSafeName(title);
+  }
+
+  public abstract getCodePrefix(): string;
 
   protected abstract generate(s: Schema, ir: TypeIntermediateRepresentation): string;
 
@@ -57,15 +67,15 @@ export abstract class CodeGen {
 
   protected abstract handleUntyped(s: Schema): TypeIntermediateRepresentation;
 
-  protected refToName(schema: Schema) {
+  protected refToTitle(schema: Schema) {
     if (schema.$ref === undefined) {
       throw new Error("the Subschemas of the schema must use $ref. Inline subschemas are not allowed.");
     }
     return schema.$ref.replace("#/definitions/", "");
   }
 
-  protected getJoinedTitles(schemas: Schema[], seperator = ", ") {
-    return schemas.map(this.refToName).join(seperator);
+  protected getJoinedSafeTitles(schemas: Schema[], seperator = ", ") {
+    return schemas.map(this.refToTitle).map(this.getSafeTitle.bind(this)).join(seperator);
   }
 
   private toIR(s: Schema): TypeIntermediateRepresentation {

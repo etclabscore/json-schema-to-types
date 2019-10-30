@@ -19,11 +19,11 @@ describe("JsonSchemaToTypes", () => {
           bar: { type: "string" },
         },
       });
-      expect(t.megaSchema.definitions.stringWxzVcTo3).toBeDefined();
+      expect(t.megaSchema.definitions.string_WxzVcTo3).toBeDefined();
     });
 
     it("can output to typescript", () => {
-      expect(transpiler.toTypescript()).toEqual("export type any_vyGp6PvF = any;");
+      expect(transpiler.toTypescript()).toEqual("export type AnyVyGp6PvF = any;");
     });
 
     describe("subschemas must have titles themselves", () => {

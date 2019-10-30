@@ -1,1 +1,1 @@
-export type stringxdEiCCNL = string;
+export type StringXdEiCCNL = string;

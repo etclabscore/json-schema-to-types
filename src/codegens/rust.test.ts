@@ -5,27 +5,27 @@ describe("codegen: rust", () => {
 
   it("implements getCodePrefix", () => {
     const generator = new RustGenerator({ title: "testerooskies", type: "boolean" });
-    expect(generator.getCodePrefix()).toBe("extern crate serde_json");
+    expect(generator.getCodePrefix()).toBe("extern crate serde_json;");
   });
 
   describe("booleans", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "boolean" });
-      expect(generator.transpile()).toBe("pub type testerooskies = bool;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = bool;");
     });
   });
 
   describe("null", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "null" });
-      expect(generator.transpile()).toBe("pub type testerooskies = serde_json::Value;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = serde_json::Value;");
     });
   });
 
   describe("number", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "number" });
-      expect(generator.transpile()).toBe("pub type testerooskies = f64;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = f64;");
     });
 
     it("enums on numbers do nothing special right now", () => {
@@ -35,14 +35,14 @@ describe("codegen: rust", () => {
         enum: [1, 2, null],
       });
 
-      expect(generator.transpile()).toBe("pub type testerooskies = f64;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = f64;");
     });
   });
 
   describe("integer", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "integer" });
-      expect(generator.transpile()).toBe("pub type testerooskies = i64;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = i64;");
     });
 
     it("enums on integers do nothing special right now", () => {
@@ -51,14 +51,14 @@ describe("codegen: rust", () => {
         type: "integer",
         enum: [1, 2, null],
       });
-      expect(generator.transpile()).toBe("pub type testerooskies = i64;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = i64;");
     });
   });
 
   describe("string", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "string" });
-      expect(generator.transpile()).toBe("pub type testerooskies = String;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = String;");
     });
 
     it("enums", () => {
@@ -69,7 +69,7 @@ describe("codegen: rust", () => {
       });
       expect(generator.transpile()).toBe([
         "#[derive(Serialize, Deserialize)]",
-        "pub enum testerooskies {",
+        "pub enum Testerooskies {",
         "    #[serde(rename = foo)]",
         "    Foo,",
         "    #[serde(rename = bar)]",
@@ -84,7 +84,7 @@ describe("codegen: rust", () => {
   describe("array", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "array" });
-      expect(generator.transpile()).toBe("pub type testerooskies = Vec<serde_json::Value>;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = Vec<serde_json::Value>;");
     });
 
     it("ordered array", () => {
@@ -101,9 +101,9 @@ describe("codegen: rust", () => {
         },
       });
       expect(generator.transpile()).toBe([
-        "pub type testerooskies = (foo, bar);",
-        "pub type foo = String;",
-        "pub type bar = String;",
+        "pub type Testerooskies = (Foo, Bar);",
+        "pub type Foo = String;",
+        "pub type Bar = String;",
       ].join("\n"));
     });
 
@@ -115,8 +115,8 @@ describe("codegen: rust", () => {
         definitions: { foo: { title: "foo", type: "string" } },
       });
       expect(generator.transpile()).toBe([
-        "pub type testerooskies = Vec<foo>;",
-        "pub type foo = String;",
+        "pub type Testerooskies = Vec<Foo>;",
+        "pub type Foo = String;",
       ].join("\n"));
     });
   });
@@ -124,7 +124,7 @@ describe("codegen: rust", () => {
   describe("object", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies", type: "object" });
-      expect(generator.transpile()).toBe("pub type testerooskies = HashMap<String, Option<serde_json::Value>>;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = HashMap<String, Option<serde_json::Value>>;");
     });
 
     it("object with multiple keys", () => {
@@ -142,12 +142,12 @@ describe("codegen: rust", () => {
       });
       expect(generator.transpile()).toBe([
         "#[derive(Serialize, Deserialize)]",
-        "pub struct testerooskies {",
-        "    pub(crate) fooThing: foo,",
-        "    pub(crate) barThing: bar,",
+        "pub struct Testerooskies {",
+        "    pub(crate) fooThing: Foo,",
+        "    pub(crate) barThing: Bar,",
         "}",
-        "pub type foo = String;",
-        "pub type bar = String;",
+        "pub type Foo = String;",
+        "pub type Bar = String;",
       ].join("\n"));
     });
   });
@@ -167,12 +167,12 @@ describe("codegen: rust", () => {
       });
       expect(generator.transpile()).toBe([
         "#[derive(Serialize, Deserialize)]",
-        "pub enum anyOfFoo {",
-        "    foo,",
-        "    bar",
+        "pub enum AnyOfFoo {",
+        "    Foo,",
+        "    Bar",
         "}",
-        "pub type foo = String;",
-        "pub type bar = String;",
+        "pub type Foo = String;",
+        "pub type Bar = String;",
       ].join("\n"));
     });
   });
@@ -192,12 +192,12 @@ describe("codegen: rust", () => {
       });
       expect(generator.transpile()).toBe([
         "#[derive(Serialize, Deserialize)]",
-        "pub enum oneOfFoo {",
-        "    foo,",
-        "    bar",
+        "pub enum OneOfFoo {",
+        "    Foo,",
+        "    Bar",
         "}",
-        "pub type foo = String;",
-        "pub type bar = String;",
+        "pub type Foo = String;",
+        "pub type Bar = String;",
       ].join("\n"));
     });
   });
@@ -216,9 +216,9 @@ describe("codegen: rust", () => {
         },
       });
       expect(generator.transpile()).toBe([
-        "pub type allOfFoo = HashMap<String, Option<serde_json::Value>>;",
-        "pub type foo = String;",
-        "pub type bar = String;",
+        "pub type AllOfFoo = HashMap<String, Option<serde_json::Value>>;",
+        "pub type Foo = String;",
+        "pub type Bar = String;",
       ].join("\n"));
     });
   });
@@ -226,7 +226,7 @@ describe("codegen: rust", () => {
   describe("any", () => {
     it("base case", () => {
       const generator = new RustGenerator({ title: "testerooskies" });
-      expect(generator.transpile()).toBe("pub type testerooskies = serde_json::Value;");
+      expect(generator.transpile()).toBe("pub type Testerooskies = serde_json::Value;");
     });
   });
 });

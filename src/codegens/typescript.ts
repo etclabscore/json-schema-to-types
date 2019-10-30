@@ -8,7 +8,7 @@ export default class Typescript extends CodeGen {
   }
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
     return [
-      `export ${ir.prefix} ${s.title}`,
+      `export ${ir.prefix} ${this.getSafeTitle(s.title)}`,
       ir.prefix === "type" ? " = " : " ",
       ir.typing,
       ir.prefix === "type" ? ";" : "",
@@ -55,7 +55,7 @@ export default class Typescript extends CodeGen {
     return {
       macros: "",
       prefix: "type",
-      typing: `[${this.getJoinedTitles(s.items)}]`,
+      typing: `[${this.getJoinedSafeTitles(s.items)}]`,
     };
   }
 
@@ -63,7 +63,7 @@ export default class Typescript extends CodeGen {
     return {
       macros: "",
       prefix: "type",
-      typing: `${this.refToName(s.items)}[]`,
+      typing: `${this.getSafeTitle(this.refToTitle(s.items))}[]`,
     };
   }
 
@@ -77,7 +77,9 @@ export default class Typescript extends CodeGen {
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      return [...typings, `  ${key}: ${this.refToName(s.properties[key])};`];
+      const title = this.refToTitle(s.properties[key]);
+      const safeTitle = this.getSafeTitle(title);
+      return [...typings, `  ${key}: ${safeTitle};`];
     }, []);
 
     return {
@@ -98,7 +100,7 @@ export default class Typescript extends CodeGen {
   protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: this.getJoinedTitles(s.anyOf, " | "),
+      typing: this.getJoinedSafeTitles(s.anyOf, " | "),
       macros: "",
     };
   }
@@ -106,7 +108,7 @@ export default class Typescript extends CodeGen {
   protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: this.getJoinedTitles(s.allOf, " & "),
+      typing: this.getJoinedSafeTitles(s.allOf, " & "),
       macros: "",
     };
   }
@@ -114,7 +116,7 @@ export default class Typescript extends CodeGen {
   protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: this.getJoinedTitles(s.oneOf, " | "),
+      typing: this.getJoinedSafeTitles(s.oneOf, " | "),
       macros: "",
     };
   }
