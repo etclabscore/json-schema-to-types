@@ -4,6 +4,7 @@ import traverse from "./traverse";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
+import { capitalize } from "./utils";
 
 const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
 const schemaSortComparator = (s1: Schema, s2: Schema) => s1.title > s2.title;
@@ -11,17 +12,26 @@ const sortKeys = (o: any) => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 
+export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts";
 /**
  * Provides a high-level interface for getting typings given a schema.
  */
 export class JsonSchemaToTypes {
   public megaSchema: Schema;
+  [toLang: string]: any;
 
   constructor(s: Schema | Schema[]) {
     const inputSchema = s instanceof Array ? s : [s];
     const schemaWithTitles = inputSchema.map((ss) => this.ensureSchemaTitles(ss));
     const reffed = schemaWithTitles.map((ss) => this.collectAndRefSchemas(ss));
     this.megaSchema = this.combineSchemas(reffed);
+  }
+
+  /**
+   * Generic transpile method.
+   */
+  public to(lang: SupportedLanguages) {
+    return this[`to${capitalize(lang)}`]();
   }
 
   /**
