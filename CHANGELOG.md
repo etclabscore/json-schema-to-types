@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/etclabscore/json-schema-to-types/compare/1.1.1...1.2.0) (2019-10-30)
+
+
+### Features
+
+* add generic interface ([a1757a7](https://github.com/etclabscore/json-schema-to-types/commit/a1757a7069b2d3f34b5a9591a340d4232d004c64))
+
 ## [1.1.1](https://github.com/etclabscore/json-schema-to-types/compare/1.1.0...1.1.1) (2019-10-30)
 
 
