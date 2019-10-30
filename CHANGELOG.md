@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/etclabscore/json-schema-to-types/compare/1.1.0...1.1.1) (2019-10-30)
+
+
+### Bug Fixes
+
+* package directory was broken ([1e90033](https://github.com/etclabscore/json-schema-to-types/commit/1e90033a31504682dbadee580914fdf35fb0f344))
+
 # [1.1.0](https://github.com/etclabscore/json-schema-to-types/compare/1.0.1...1.1.0) (2019-10-29)
 
 
