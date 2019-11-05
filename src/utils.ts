@@ -36,7 +36,7 @@ export const languageSafeName = (title: string) => {
 export const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
 export const sortSchemasByTitle = (s: Schema) => s.sort((s1: Schema, s2: Schema) => s1.title > s2.title);
 
-export const sortKeys = (o: any) => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
+export const sortKeys = (o: any): any => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
 export const joinSchemaTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
@@ -115,6 +115,4 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
  * @category SchemaImprover
  *
  */
-export function ensureSchemaTitles(s: Schema) {
-  return traverse(s, getDefaultTitleForSchema);
-}
+export const ensureSchemaTitles = (s: Schema): Schema => traverse(s, getDefaultTitleForSchema);
