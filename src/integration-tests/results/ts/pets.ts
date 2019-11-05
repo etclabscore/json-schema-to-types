@@ -1,3 +1,8 @@
+/**
+ *
+ * a bunch of pets
+ *
+ */
 export type Pets = OneOfBearManPigSb42HoGS[];
 export type Bear = any;
 export type Man = any;
