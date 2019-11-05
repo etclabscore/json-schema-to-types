@@ -35,7 +35,8 @@
       "JsonSchemaToTypes",
       "traverse",
       "CodeGen",
-      "ensureSubschemaTitles"
+      "ensureSubschemaTitles",
+      "getDefaultTitleForSchema"
     ]
   }
 }
