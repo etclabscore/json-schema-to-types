@@ -5,14 +5,14 @@ import { capitalize } from "../utils";
 
 export default class Rust extends CodeGen {
   public getCodePrefix() {
-    return "extern crate serde_json";
+    return "extern crate serde_json;";
   }
 
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
     return [
       ir.macros,
       ir.macros ? "\n" : "",
-      `pub ${ir.prefix} ${s.title}`,
+      `pub ${ir.prefix} ${this.getSafeTitle(s.title)}`,
       ir.prefix === "type" ? " = " : " ",
       ir.typing,
       ir.prefix === "type" ? ";" : "",
@@ -52,7 +52,10 @@ export default class Rust extends CodeGen {
   protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
     const enumFields = s.enum
       .filter((enumField: any) => typeof enumField === "string")
-      .map((enumField: string) => [`    #[serde(rename = ${enumField})]`, `    ${capitalize(enumField)},`].join("\n"));
+      .map((enumField: string) => [
+        `    #[serde(rename = ${enumField})]`,
+        `    ${this.getSafeTitle(enumField)},`,
+      ].join("\n"));
 
     return {
       macros: "#[derive(Serialize, Deserialize)]",
@@ -64,7 +67,7 @@ export default class Rust extends CodeGen {
   protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: `(${this.getJoinedTitles(s.items)})`,
+      typing: `(${this.getJoinedSafeTitles(s.items)})`,
       macros: "",
     };
   }
@@ -72,7 +75,7 @@ export default class Rust extends CodeGen {
   protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: `Vec<${this.refToName(s.items)}>`,
+      typing: `Vec<${this.getSafeTitle(this.refToTitle(s.items))}>`,
       macros: "",
     };
   }
@@ -87,7 +90,7 @@ export default class Rust extends CodeGen {
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      return [...typings, `    pub(crate) ${key}: ${this.refToName(s.properties[key])},`];
+      return [...typings, `    pub(crate) ${key}: ${this.getSafeTitle(this.refToTitle(s.properties[key]))},`];
     }, []);
 
     return {
@@ -130,7 +133,7 @@ export default class Rust extends CodeGen {
       prefix: "enum",
       typing: [
         "{",
-        this.getJoinedTitles(s, ",\n").split("\n").map((l) => `    ${l}`).join("\n"),
+        this.getJoinedSafeTitles(s, ",\n").split("\n").map((l) => `    ${l}`).join("\n"),
         "}",
       ].join("\n"),
     };

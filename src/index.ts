@@ -5,6 +5,7 @@ import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 import { capitalize } from "./utils";
+import { CodeGen } from "./codegens/codegen-interface";
 
 const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
 const schemaSortComparator = (s1: Schema, s2: Schema) => s1.title > s2.title;
@@ -17,8 +18,8 @@ export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts";
  * Provides a high-level interface for getting typings given a schema.
  */
 export class JsonSchemaToTypes {
-  public megaSchema: Schema;
   [toLang: string]: any;
+  public megaSchema: Schema;
 
   constructor(s: Schema | Schema[]) {
     const inputSchema = s instanceof Array ? s : [s];
@@ -30,7 +31,7 @@ export class JsonSchemaToTypes {
   /**
    * Generic transpile method.
    */
-  public to(lang: SupportedLanguages) {
+  public to(lang: SupportedLanguages): string {
     return this[`to${capitalize(lang)}`]();
   }
 
@@ -43,8 +44,8 @@ export class JsonSchemaToTypes {
    * @category TargetCodeGenerator
    *
    */
-  public toTypescript() {
-    return new TypescriptGenerator(this.megaSchema).transpile();
+  public toTypescript(): string {
+    return this.transpile(new TypescriptGenerator(this.megaSchema));
   }
 
   /**
@@ -54,7 +55,7 @@ export class JsonSchemaToTypes {
    * @category TargetCodeGenerator
    *
    */
-  public toTs() {
+  public toTs(): string {
     return this.toTypescript();
   }
 
@@ -67,8 +68,8 @@ export class JsonSchemaToTypes {
    * @category TargetCodeGenerator
    *
    */
-  public toRust() {
-    return new RustGenerator(this.megaSchema).transpile();
+  public toRust(): string {
+    return this.transpile(new RustGenerator(this.megaSchema));
   }
 
   /**
@@ -109,7 +110,7 @@ export class JsonSchemaToTypes {
       throw subSchemaTitleErrors[0];
     }
 
-    let prefix = schema.type || "any_";
+    let prefix = schema.type ? `${schema.type}_` : "any_";
 
     ["anyOf", "oneOf", "allOf"].forEach((k) => {
       if (schema[k]) {
@@ -142,6 +143,17 @@ export class JsonSchemaToTypes {
     const hash = createHash("sha1").update(JSON.stringify(schema)).digest("base64");
     const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
     return { ...schema, title: `${prefix}${friendlyHash}`, definitions };
+  }
+
+  private transpile(gen: CodeGen): string {
+    const codeLines = [];
+    const prefix = gen.getCodePrefix();
+    if (prefix) {
+      codeLines.push(prefix);
+      codeLines.push("");
+    }
+    codeLines.push(gen.transpile());
+    return codeLines.join("\n");
   }
 
   /**

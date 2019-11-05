@@ -5,21 +5,21 @@ describe("codegen: typescript", () => {
   describe("booleans", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "boolean" });
-      expect(generator.transpile()).toBe("export type testerooskies = boolean;");
+      expect(generator.transpile()).toBe("export type Testerooskies = boolean;");
     });
   });
 
   describe("null", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "null" });
-      expect(generator.transpile()).toBe("export type testerooskies = null;");
+      expect(generator.transpile()).toBe("export type Testerooskies = null;");
     });
   });
 
   describe("number", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "number" });
-      expect(generator.transpile()).toBe("export type testerooskies = number;");
+      expect(generator.transpile()).toBe("export type Testerooskies = number;");
     });
 
     it("enums", () => {
@@ -28,14 +28,14 @@ describe("codegen: typescript", () => {
         type: "number",
         enum: [1, 2, null],
       });
-      expect(generator.transpile()).toBe("export type testerooskies = 1 | 2;");
+      expect(generator.transpile()).toBe("export type Testerooskies = 1 | 2;");
     });
   });
 
   describe("integer", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "integer" });
-      expect(generator.transpile()).toBe("export type testerooskies = number;");
+      expect(generator.transpile()).toBe("export type Testerooskies = number;");
     });
 
     it("enums", () => {
@@ -44,14 +44,14 @@ describe("codegen: typescript", () => {
         type: "integer",
         enum: [1, 2, null],
       });
-      expect(generator.transpile()).toBe("export type testerooskies = 1 | 2;");
+      expect(generator.transpile()).toBe("export type Testerooskies = 1 | 2;");
     });
   });
 
   describe("string", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "string" });
-      expect(generator.transpile()).toBe("export type testerooskies = string;");
+      expect(generator.transpile()).toBe("export type Testerooskies = string;");
     });
 
     it("enums", () => {
@@ -60,14 +60,14 @@ describe("codegen: typescript", () => {
         type: "string",
         enum: ["foo", "bar", "baz", null],
       });
-      expect(generator.transpile()).toBe("export type testerooskies = \"foo\" | \"bar\" | \"baz\";");
+      expect(generator.transpile()).toBe("export type Testerooskies = \"foo\" | \"bar\" | \"baz\";");
     });
   });
 
   describe("array", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "array" });
-      expect(generator.transpile()).toBe("export type testerooskies = any[];");
+      expect(generator.transpile()).toBe("export type Testerooskies = any[];");
     });
 
     it("ordered array", () => {
@@ -84,9 +84,9 @@ describe("codegen: typescript", () => {
         },
       });
       expect(generator.transpile()).toBe([
-        "export type testerooskies = [foo, bar];",
-        "export type foo = string;",
-        "export type bar = string;",
+        "export type Testerooskies = [Foo, Bar];",
+        "export type Foo = string;",
+        "export type Bar = string;",
       ].join("\n"));
     });
 
@@ -98,8 +98,8 @@ describe("codegen: typescript", () => {
         definitions: { foo: { title: "foo", type: "string" } },
       });
       expect(generator.transpile()).toBe([
-        "export type testerooskies = foo[];",
-        "export type foo = string;",
+        "export type Testerooskies = Foo[];",
+        "export type Foo = string;",
       ].join("\n"));
     });
   });
@@ -107,7 +107,7 @@ describe("codegen: typescript", () => {
   describe("object", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "object" });
-      expect(generator.transpile()).toBe("export interface testerooskies { [key: string]: any }");
+      expect(generator.transpile()).toBe("export interface Testerooskies { [key: string]: any }");
     });
 
     it("object with multiple keys", () => {
@@ -124,12 +124,12 @@ describe("codegen: typescript", () => {
         },
       });
       expect(generator.transpile()).toBe([
-        "export interface testerooskies {",
-        "  fooThing: foo;",
-        "  barThing: bar;",
+        "export interface Testerooskies {",
+        "  fooThing: Foo;",
+        "  barThing: Bar;",
         "}",
-        "export type foo = string;",
-        "export type bar = string;",
+        "export type Foo = string;",
+        "export type Bar = string;",
       ].join("\n"));
     });
   });
@@ -149,9 +149,9 @@ describe("codegen: typescript", () => {
 
       });
       expect(generator.transpile()).toBe([
-        "export type anyOfFoo = foo | bar;",
-        "export type foo = string;",
-        "export type bar = string;",
+        "export type AnyOfFoo = Foo | Bar;",
+        "export type Foo = string;",
+        "export type Bar = string;",
       ].join("\n"));
     });
   });
@@ -170,9 +170,9 @@ describe("codegen: typescript", () => {
         },
       });
       expect(generator.transpile()).toBe([
-        "export type oneOfFoo = foo | bar;",
-        "export type foo = string;",
-        "export type bar = string;",
+        "export type OneOfFoo = Foo | Bar;",
+        "export type Foo = string;",
+        "export type Bar = string;",
       ].join("\n"));
     });
   });
@@ -191,9 +191,9 @@ describe("codegen: typescript", () => {
         },
       });
       expect(generator.transpile()).toBe([
-        "export type allOfFoo = foo & bar;",
-        "export type foo = string;",
-        "export type bar = string;",
+        "export type AllOfFoo = Foo & Bar;",
+        "export type Foo = string;",
+        "export type Bar = string;",
       ].join("\n"));
     });
   });
@@ -201,7 +201,7 @@ describe("codegen: typescript", () => {
   describe("any", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies" });
-      expect(generator.transpile()).toBe("export type testerooskies = any;");
+      expect(generator.transpile()).toBe("export type Testerooskies = any;");
     });
   });
 });
