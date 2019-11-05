@@ -7,7 +7,7 @@ Features:
  - Supports the following languages:
    - Typescript
    - Rust
- - Zero external dependencies
+ - minimal external dependencies
  - Supports merging multiple JSONSchema into one set of types
  - Generates titles for schemas that are missing them
  - Run in browser / node
