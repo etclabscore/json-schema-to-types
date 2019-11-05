@@ -2,9 +2,10 @@ import { Schema } from "@open-rpc/meta-schema";
 import { capitalize, languageSafeName } from "../utils";
 
 export interface TypeIntermediateRepresentation {
-  macros: string;
+  macros?: string;
   prefix: string;
   typing: string;
+  documentationComment?: string;
 }
 
 /**

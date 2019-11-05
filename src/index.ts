@@ -5,7 +5,7 @@ import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 import { capitalize, schemaToRef, sortKeys, sortSchemasByTitle, ensureSchemaTitles } from "./utils";
-import { CodeGen } from "./codegens/codegen-interface";
+import { CodeGen } from "./codegens/codegen";
 
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");

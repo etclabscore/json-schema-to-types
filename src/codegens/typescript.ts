@@ -1,5 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
-import { CodeGen, TypeIntermediateRepresentation } from "./codegen-interface";
+import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 import traverse from "../traverse";
 
 export default class Typescript extends CodeGen {
@@ -8,6 +8,7 @@ export default class Typescript extends CodeGen {
   }
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
     return [
+      ir.documentationComment,
       `export ${ir.prefix} ${this.getSafeTitle(s.title)}`,
       ir.prefix === "type" ? " = " : " ",
       ir.typing,
@@ -16,15 +17,15 @@ export default class Typescript extends CodeGen {
   }
 
   protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "boolean", macros: "" };
+    return { documentationComment: this.buildDocs(s), prefix: "type", typing: "boolean" };
   }
 
   protected handleNull(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "null", macros: "" };
+    return { prefix: "type", typing: "null" };
   }
 
   protected handleNumber(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "number", macros: "" };
+    return { documentationComment: this.buildDocs(s), prefix: "type", typing: "number" };
   }
 
   protected handleInteger(s: Schema): TypeIntermediateRepresentation {
@@ -33,19 +34,19 @@ export default class Typescript extends CodeGen {
 
   protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
     return {
-      macros: "",
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: this.buildEnum(s),
     };
   }
 
   protected handleString(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "string", macros: "" };
+    return { documentationComment: this.buildDocs(s), prefix: "type", typing: "string" };
   }
 
   protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
     return {
-      macros: "",
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: this.buildEnum(s),
     };
@@ -53,7 +54,7 @@ export default class Typescript extends CodeGen {
 
   protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
     return {
-      macros: "",
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: `[${this.getJoinedSafeTitles(s.items)}]`,
     };
@@ -61,7 +62,7 @@ export default class Typescript extends CodeGen {
 
   protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
     return {
-      macros: "",
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: `${this.getSafeTitle(this.refToTitle(s.items))}[]`,
     };
@@ -69,7 +70,7 @@ export default class Typescript extends CodeGen {
 
   protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
     return {
-      macros: "",
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: `any[]`,
     };
@@ -83,46 +84,46 @@ export default class Typescript extends CodeGen {
     }, []);
 
     return {
-      macros: "",
+      documentationComment: this.buildDocs(s),
       prefix: "interface",
       typing: [`{`, ...propertyTypings, "}"].join("\n"),
     };
   }
 
-  protected handleUntypedObject(schema: Schema): TypeIntermediateRepresentation {
+  protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
     return {
-      macros: "",
       prefix: "interface",
       typing: "{ [key: string]: any }",
+      documentationComment: this.buildDocs(s),
     };
   }
 
   protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
     return {
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: this.getJoinedSafeTitles(s.anyOf, " | "),
-      macros: "",
     };
   }
 
   protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
     return {
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: this.getJoinedSafeTitles(s.allOf, " & "),
-      macros: "",
     };
   }
 
   protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
     return {
+      documentationComment: this.buildDocs(s),
       prefix: "type",
       typing: this.getJoinedSafeTitles(s.oneOf, " | "),
-      macros: "",
     };
   }
 
   protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "any", macros: "" };
+    return { documentationComment: this.buildDocs(s), prefix: "type", typing: "any" };
   }
 
   private buildEnum(schema: Schema): string {
@@ -131,5 +132,37 @@ export default class Typescript extends CodeGen {
       .filter((s: any) => typeof s === typeOf)
       .map((s: string) => typeOf === "string" ? `"${s}"` : s)
       .join(" | ");
+  }
+
+  private buildDocs(s: Schema): string | undefined {
+    const docStringLines = [];
+
+    if (s.description) {
+      docStringLines.push(` * ${s.description}`);
+      docStringLines.push(" *");
+    }
+
+    if (s.default) {
+      docStringLines.push(` * @default  ${s.default}`);
+      docStringLines.push(` *`);
+    }
+
+    if (s.examples) {
+      s.examples.forEach((example: string) => {
+        docStringLines.push(" * @example");
+        docStringLines.push(` * \`${example}\``);
+        docStringLines.push(" *");
+      });
+    }
+
+    if (docStringLines.length > 0) {
+      return [
+        "/**",
+        " *",
+        ...docStringLines,
+        " */",
+        "",
+      ].join("\n");
+    }
   }
 }
