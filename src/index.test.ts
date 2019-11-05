@@ -1,4 +1,5 @@
 import JsonSchemaToTypes from "./index";
+import { getDefaultTitleForSchema } from "./utils";
 
 describe("JsonSchemaToTypes", () => {
 
@@ -7,7 +8,7 @@ describe("JsonSchemaToTypes", () => {
 
     it("does not change anything if theres already a title", () => {
       const testSchema = { title: "foo" };
-      const result = transpiler.getDefaultTitleForSchema(testSchema);
+      const result = getDefaultTitleForSchema(testSchema);
       expect(result).toBe(testSchema);
     });
 
@@ -28,31 +29,31 @@ describe("JsonSchemaToTypes", () => {
 
     describe("subschemas must have titles themselves", () => {
       it("anyOf", () => {
-        expect(() => transpiler.getDefaultTitleForSchema({
+        expect(() => getDefaultTitleForSchema({
           anyOf: [{ title: "abc" }, {}],
         })).toThrow(Error);
       });
 
       it("allOf", () => {
-        expect(() => transpiler.getDefaultTitleForSchema({
+        expect(() => getDefaultTitleForSchema({
           allOf: [{ title: "abc" }, {}],
         })).toThrow(Error);
       });
 
       it("oneOf", () => {
-        expect(() => transpiler.getDefaultTitleForSchema({
+        expect(() => getDefaultTitleForSchema({
           oneOf: [{ title: "abc" }, {}],
         })).toThrow(Error);
       });
 
       it("items", () => {
-        expect(() => transpiler.getDefaultTitleForSchema({
+        expect(() => getDefaultTitleForSchema({
           items: [{ title: "abc" }, {}],
         })).toThrow(Error);
       });
 
       it("properties", () => {
-        expect(() => transpiler.getDefaultTitleForSchema({
+        expect(() => getDefaultTitleForSchema({
           properties: { a: { title: "abc" }, b: {} },
         })).toThrow(Error);
       });
@@ -61,21 +62,21 @@ describe("JsonSchemaToTypes", () => {
     describe("different schema yields different name", () => {
 
       it("type", () => {
-        expect(transpiler.getDefaultTitleForSchema({ type: "string" }))
+        expect(getDefaultTitleForSchema({ type: "string" }))
           .not
-          .toEqual(transpiler.getDefaultTitleForSchema({ type: "number" }));
+          .toEqual(getDefaultTitleForSchema({ type: "number" }));
       });
 
       it("additional properties such as minimum", () => {
-        expect(transpiler.getDefaultTitleForSchema({ type: "number" }))
+        expect(getDefaultTitleForSchema({ type: "number" }))
           .not
-          .toEqual(transpiler.getDefaultTitleForSchema({ type: "number", minimum: 3 }));
+          .toEqual(getDefaultTitleForSchema({ type: "number", minimum: 3 }));
       });
 
       it("different titles same everything else", () => {
-        expect(transpiler.getDefaultTitleForSchema({ type: "number", title: "b" }))
+        expect(getDefaultTitleForSchema({ type: "number", title: "b" }))
           .not
-          .toEqual(transpiler.getDefaultTitleForSchema({ type: "number", title: "a" }));
+          .toEqual(getDefaultTitleForSchema({ type: "number", title: "a" }));
       });
 
       it("when items is an array, order matters", () => {
@@ -85,9 +86,9 @@ describe("JsonSchemaToTypes", () => {
         const t1 = { type: "array", items: [a, b] };
         const t2 = { type: "array", items: [b, a] };
 
-        expect(transpiler.getDefaultTitleForSchema(t1))
+        expect(getDefaultTitleForSchema(t1))
           .not
-          .toEqual(transpiler.getDefaultTitleForSchema(t2));
+          .toEqual(getDefaultTitleForSchema(t2));
       });
     });
 
@@ -100,8 +101,8 @@ describe("JsonSchemaToTypes", () => {
         ["anyOf", "oneOf", "allOf"].forEach((k) => {
           const t1 = { [k]: [a, b] };
           const t2 = { [k]: [b, a] };
-          expect(transpiler.getDefaultTitleForSchema(t1))
-            .toEqual(transpiler.getDefaultTitleForSchema(t2));
+          expect(getDefaultTitleForSchema(t1))
+            .toEqual(getDefaultTitleForSchema(t2));
         });
       });
 
@@ -112,8 +113,8 @@ describe("JsonSchemaToTypes", () => {
         const t1 = { type: "object", properties: { a, b } };
         const t2 = { type: "object", properties: { b, a } };
 
-        expect(transpiler.getDefaultTitleForSchema(t1))
-          .toEqual(transpiler.getDefaultTitleForSchema(t2));
+        expect(getDefaultTitleForSchema(t1))
+          .toEqual(getDefaultTitleForSchema(t2));
       });
 
       it("when array items is an object (single schema), property ordering does not matter", () => {
@@ -123,24 +124,24 @@ describe("JsonSchemaToTypes", () => {
         const t1 = { type: "array", items: a };
         const t2 = { type: "array", items: b };
 
-        expect(transpiler.getDefaultTitleForSchema(t1))
-          .toEqual(transpiler.getDefaultTitleForSchema(t2));
+        expect(getDefaultTitleForSchema(t1))
+          .toEqual(getDefaultTitleForSchema(t2));
       });
 
       it("order of enum values doesnt matter", () => {
         const a = { type: "number", enum: [1, 2, 3] };
         const b = { type: "number", enum: [3, 2, 1] };
 
-        expect(transpiler.getDefaultTitleForSchema(a))
-          .toEqual(transpiler.getDefaultTitleForSchema(b));
+        expect(getDefaultTitleForSchema(a))
+          .toEqual(getDefaultTitleForSchema(b));
       });
 
       it("definitions are ignored", () => {
         const a = { type: "number", definitions: { a: { type: "number" } } };
         const b = { type: "number", definitions: { b: { type: "string" } } };
 
-        expect(transpiler.getDefaultTitleForSchema(a).title)
-          .toEqual(transpiler.getDefaultTitleForSchema(b).title);
+        expect(getDefaultTitleForSchema(a).title)
+          .toEqual(getDefaultTitleForSchema(b).title);
       });
     });
   });
