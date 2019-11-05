@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/etclabscore/json-schema-to-types/compare/1.2.1...1.3.0) (2019-11-05)
+
+
+### Bug Fixes
+
+* update tsdoc tox ([41b1722](https://github.com/etclabscore/json-schema-to-types/commit/41b1722eef6aa9fdec076c1967eb5dd5b9e1b14b))
+
+
+### Features
+
+* push functionality into usils ([b9795da](https://github.com/etclabscore/json-schema-to-types/commit/b9795da2b71290f43013352dfdbf5acbd0adf7d7))
+
 ## [1.2.1](https://github.com/etclabscore/json-schema-to-types/compare/1.2.0...1.2.1) (2019-11-05)
 
 
