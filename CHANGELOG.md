@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/etclabscore/json-schema-to-types/compare/1.2.0...1.2.1) (2019-11-05)
+
+
+### Bug Fixes
+
+* friendly titles ([31de569](https://github.com/etclabscore/json-schema-to-types/commit/31de569369cb74700bf23b316a0f5096d998cdf5))
+* using some lodash stuff ([845c1c4](https://github.com/etclabscore/json-schema-to-types/commit/845c1c45d77572c82f37b75830c340226e746873))
+
 # [1.2.0](https://github.com/etclabscore/json-schema-to-types/compare/1.1.1...1.2.0) (2019-10-30)
 
 
