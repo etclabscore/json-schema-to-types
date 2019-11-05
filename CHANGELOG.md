@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/etclabscore/json-schema-to-types/compare/1.3.0...1.4.0) (2019-11-05)
+
+
+### Bug Fixes
+
+* style change ([4d298b1](https://github.com/etclabscore/json-schema-to-types/commit/4d298b189bd2c39f912f9c0467935b43b5ce1241))
+* wrong name ([436ff60](https://github.com/etclabscore/json-schema-to-types/commit/436ff609e3a19a1f5833ce65ad7a642fe036e83f))
+
+
+### Features
+
+* add docs ([ecbb102](https://github.com/etclabscore/json-schema-to-types/commit/ecbb1025ee574ffe0e6f76e586808f9bcae90e83))
+
 # [1.3.0](https://github.com/etclabscore/json-schema-to-types/compare/1.2.1...1.3.0) (2019-11-05)
 
 
