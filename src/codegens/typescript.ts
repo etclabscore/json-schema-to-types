@@ -3,9 +3,6 @@ import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 import traverse from "../traverse";
 
 export default class Typescript extends CodeGen {
-  public getCodePrefix() {
-    return "";
-  }
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
     return [
       ir.documentationComment,
