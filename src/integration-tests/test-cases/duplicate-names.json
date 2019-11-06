@@ -1,0 +1,42 @@
+[
+  {
+    "type": "string"
+  },
+  {
+    "type": "string"
+  },
+  {
+    "properties": {
+      "ripslip": {
+        "type": "boolean"
+      }
+    },
+    "type": "object"
+  },
+  {
+    "title": "OneOfStuff",
+    "oneOf": [
+      {
+        "description": "array of strings is all...",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      {
+        "title": "Buncha Numbers",
+        "items": [
+          {
+            "format": "int64",
+            "type": "integer"
+          }
+        ],
+        "type": "array"
+      }
+    ]
+  },
+  {
+    "format": "int64",
+    "type": "integer"
+  }
+]
