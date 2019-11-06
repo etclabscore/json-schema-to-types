@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/etclabscore/json-schema-to-types/compare/1.4.0...1.4.1) (2019-11-06)
+
+
+### Bug Fixes
+
+* add broken test for [#26](https://github.com/etclabscore/json-schema-to-types/issues/26) ([d8394ae](https://github.com/etclabscore/json-schema-to-types/commit/d8394ae515133d4212552755d4ad4c3524c2505e))
+* duplicate issue ([30e6a1d](https://github.com/etclabscore/json-schema-to-types/commit/30e6a1d9e9ef646a18ef02a31fc834bddaba5a8f)), closes [#26](https://github.com/etclabscore/json-schema-to-types/issues/26)
+
 # [1.4.0](https://github.com/etclabscore/json-schema-to-types/compare/1.3.0...1.4.0) (2019-11-05)
 
 
