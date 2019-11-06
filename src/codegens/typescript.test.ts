@@ -127,6 +127,7 @@ describe("codegen: typescript", () => {
         "export interface Testerooskies {",
         "  fooThing?: Foo;",
         "  barThing?: Bar;",
+        "  [k: string]: any;",
         "}",
         "export type Foo = string;",
         "export type Bar = string;",

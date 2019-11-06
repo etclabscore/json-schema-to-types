@@ -2,6 +2,7 @@ export type StringWxzVcTo3 = string;
 export type BooleanQg3XFxa5 = boolean;
 export interface ObjectOfBooleanQg3XFxa5U126EkTS {
   ripslip?: BooleanQg3XFxa5;
+  [k: string]: any;
 }
 /**
  *
