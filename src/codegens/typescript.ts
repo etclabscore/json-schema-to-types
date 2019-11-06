@@ -84,6 +84,10 @@ export default class Typescript extends CodeGen {
       return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
     }, []);
 
+    if (s.additionalProperties !== false) {
+      propertyTypings.push("  [k: string]: any;");
+    }
+
     return {
       documentationComment: this.buildDocs(s),
       prefix: "interface",
