@@ -3,6 +3,7 @@ import { Schema } from "@open-rpc/meta-schema";
 import traverse from "./traverse";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
+import GolangGenerator from "./codegens/golang";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 import { capitalize, schemaToRef, sortKeys, sortSchemasByTitle, ensureSchemaTitles } from "./utils";
 import { CodeGen } from "./codegens/codegen";
@@ -10,7 +11,7 @@ import { CodeGen } from "./codegens/codegen";
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 
-export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts";
+export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "golang";
 /**
  * Provides a high-level interface for getting typings given a schema.
  */
@@ -80,6 +81,32 @@ export class JsonSchemaToTypes {
    */
   public toRs(): string {
     return this.toRust();
+  }
+
+  /**
+   * Returns the types in Rust
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Rust
+   * @category TargetCodeGenerator
+   *
+   */
+  public toGolang(): string {
+    return this.transpile(new GolangGenerator(this.megaSchema));
+  }
+
+  /**
+   * Returns the types in Rust
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Rust
+   * @category TargetCodeGenerator
+   *
+   */
+  public toGo(): string {
+    return this.toGolang();
   }
 
   private transpile(gen: CodeGen): string {

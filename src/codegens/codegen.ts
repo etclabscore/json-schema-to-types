@@ -3,7 +3,7 @@ import { capitalize, languageSafeName } from "../utils";
 
 export interface TypeIntermediateRepresentation {
   macros?: string;
-  prefix: string;
+  prefix?: string;
   typing: string;
   documentationComment?: string;
 }
@@ -41,7 +41,7 @@ export abstract class CodeGen {
     return languageSafeName(title);
   }
 
-  public abstract getCodePrefix(): string;
+  public getCodePrefix(): string { return ""; }
 
   protected abstract generate(s: Schema, ir: TypeIntermediateRepresentation): string;
 
