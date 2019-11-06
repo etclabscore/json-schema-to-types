@@ -125,8 +125,8 @@ describe("codegen: typescript", () => {
       });
       expect(generator.transpile()).toBe([
         "export interface Testerooskies {",
-        "  fooThing: Foo;",
-        "  barThing: Bar;",
+        "  fooThing?: Foo;",
+        "  barThing?: Bar;",
         "}",
         "export type Foo = string;",
         "export type Bar = string;",
