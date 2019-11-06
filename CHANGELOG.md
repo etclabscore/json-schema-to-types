@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/etclabscore/json-schema-to-types/compare/1.5.0...1.6.0) (2019-11-06)
+
+
+### Features
+
+* make required work properly ([bf5ae6c](https://github.com/etclabscore/json-schema-to-types/commit/bf5ae6c9a5ee223cb6da920d097642377884733a)), closes [#25](https://github.com/etclabscore/json-schema-to-types/issues/25)
+
 # [1.5.0](https://github.com/etclabscore/json-schema-to-types/compare/1.4.1...1.5.0) (2019-11-06)
 
 
