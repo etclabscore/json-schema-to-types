@@ -130,6 +130,7 @@ export class JsonSchemaToTypes {
         };
       }, {}),
     };
+    delete combined.definitions[combined.title];
     return combined;
   }
 }

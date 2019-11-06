@@ -5,9 +5,8 @@
     "type": "array",
     "items": {
       "oneOf": [
-        { "title": "Man" },
-        { "title": "Bear" },
-        { "title": "Pig" }
+        { "type": "string" },
+        { "type": "string" }
       ]
     }
   },
