@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/etclabscore/json-schema-to-types/compare/1.6.0...1.6.1) (2019-11-06)
+
+
+### Bug Fixes
+
+* additional props ([8734c42](https://github.com/etclabscore/json-schema-to-types/commit/8734c4215de1dd7468796278ac9bd1d306eb07c2)), closes [#31](https://github.com/etclabscore/json-schema-to-types/issues/31)
+
 # [1.6.0](https://github.com/etclabscore/json-schema-to-types/compare/1.5.0...1.6.0) (2019-11-06)
 
 
