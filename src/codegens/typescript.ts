@@ -75,9 +75,13 @@ export default class Typescript extends CodeGen {
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      const title = this.refToTitle(s.properties[key]);
-      const safeTitle = this.getSafeTitle(title);
-      return [...typings, `  ${key}: ${safeTitle};`];
+      const propSchema = s.properties[key];
+      let isRequired = false;
+      if (s.required) {
+        isRequired = s.required.indexOf(propSchema.title) !== -1;
+      }
+      const title = this.getSafeTitle(this.refToTitle(propSchema));
+      return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
     }, []);
 
     return {

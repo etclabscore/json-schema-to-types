@@ -92,7 +92,21 @@ export default class Rust extends CodeGen {
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      return [...typings, `    pub(crate) ${key}: ${this.getSafeTitle(this.refToTitle(s.properties[key]))},`];
+      const propSchema = s.properties[key];
+      let isRequired = false;
+      if (s.required) {
+        isRequired = s.required.indexOf(propSchema.title) !== -1;
+      }
+
+      const typeName = this.getSafeTitle(this.refToTitle(propSchema));
+
+      return [
+        ...typings,
+        [
+          `    pub(crate) ${key}: `,
+          isRequired ? typeName + "," : `Option<${typeName}>,`,
+        ].join(""),
+      ];
     }, []);
 
     return {

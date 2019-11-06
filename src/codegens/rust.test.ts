@@ -143,8 +143,8 @@ describe("codegen: rust", () => {
       expect(generator.transpile()).toBe([
         "#[derive(Serialize, Deserialize)]",
         "pub struct Testerooskies {",
-        "    pub(crate) fooThing: Foo,",
-        "    pub(crate) barThing: Bar,",
+        "    pub(crate) fooThing: Option<Foo>,",
+        "    pub(crate) barThing: Option<Bar>,",
         "}",
         "pub type Foo = String;",
         "pub type Bar = String;",

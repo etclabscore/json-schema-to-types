@@ -83,12 +83,17 @@ export default class Golang extends CodeGen {
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
+      const propSchema = s.properties[key];
+      let isRequired = false;
+      if (s.required) {
+        isRequired = s.required.indexOf(propSchema.title) !== -1;
+      }
       return [
         ...typings,
         "\t" + [
           this.getSafeTitle(key),
-          `*${this.getSafeTitle(this.refToTitle(s.properties[key]))}`,
-          `\`json:"${key},omitempty"\``,
+          `*${this.getSafeTitle(this.refToTitle(propSchema))}`,
+          `\`json:"${key}${isRequired ? "" : ",omitempty"}"\``,
         ].join(" "),
       ];
     }, []);

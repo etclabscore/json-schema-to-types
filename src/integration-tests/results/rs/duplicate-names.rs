@@ -4,7 +4,7 @@ pub type StringWxzVcTo3 = String;
 pub type BooleanQg3XFxa5 = bool;
 #[derive(Serialize, Deserialize)]
 pub struct ObjectOfBooleanQg3XFxa5U126EkTS {
-    pub(crate) ripslip: BooleanQg3XFxa5,
+    pub(crate) ripslip: Option<BooleanQg3XFxa5>,
 }
 /// UnorderedSetOfStringWxzVcTo3YX5DSLJx
 ///
