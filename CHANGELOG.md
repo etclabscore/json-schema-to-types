@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/etclabscore/json-schema-to-types/compare/1.4.1...1.5.0) (2019-11-06)
+
+
+### Features
+
+* add golang support ([40b203b](https://github.com/etclabscore/json-schema-to-types/commit/40b203b6b1a0cc6b8981bca9c7bccdb71688a509))
+
 ## [1.4.1](https://github.com/etclabscore/json-schema-to-types/compare/1.4.0...1.4.1) (2019-11-06)
 
 
