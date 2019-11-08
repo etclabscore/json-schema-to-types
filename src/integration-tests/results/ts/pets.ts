@@ -3,8 +3,8 @@
  * a bunch of pets
  *
  */
-export type Pets = OneOfBearManPigSb42HoGS[];
-export type Bear = any;
+export type Pets = OneOfManBearPigDYW6G7UV[];
 export type Man = any;
+export type Bear = any;
 export type Pig = any;
-export type OneOfBearManPigSb42HoGS = Bear | Man | Pig;
+export type OneOfManBearPigDYW6G7UV = Man | Bear | Pig;

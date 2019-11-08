@@ -38,6 +38,7 @@ export const sortSchemasByTitle = (s: Schema) => s.sort((s1: Schema, s2: Schema)
 
 export const sortKeys = (o: any): any => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
 export const joinSchemaTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
+export const sortEntriesByKey = ([key1]: any, [key2]: any) => key1 > key2 ? -1 : 1;
 
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 
@@ -66,23 +67,25 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
     throw subSchemaTitleErrors[0];
   }
 
+  const deterministicSchema = {...schema};
   let prefix = schema.type ? `${schema.type}_` : "any_";
 
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
     if (schema[k]) {
-      schema[k] = sortSchemasByTitle(schema[k]);
-      prefix = `${k}_${schema[k].map(({ title }: Schema) => title).join("_")}_`;
+      deterministicSchema[k] = sortSchemasByTitle(schema[k].slice(0));
+      prefix = `${k}_${deterministicSchema[k].map(({ title }: Schema) => title).join("_")}_`;
     }
   });
 
   if (schema.type === "object" && schema.properties) {
-    schema.properties = sortKeys(schema.properties);
-    prefix = `objectOf_${joinSchemaTitles(Object.values(schema.properties))}_`;
+    deterministicSchema.properties = Object.entries(schema.properties).sort(sortEntriesByKey);
+    const joinedTitles = joinSchemaTitles(deterministicSchema.properties.map((val: any) => val[1]));
+    prefix = `objectOf_${joinedTitles}_`;
   }
 
   if (schema.type === "array") {
     if (schema.items instanceof Array === false) {
-      schema.items = sortKeys(schema.items);
+      deterministicSchema.items = Object.entries(schema.items).sort(sortEntriesByKey);
       prefix = `unorderedSetOf_${schema.items.title}`;
     } else {
       prefix = `unorderedSetOf_${joinSchemaTitles(schema.items)}`;
@@ -90,15 +93,15 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
   }
 
   if (schema.enum) {
-    schema.enum = schema.enum.sort();
+    deterministicSchema.enum = schema.enum.slice(0).sort();
   }
 
-  const definitions = schema.definitions;
-  schema.definitions = undefined;
+  // Schema must be deterministic by now
+  deterministicSchema.definitions = undefined;
 
-  const hash = createHash("sha1").update(JSON.stringify(schema)).digest("base64");
+  const hash = createHash("sha1").update(JSON.stringify(deterministicSchema)).digest("base64");
   const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
-  return { ...schema, title: `${prefix}${friendlyHash}`, definitions };
+  return { ...schema, title: `${prefix}${friendlyHash}` };
 }
 
 /**
