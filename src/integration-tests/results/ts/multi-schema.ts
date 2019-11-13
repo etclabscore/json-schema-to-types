@@ -3,13 +3,13 @@
  * a bunch of pets
  *
  */
-export type Pets = OneOfStringWxzVcTo3StringWxzVcTo3VIyVNwmv[];
-export type StringWxzVcTo3 = string;
-export type OneOfStringWxzVcTo3StringWxzVcTo3VIyVNwmv = StringWxzVcTo3 | StringWxzVcTo3;
+export type Pets = OneOfStringDoaGddGAStringDoaGddGABERs71N5[];
+export type StringDoaGddGA = string;
+export type OneOfStringDoaGddGAStringDoaGddGABERs71N5 = StringDoaGddGA | StringDoaGddGA;
 /**
  *
  * simplest test case
  *
  */
-export type StringXdEiCCNL = string;
+export type StringLxWtMXSJ = string;
 export type Man = any;

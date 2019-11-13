@@ -1,10 +1,10 @@
 // a bunch of pets
-type Pets []OneOfStringWxzVcTo3StringWxzVcTo3VIyVNwmv
-type StringWxzVcTo3 string
-type OneOfStringWxzVcTo3StringWxzVcTo3VIyVNwmv struct {
-	StringWxzVcTo3 *StringWxzVcTo3
-	StringWxzVcTo3 *StringWxzVcTo3
+type Pets []OneOfStringDoaGddGAStringDoaGddGABERs71N5
+type StringDoaGddGA string
+type OneOfStringDoaGddGAStringDoaGddGABERs71N5 struct {
+	StringDoaGddGA *StringDoaGddGA
+	StringDoaGddGA *StringDoaGddGA
 }
 // simplest test case
-type StringXdEiCCNL string
+type StringLxWtMXSJ string
 type Man interface{}

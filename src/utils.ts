@@ -36,7 +36,6 @@ export const languageSafeName = (title: string) => {
 export const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
 export const sortSchemasByTitle = (s: Schema) => s.sort((s1: Schema, s2: Schema) => s1.title > s2.title);
 
-export const sortKeys = (o: any): any => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
 export const joinSchemaTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 export const sortEntriesByKey = ([key1]: any, [key2]: any) => key1 > key2 ? -1 : 1;
 
@@ -72,8 +71,9 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
 
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
     if (schema[k]) {
-      deterministicSchema[k] = sortSchemasByTitle(schema[k].slice(0));
-      prefix = `${k}_${deterministicSchema[k].map(({ title }: Schema) => title).join("_")}_`;
+      deterministicSchema[k] = schema[k].map((s: Schema) => s.title).sort();
+      console.log("determinitic: ", deterministicSchema[k], "\n", "regular Schema: ", schema[k]); //tslint:disable-line
+      prefix = `${k}_${deterministicSchema[k].join("_")}_`;
     }
   });
 
@@ -96,10 +96,11 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
     deterministicSchema.enum = schema.enum.slice(0).sort();
   }
 
-  // Schema must be deterministic by now
-  deterministicSchema.definitions = undefined;
+  delete deterministicSchema.definitions;
 
-  const hash = createHash("sha1").update(JSON.stringify(deterministicSchema)).digest("base64");
+  const asEntries = Object.entries(deterministicSchema).sort(sortEntriesByKey);
+
+  const hash = createHash("sha1").update(JSON.stringify(asEntries)).digest("base64");
   const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
   return { ...schema, title: `${prefix}${friendlyHash}` };
 }

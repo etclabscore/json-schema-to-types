@@ -1,2 +1,2 @@
 // simplest test case
-type StringXdEiCCNL string
+type StringLxWtMXSJ string

@@ -4,16 +4,16 @@ extern crate serde_json;
 ///
 /// a bunch of pets
 ///
-pub type Pets = Vec<OneOfStringWxzVcTo3StringWxzVcTo3VIyVNwmv>;
-pub type StringWxzVcTo3 = String;
+pub type Pets = Vec<OneOfStringDoaGddGAStringDoaGddGABERs71N5>;
+pub type StringDoaGddGA = String;
 #[derive(Serialize, Deserialize)]
-pub enum OneOfStringWxzVcTo3StringWxzVcTo3VIyVNwmv {
-    StringWxzVcTo3,
-    StringWxzVcTo3
+pub enum OneOfStringDoaGddGAStringDoaGddGABERs71N5 {
+    StringDoaGddGA,
+    StringDoaGddGA
 }
-/// StringXdEiCCNL
+/// StringLxWtMXSJ
 ///
 /// simplest test case
 ///
-pub type StringXdEiCCNL = String;
+pub type StringLxWtMXSJ = String;
 pub type Man = serde_json::Value;

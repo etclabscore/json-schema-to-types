@@ -1,7 +1,7 @@
-export type StringWxzVcTo3 = string;
-export type BooleanQg3XFxa5 = boolean;
-export interface ObjectOfBooleanQg3XFxa5GMZRBVXu {
-  ripslip?: BooleanQg3XFxa5;
+export type StringDoaGddGA = string;
+export type BooleanVyG3AETh = boolean;
+export interface ObjectOfBooleanVyG3AETh5PX0GXMY {
+  ripslip?: BooleanVyG3AETh;
   [k: string]: any;
 }
 /**
@@ -9,7 +9,7 @@ export interface ObjectOfBooleanQg3XFxa5GMZRBVXu {
  * array of strings is all...
  *
  */
-export type UnorderedSetOfStringWxzVcTo34KPCMNDQ = StringWxzVcTo3[];
-export type IntegerBxA6IlE2 = number;
-export type BunchaNumbers = [IntegerBxA6IlE2];
-export type OneOfStuff = UnorderedSetOfStringWxzVcTo34KPCMNDQ | BunchaNumbers;
+export type UnorderedSetOfStringDoaGddGAmrf5BlCm = StringDoaGddGA[];
+export type IntegerXZTmW7Mv = number;
+export type BunchaNumbers = [IntegerXZTmW7Mv];
+export type OneOfStuff = UnorderedSetOfStringDoaGddGAmrf5BlCm | BunchaNumbers;
