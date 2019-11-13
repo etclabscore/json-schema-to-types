@@ -4,12 +4,12 @@ extern crate serde_json;
 ///
 /// a bunch of pets
 ///
-pub type Pets = Vec<OneOfManBearPigDYW6G7UV>;
+pub type Pets = Vec<OneOfBearManPigSb42HoGS>;
 pub type Man = serde_json::Value;
 pub type Bear = serde_json::Value;
 pub type Pig = serde_json::Value;
 #[derive(Serialize, Deserialize)]
-pub enum OneOfManBearPigDYW6G7UV {
+pub enum OneOfBearManPigSb42HoGS {
     Man,
     Bear,
     Pig
