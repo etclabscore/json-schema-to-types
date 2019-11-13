@@ -6,7 +6,6 @@ import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import GolangGenerator from "./codegens/golang";
 
-const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 
 export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "golang";
