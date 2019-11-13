@@ -1,12 +1,10 @@
-import { createHash } from "crypto";
 import { Schema } from "@open-rpc/meta-schema";
 import traverse from "./traverse";
+import { capitalize, ensureSchemaTitles } from "./utils";
+import { CodeGen } from "./codegens/codegen";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import GolangGenerator from "./codegens/golang";
-import { ensureSubschemaTitles } from "./ensure-subschema-titles";
-import { capitalize, ensureSchemaTitles } from "./utils";
-import { CodeGen } from "./codegens/codegen";
 
 const joinTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
