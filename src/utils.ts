@@ -34,8 +34,6 @@ export const languageSafeName = (title: string) => {
 };
 
 export const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
-export const sortSchemasByTitle = (s: Schema) => s.sort((s1: Schema, s2: Schema) => s1.title > s2.title);
-
 export const joinSchemaTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
 export const sortEntriesByKey = ([key1]: any, [key2]: any) => key1 > key2 ? -1 : 1;
 
@@ -66,7 +64,7 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
     throw subSchemaTitleErrors[0];
   }
 
-  const deterministicSchema = {...schema};
+  const deterministicSchema = { ...schema };
   let prefix = schema.type ? `${schema.type}_` : "any_";
 
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
