@@ -72,7 +72,6 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
     if (schema[k]) {
       deterministicSchema[k] = schema[k].map((s: Schema) => s.title).sort();
-      console.log("determinitic: ", deterministicSchema[k], "\n", "regular Schema: ", schema[k]); //tslint:disable-line
       prefix = `${k}_${deterministicSchema[k].join("_")}_`;
     }
   });
