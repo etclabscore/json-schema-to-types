@@ -117,3 +117,44 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
  *
  */
 export const ensureSchemaTitles = (s: Schema): Schema => traverse(s, getDefaultTitleForSchema);
+
+/**
+ * Returns the schema where all subschemas have been replaced with $refs and added to definitions
+ *
+ * @param s The schema to ensure has names for it and all subschemas of it.
+ *
+ * @returns Deep schema copy of the input schema where the schema and all sub schemas have titles.
+ *
+ * @category Utils
+ * @category SchemaImprover
+ *
+ */
+export function collectAndRefSchemas(s: Schema): Schema {
+  const definitions: any = {};
+  return {
+    ...traverse(s, (subSchema: Schema) => {
+      definitions[subSchema.title] = subSchema;
+      return { $ref: `#/definitions/${subSchema.title}` };
+    }, { skipFirstMutation: true }),
+    definitions,
+  };
+}
+
+export function combineSchemas(s: Schema[]): Schema {
+  const combined = { ...s[0] };
+  combined.definitions = {
+    ...combined.definitions,
+    ...s.slice(1).reduce((def, schema) => {
+      const schemaCopy = { ...schema };
+      delete schemaCopy.definitions;
+
+      return {
+        ...def,
+        ...schema.definitions,
+        [schema.title]: schemaCopy,
+      };
+    }, {}),
+  };
+  delete combined.definitions[combined.title];
+  return combined;
+}

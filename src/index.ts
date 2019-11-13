@@ -1,6 +1,6 @@
 import { Schema } from "@open-rpc/meta-schema";
 import traverse from "./traverse";
-import { capitalize, ensureSchemaTitles } from "./utils";
+import { capitalize, ensureSchemaTitles, collectAndRefSchemas, combineSchemas } from "./utils";
 import { CodeGen } from "./codegens/codegen";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
@@ -17,8 +17,8 @@ export class JsonSchemaToTypes {
   constructor(s: Schema | Schema[]) {
     const inputSchema = s instanceof Array ? s : [s];
     const schemaWithTitles = inputSchema.map((ss) => ensureSchemaTitles(ss));
-    const reffed = schemaWithTitles.map((ss) => this.collectAndRefSchemas(ss));
-    this.megaSchema = this.combineSchemas(reffed);
+    const reffed = schemaWithTitles.map((ss) => collectAndRefSchemas(ss));
+    this.megaSchema = combineSchemas(reffed);
   }
 
   /**
@@ -113,47 +113,6 @@ export class JsonSchemaToTypes {
     }
     codeLines.push(gen.transpile());
     return codeLines.join("\n");
-  }
-
-  /**
-   * Returns the schema where all subschemas have been replaced with $refs and added to definitions
-   *
-   * @param s The schema to ensure has names for it and all subschemas of it.
-   *
-   * @returns Deep schema copy of the input schema where the schema and all sub schemas have titles.
-   *
-   * @category Utils
-   * @category SchemaImprover
-   *
-   */
-  private collectAndRefSchemas(s: Schema): Schema {
-    const definitions: any = {};
-    return {
-      ...traverse(s, (subSchema: Schema) => {
-        definitions[subSchema.title] = subSchema;
-        return { $ref: `#/definitions/${subSchema.title}` };
-      }, { skipFirstMutation: true }),
-      definitions,
-    };
-  }
-
-  private combineSchemas(s: Schema[]): Schema {
-    const combined = { ...s[0] };
-    combined.definitions = {
-      ...combined.definitions,
-      ...s.slice(1).reduce((def, schema) => {
-        const schemaCopy = { ...schema };
-        delete schemaCopy.definitions;
-
-        return {
-          ...def,
-          ...schema.definitions,
-          [schema.title]: schemaCopy,
-        };
-      }, {}),
-    };
-    delete combined.definitions[combined.title];
-    return combined;
   }
 }
 
