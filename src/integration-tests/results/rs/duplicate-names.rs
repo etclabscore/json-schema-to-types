@@ -1,20 +1,20 @@
 extern crate serde_json;
 
-pub type StringWxzVcTo3 = String;
-pub type BooleanQg3XFxa5 = bool;
+pub type StringDoaGddGA = String;
+pub type BooleanVyG3AETh = bool;
 #[derive(Serialize, Deserialize)]
-pub struct ObjectOfBooleanQg3XFxa5U126EkTS {
-    pub(crate) ripslip: Option<BooleanQg3XFxa5>,
+pub struct ObjectOfBooleanVyG3AETh5PX0GXMY {
+    pub(crate) ripslip: Option<BooleanVyG3AETh>,
 }
-/// UnorderedSetOfStringWxzVcTo3YX5DSLJx
+/// UnorderedSetOfStringDoaGddGAmrf5BlCm
 ///
 /// array of strings is all...
 ///
-pub type UnorderedSetOfStringWxzVcTo3YX5DSLJx = Vec<StringWxzVcTo3>;
-pub type IntegerBxA6IlE2 = i64;
-pub type BunchaNumbers = (IntegerBxA6IlE2);
+pub type UnorderedSetOfStringDoaGddGAmrf5BlCm = Vec<StringDoaGddGA>;
+pub type IntegerXZTmW7Mv = i64;
+pub type BunchaNumbers = (IntegerXZTmW7Mv);
 #[derive(Serialize, Deserialize)]
 pub enum OneOfStuff {
-    UnorderedSetOfStringWxzVcTo3YX5DSLJx,
+    UnorderedSetOfStringDoaGddGAmrf5BlCm,
     BunchaNumbers
 }

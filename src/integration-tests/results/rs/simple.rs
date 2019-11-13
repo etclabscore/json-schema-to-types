@@ -1,7 +1,7 @@
 extern crate serde_json;
 
-/// StringXdEiCCNL
+/// StringLxWtMXSJ
 ///
 /// simplest test case
 ///
-pub type StringXdEiCCNL = String;
+pub type StringLxWtMXSJ = String;

@@ -20,11 +20,11 @@ describe("JsonSchemaToTypes", () => {
           bar: { type: "string" },
         },
       });
-      expect(t.megaSchema.definitions.string_WxzVcTo3).toBeDefined();
+      expect(t.megaSchema.definitions.string_doaGddGA).toBeDefined();
     });
 
     it("can output to typescript", () => {
-      expect(transpiler.toTypescript()).toEqual("export type AnyVyGp6PvF = any;");
+      expect(transpiler.toTypescript()).toEqual("export type AnyL9Fw4VUO = any;");
     });
 
     describe("subschemas must have titles themselves", () => {
@@ -101,8 +101,8 @@ describe("JsonSchemaToTypes", () => {
         ["anyOf", "oneOf", "allOf"].forEach((k) => {
           const t1 = { [k]: [a, b] };
           const t2 = { [k]: [b, a] };
-          expect(getDefaultTitleForSchema(t1))
-            .toEqual(getDefaultTitleForSchema(t2));
+          expect(getDefaultTitleForSchema(t1).title)
+            .toEqual(getDefaultTitleForSchema(t2).title);
         });
       });
 
@@ -113,8 +113,8 @@ describe("JsonSchemaToTypes", () => {
         const t1 = { type: "object", properties: { a, b } };
         const t2 = { type: "object", properties: { b, a } };
 
-        expect(getDefaultTitleForSchema(t1))
-          .toEqual(getDefaultTitleForSchema(t2));
+        expect(getDefaultTitleForSchema(t1).title)
+          .toEqual(getDefaultTitleForSchema(t2).title);
       });
 
       it("when array items is an object (single schema), property ordering does not matter", () => {
@@ -132,8 +132,8 @@ describe("JsonSchemaToTypes", () => {
         const a = { type: "number", enum: [1, 2, 3] };
         const b = { type: "number", enum: [3, 2, 1] };
 
-        expect(getDefaultTitleForSchema(a))
-          .toEqual(getDefaultTitleForSchema(b));
+        expect(getDefaultTitleForSchema(a).title)
+          .toEqual(getDefaultTitleForSchema(b).title);
       });
 
       it("definitions are ignored", () => {

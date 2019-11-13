@@ -3,4 +3,4 @@
  * simplest test case
  *
  */
-export type StringXdEiCCNL = string;
+export type StringLxWtMXSJ = string;

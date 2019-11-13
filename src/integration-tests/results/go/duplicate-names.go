@@ -1,13 +1,13 @@
-type StringWxzVcTo3 string
-type BooleanQg3XFxa5 bool
-type ObjectOfBooleanQg3XFxa5U126EkTS struct {
-	Ripslip *BooleanQg3XFxa5 `json:"ripslip,omitempty"`
+type StringDoaGddGA string
+type BooleanVyG3AETh bool
+type ObjectOfBooleanVyG3AETh5PX0GXMY struct {
+	Ripslip *BooleanVyG3AETh `json:"ripslip,omitempty"`
 }
 // array of strings is all...
-type UnorderedSetOfStringWxzVcTo3YX5DSLJx []StringWxzVcTo3
-type IntegerBxA6IlE2 int64
-type BunchaNumbers (IntegerBxA6IlE2)
+type UnorderedSetOfStringDoaGddGAmrf5BlCm []StringDoaGddGA
+type IntegerXZTmW7Mv int64
+type BunchaNumbers (IntegerXZTmW7Mv)
 type OneOfStuff struct {
-	UnorderedSetOfStringWxzVcTo3YX5DSLJx *UnorderedSetOfStringWxzVcTo3YX5DSLJx
+	UnorderedSetOfStringDoaGddGAmrf5BlCm *UnorderedSetOfStringDoaGddGAmrf5BlCm
 	BunchaNumbers *BunchaNumbers
 }

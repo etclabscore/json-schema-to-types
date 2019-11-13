@@ -34,10 +34,8 @@ export const languageSafeName = (title: string) => {
 };
 
 export const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
-export const sortSchemasByTitle = (s: Schema) => s.sort((s1: Schema, s2: Schema) => s1.title > s2.title);
-
-export const sortKeys = (o: any): any => Object.keys(o).sort().reduce((m, k) => ({ ...m, [k]: o[k] }), {});
 export const joinSchemaTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
+export const sortEntriesByKey = ([key1]: any, [key2]: any) => key1 > key2 ? -1 : 1;
 
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
 
@@ -66,23 +64,25 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
     throw subSchemaTitleErrors[0];
   }
 
+  const deterministicSchema = { ...schema };
   let prefix = schema.type ? `${schema.type}_` : "any_";
 
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
     if (schema[k]) {
-      schema[k] = sortSchemasByTitle(schema[k]);
-      prefix = `${k}_${schema[k].map(({ title }: Schema) => title).join("_")}_`;
+      deterministicSchema[k] = schema[k].map((s: Schema) => s.title).sort();
+      prefix = `${k}_${deterministicSchema[k].join("_")}_`;
     }
   });
 
   if (schema.type === "object" && schema.properties) {
-    schema.properties = sortKeys(schema.properties);
-    prefix = `objectOf_${joinSchemaTitles(Object.values(schema.properties))}_`;
+    deterministicSchema.properties = Object.entries(schema.properties).sort(sortEntriesByKey);
+    const joinedTitles = joinSchemaTitles(deterministicSchema.properties.map((val: any) => val[1]));
+    prefix = `objectOf_${joinedTitles}_`;
   }
 
   if (schema.type === "array") {
     if (schema.items instanceof Array === false) {
-      schema.items = sortKeys(schema.items);
+      deterministicSchema.items = Object.entries(schema.items).sort(sortEntriesByKey);
       prefix = `unorderedSetOf_${schema.items.title}`;
     } else {
       prefix = `unorderedSetOf_${joinSchemaTitles(schema.items)}`;
@@ -90,15 +90,16 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
   }
 
   if (schema.enum) {
-    schema.enum = schema.enum.sort();
+    deterministicSchema.enum = schema.enum.slice(0).sort();
   }
 
-  const definitions = schema.definitions;
-  schema.definitions = undefined;
+  delete deterministicSchema.definitions;
 
-  const hash = createHash("sha1").update(JSON.stringify(schema)).digest("base64");
+  const asEntries = Object.entries(deterministicSchema).sort(sortEntriesByKey);
+
+  const hash = createHash("sha1").update(JSON.stringify(asEntries)).digest("base64");
   const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
-  return { ...schema, title: `${prefix}${friendlyHash}`, definitions };
+  return { ...schema, title: `${prefix}${friendlyHash}` };
 }
 
 /**
@@ -116,3 +117,44 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
  *
  */
 export const ensureSchemaTitles = (s: Schema): Schema => traverse(s, getDefaultTitleForSchema);
+
+/**
+ * Returns the schema where all subschemas have been replaced with $refs and added to definitions
+ *
+ * @param s The schema to ensure has names for it and all subschemas of it.
+ *
+ * @returns Deep schema copy of the input schema where the schema and all sub schemas have titles.
+ *
+ * @category Utils
+ * @category SchemaImprover
+ *
+ */
+export function collectAndRefSchemas(s: Schema): Schema {
+  const definitions: any = {};
+  return {
+    ...traverse(s, (subSchema: Schema) => {
+      definitions[subSchema.title] = subSchema;
+      return { $ref: `#/definitions/${subSchema.title}` };
+    }, { skipFirstMutation: true }),
+    definitions,
+  };
+}
+
+export function combineSchemas(s: Schema[]): Schema {
+  const combined = { ...s[0] };
+  combined.definitions = {
+    ...combined.definitions,
+    ...s.slice(1).reduce((def, schema) => {
+      const schemaCopy = { ...schema };
+      delete schemaCopy.definitions;
+
+      return {
+        ...def,
+        ...schema.definitions,
+        [schema.title]: schemaCopy,
+      };
+    }, {}),
+  };
+  delete combined.definitions[combined.title];
+  return combined;
+}
