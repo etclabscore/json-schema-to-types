@@ -6,8 +6,6 @@ import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import GolangGenerator from "./codegens/golang";
 
-const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
-
 export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "golang";
 /**
  * Provides a high-level interface for getting typings given a schema.
