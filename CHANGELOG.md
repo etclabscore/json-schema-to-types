@@ -1,3 +1,20 @@
+## [1.6.2](https://github.com/etclabscore/json-schema-to-types/compare/1.6.1...1.6.2) (2019-11-13)
+
+
+### Bug Fixes
+
+* add node env version ([ef92d49](https://github.com/etclabscore/json-schema-to-types/commit/ef92d49cd505e4c48c83b09195b332f10bb1cfaf))
+* deterministic titles ([7cbad4d](https://github.com/etclabscore/json-schema-to-types/commit/7cbad4d5661a98333614a33283d15be01347ca63)), closes [#33](https://github.com/etclabscore/json-schema-to-types/issues/33)
+* finish test fixing ([2f21035](https://github.com/etclabscore/json-schema-to-types/commit/2f210350842cb304c148240a16ab99fcac3bd7f6))
+* more extra imports ([f921171](https://github.com/etclabscore/json-schema-to-types/commit/f9211712bae921806519c83eee167189b8e27b70))
+* more extras ([0914694](https://github.com/etclabscore/json-schema-to-types/commit/0914694bfe3d286db5782151e0e700c5e5b71768))
+* remove console log ([c845b1b](https://github.com/etclabscore/json-schema-to-types/commit/c845b1b3d001a3713e59da6890dd8b7e7e9d9492))
+* remove extra fn ([05492ee](https://github.com/etclabscore/json-schema-to-types/commit/05492ee3debd716ad67072bbb09b46179f3a7160))
+* remove extra imports ([368f616](https://github.com/etclabscore/json-schema-to-types/commit/368f61690dcf9a53cafbf65632b8304d6d79314f))
+* remove more extra ([775d510](https://github.com/etclabscore/json-schema-to-types/commit/775d5104f45f79ec8980a06fce80352afe4d2aa4))
+* reorganize things a little ([c8a5b1b](https://github.com/etclabscore/json-schema-to-types/commit/c8a5b1b61777043b64d4b1811c86ae356cf5b91e))
+* unbreak all tests ([75b6795](https://github.com/etclabscore/json-schema-to-types/commit/75b6795138b6cab83b60ffbfdf15ec7f35073a01))
+
 ## [1.6.1](https://github.com/etclabscore/json-schema-to-types/compare/1.6.0...1.6.1) (2019-11-06)
 
 
