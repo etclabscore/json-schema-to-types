@@ -5,6 +5,7 @@ import { CodeGen } from "./codegens/codegen";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import GolangGenerator from "./codegens/golang";
+import JavaGenerator from "./codegens/java";
 
 export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "golang";
 /**
@@ -102,6 +103,19 @@ export class JsonSchemaToTypes {
    */
   public toGo(): string {
     return this.toGolang();
+  }
+
+  /**
+   * Returns the types in Rust
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Rust
+   * @category TargetCodeGenerator
+   *
+   */
+  public toJava(): string {
+    return this.transpile(new JavaGenerator(this.megaSchema));
   }
 
   private transpile(gen: CodeGen): string {
