@@ -118,6 +118,7 @@ describe("codegen: typescript", () => {
           fooThing: { $ref: "#/definitions/foo" },
           barThing: { $ref: "#/definitions/bar" },
         },
+        required: ["fooThing"],
         definitions: {
           foo: { title: "foo", type: "string" },
           bar: { title: "bar", type: "string" },
@@ -125,7 +126,7 @@ describe("codegen: typescript", () => {
       });
       expect(generator.transpile()).toBe([
         "export interface Testerooskies {",
-        "  fooThing?: Foo;",
+        "  fooThing: Foo;",
         "  barThing?: Bar;",
         "  [k: string]: any;",
         "}",
