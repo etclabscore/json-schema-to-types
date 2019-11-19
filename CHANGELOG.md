@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/etclabscore/json-schema-to-types/compare/1.6.2...1.6.3) (2019-11-19)
+
+
+### Bug Fixes
+
+* code generation to handle required on object ([a480a8e](https://github.com/etclabscore/json-schema-to-types/commit/a480a8e0a0f6f8cb98e73de5fd6d5fc6bf92847a)), closes [#36](https://github.com/etclabscore/json-schema-to-types/issues/36)
+
 ## [1.6.2](https://github.com/etclabscore/json-schema-to-types/compare/1.6.1...1.6.2) (2019-11-13)
 
 
