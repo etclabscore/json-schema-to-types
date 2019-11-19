@@ -135,6 +135,7 @@ describe("codegen: rust", () => {
           fooThing: { $ref: "#/definitions/foo" },
           barThing: { $ref: "#/definitions/bar" },
         },
+        required: ["fooThing"],
         definitions: {
           foo: { title: "foo", type: "string" },
           bar: { title: "bar", type: "string" },
@@ -143,7 +144,7 @@ describe("codegen: rust", () => {
       expect(generator.transpile()).toBe([
         "#[derive(Serialize, Deserialize)]",
         "pub struct Testerooskies {",
-        "    pub(crate) fooThing: Option<Foo>,",
+        "    pub(crate) fooThing: Foo,",
         "    pub(crate) barThing: Option<Bar>,",
         "}",
         "pub type Foo = String;",

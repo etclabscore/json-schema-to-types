@@ -95,7 +95,7 @@ export default class Rust extends CodeGen {
       const propSchema = s.properties[key];
       let isRequired = false;
       if (s.required) {
-        isRequired = s.required.indexOf(propSchema.title) !== -1;
+        isRequired = s.required.indexOf(key) !== -1;
       }
 
       const typeName = this.getSafeTitle(this.refToTitle(propSchema));

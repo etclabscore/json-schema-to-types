@@ -78,7 +78,7 @@ export default class Typescript extends CodeGen {
       const propSchema = s.properties[key];
       let isRequired = false;
       if (s.required) {
-        isRequired = s.required.indexOf(propSchema.title) !== -1;
+        isRequired = s.required.indexOf(key) !== -1;
       }
       const title = this.getSafeTitle(this.refToTitle(propSchema));
       return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
