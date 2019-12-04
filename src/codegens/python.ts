@@ -14,8 +14,8 @@ export default class Python extends CodeGen {
   }
 
   protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("boolean");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    return { typing: `${title} = NewType(${title}, bool)` };
   }
 
   protected handleNull(s: Schema): TypeIntermediateRepresentation {
@@ -24,13 +24,13 @@ export default class Python extends CodeGen {
   }
 
   protected handleNumber(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("number");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    return { typing: `${title} = NewType(${title}, float)` };
   }
 
   protected handleInteger(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("integer");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    return { typing: `${title} = NewType(${title}, int)` };
   }
 
   protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
@@ -39,8 +39,8 @@ export default class Python extends CodeGen {
   }
 
   protected handleString(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("string");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    return { typing: `${title} = NewType(${title}, str)` };
   }
 
   protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
