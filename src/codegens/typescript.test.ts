@@ -107,10 +107,10 @@ describe("codegen: typescript", () => {
   describe("object", () => {
     it("base case", () => {
       const generator = new TypescriptGenerator({ title: "testerooskies", type: "object" });
-      expect(generator.transpile()).toBe("export interface Testerooskies { [key: string]: any }");
+      expect(generator.transpile()).toBe("export interface Testerooskies { [key: string]: any; }");
     });
 
-    it("object with multiple keys", () => {
+    it.only("object with multiple keys", () => {
       const generator = new TypescriptGenerator({
         title: "testerooskies",
         type: "object",
@@ -118,10 +118,20 @@ describe("codegen: typescript", () => {
           fooThing: { $ref: "#/definitions/foo" },
           barThing: { $ref: "#/definitions/bar" },
         },
+        additionalProperties: {
+          $ref: "#/definitions/kids",
+        },
         required: ["fooThing"],
         definitions: {
           foo: { title: "foo", type: "string" },
           bar: { title: "bar", type: "string" },
+          kids: {
+            title: "kids",
+            type: "array",
+            items: {
+              type: "integer",
+            },
+          },
         },
       });
       expect(generator.transpile()).toBe([

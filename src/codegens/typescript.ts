@@ -74,18 +74,39 @@ export default class Typescript extends CodeGen {
   }
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
-    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      const propSchema = s.properties[key];
-      let isRequired = false;
-      if (s.required) {
-        isRequired = s.required.indexOf(key) !== -1;
-      }
-      const title = this.getSafeTitle(this.refToTitle(propSchema));
-      return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
-    }, []);
+    const extractPropertyTypings = (props: any, required: string[]): string[] => {
+      return Object.keys(props).reduce((typings: string[], key: string) => {
+        const propSchema = props[key];
+        let isRequired = false;
+        if (required) {
+          isRequired = required.indexOf(key) !== -1;
+        }
+        const title = this.getSafeTitle(this.refToTitle(propSchema));
+        return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
+      }, []);
 
+    };
+    const propertyTypings = extractPropertyTypings(s.properties, s.required);
+    /* const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
+       const propSchema = s.properties[key];
+       let isRequired = false;
+       if (s.required) {
+         isRequired = s.required.indexOf(key) !== -1;
+       }
+       const title = this.getSafeTitle(this.refToTitle(propSchema));
+       return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
+     }, []);*/
     if (s.additionalProperties !== false) {
-      propertyTypings.push("  [k: string]: any;");
+      /*s.additionalProperties = {
+        type: "string",
+      };*/
+      ///      propertyTypings.push();
+      if (s.additionalProperties === true) {
+        propertyTypings.push("  [k: string]: any;");
+      } else {
+        const title = this.getSafeTitle(this.refToTitle(s.additionalProperties));
+        propertyTypings.push(` [k: string]: ${title};`);
+      }
     }
 
     return {

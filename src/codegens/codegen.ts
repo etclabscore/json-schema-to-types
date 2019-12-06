@@ -79,7 +79,7 @@ export abstract class CodeGen {
     return schemas.map(this.refToTitle).map(this.getSafeTitle.bind(this)).join(seperator);
   }
 
-  private toIR(s: Schema): TypeIntermediateRepresentation {
+  protected toIR(s: Schema): TypeIntermediateRepresentation {
     switch (s.type) {
       case "boolean": return this.handleBoolean(s);
 

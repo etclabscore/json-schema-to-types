@@ -58,6 +58,16 @@ export default function traverse(
         (r: Schema, v: string) => ({ ...r, ...{ [v]: rec(schema.properties[v]) } }),
         {},
       );
+  } else if (schema.additionalProperties) {
+    if (schema.additionalProperties !== true) {
+      mutableSchema.additionalProperties = traverse(schema.additionalProperties, mutation);
+    }
+  }
+  additionalProperties: {
+    type: "array"
+    items: {
+
+    }
   }
 
   if (traverseOptions.skipFirstMutation === true && depth === 0) {
