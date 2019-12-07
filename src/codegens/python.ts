@@ -96,6 +96,7 @@ export default class Python extends CodeGen {
 
     if (s.additionalProperties !== false) {
       this.warnNotWellSupported("ObjectsWithAdditionalProperties");
+      return this.handleUntypedObject(s);
     }
 
     const title = this.getSafeTitle(s.title);
