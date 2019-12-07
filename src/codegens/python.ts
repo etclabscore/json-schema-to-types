@@ -86,8 +86,13 @@ export default class Python extends CodeGen {
   }
 
   protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("untypedArray");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    const itemsTitle = this.refToTitle(this.getSafeTitle(s.items.title));
+    return {
+      documentationComment: this.buildDocs(s),
+      macros: "from typing import List, Any",
+      typing: `${title} = NewType(${title}, List[Any])`
+    };
   }
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
