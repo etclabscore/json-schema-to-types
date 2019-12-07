@@ -111,6 +111,7 @@ export default class Python extends CodeGen {
   }
 
   protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
+    const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
       typing: `${title} = NewType(${title}, Mapping[Any, Any])`,
