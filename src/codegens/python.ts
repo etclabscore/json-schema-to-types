@@ -105,9 +105,8 @@ export default class Python extends CodeGen {
 
   protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
     return {
-      prefix: "interface",
-      typing: "{ [key: string]: any }",
       documentationComment: this.buildDocs(s),
+      typing: `${title} = NewType(${title}, Mapping[Any, Any])`,
     };
   }
 
