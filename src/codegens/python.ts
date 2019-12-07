@@ -149,10 +149,11 @@ export default class Python extends CodeGen {
   }
 
   protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
+    const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.oneOf, " | "),
+      typing: `${title} = NewType(${title}, Union[${this.getJoinedSafeTitles(s.oneOf, ", ")}])`,
     };
   }
 
