@@ -35,7 +35,11 @@ export default class Python extends CodeGen {
 
   protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
     this.warnNotWellSupported("numericalEnum");
-    return { typing: "" };
+    if (s.type === "integer") {
+      return this.handleInteger(s);
+    } else {
+      return this.handleNumber(s);
+    }
   }
 
   protected handleString(s: Schema): TypeIntermediateRepresentation {
@@ -44,8 +48,18 @@ export default class Python extends CodeGen {
   }
 
   protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("stringEnum");
-    return { typing: "" };
+    const typeLines = s.enum
+      .filter((enumString: any) => typeof enumString === "string")
+      .map((enumString: string, i: number) => `    ${enumString.toUpperCase()} = ${i}`);
+
+    const title = this.getSafeTitle(s.title);
+    return {
+      macros: "from enum import Enum",
+      typing: [
+        `class ${title}(Enum):`,
+        ...typeLines,
+      ].join("\n"),
+    };
   }
 
   protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
