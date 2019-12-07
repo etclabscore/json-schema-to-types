@@ -67,8 +67,12 @@ export default class Python extends CodeGen {
   }
 
   protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("orderedArray");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    const itemTitles = s.items.map((item: Schema) => this.refToTitle(this.getSafeTitle(s.title)));
+    return {
+      documentationComment: this.buildDocs(s),
+      typing: `${title} = NewType(${title}, Tuple[${itemTitles.join(", ")}])`
+    };
   }
 
   protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
