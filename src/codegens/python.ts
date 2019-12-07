@@ -89,17 +89,23 @@ export default class Python extends CodeGen {
         isRequired = s.required.indexOf(propSchema.title) !== -1;
       }
       const title = this.getSafeTitle(this.refToTitle(propSchema));
-      return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
+      // first expression of right hand side
+      const rhs = isRequired ? title : `Optional[${title}]`
+      return [...typings, `    ${key}: ${rhs}`];
     }, []);
 
     if (s.additionalProperties !== false) {
-      propertyTypings.push("  [k: string]: any;");
+      this.warnNotWellSupported("ObjectsWithAdditionalProperties");
     }
 
+    const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
-      prefix: "interface",
-      typing: [`{`, ...propertyTypings, "}"].join("\n"),
+      macros: "from typing import TypedDict",
+      typing: [
+        `class ${title}(TypedDict):`,
+        ...propertyTypings,
+      ].join("\n"),
     };
   }
 
