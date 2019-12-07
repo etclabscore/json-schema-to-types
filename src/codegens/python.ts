@@ -19,8 +19,12 @@ export default class Python extends CodeGen {
   }
 
   protected handleNull(s: Schema): TypeIntermediateRepresentation {
-    this.warnNotWellSupported("null");
-    return { typing: "" };
+    const title = this.getSafeTitle(s.title);
+    return { typing: `${title} = NewType(${title}, float)` };
+    return {
+      documentationComment: this.buildDocs(s),
+      typing: "`${title} = NewType(${title}, None)`",
+    };
   }
 
   protected handleNumber(s: Schema): TypeIntermediateRepresentation {
@@ -132,19 +136,17 @@ export default class Python extends CodeGen {
   }
 
   protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
-    return { documentationComment: this.buildDocs(s), prefix: "type", typing: "any" };
+    const title = this.getSafeTitle(s.title);
+    return { typing: `${title} = NewType(${title}, int)` };
+    return {
+      documentationComment: this.buildDocs(s),
+      macros: "from typing import Any",
+      typing: `${title} = NewType(${title}, Any)`,
+    };
   }
 
   private warnNotWellSupported(typing: string) {
     console.warn(`In Python, ${typing} is not well supported.`);
-  }
-
-  private buildEnum(schema: Schema): string {
-    const typeOf = schema.type === "string" ? "string" : "number";
-    return schema.enum
-      .filter((s: any) => typeof s === typeOf)
-      .map((s: string) => typeOf === "string" ? `"${s}"` : s)
-      .join(" | ");
   }
 
   private buildDocs(s: Schema): string | undefined {
