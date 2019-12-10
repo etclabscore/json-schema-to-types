@@ -157,7 +157,7 @@ export default class Rust extends CodeGen {
   }
 
   private buildDocs(s: Schema): string | undefined {
-    const docStringLines = [];
+    const docStringLines: string[] = [];
 
     if (s.description) {
       docStringLines.push(`/// ${s.description}`);

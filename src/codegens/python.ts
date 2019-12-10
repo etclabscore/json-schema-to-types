@@ -133,15 +133,23 @@ export default class Python extends CodeGen {
   }
 
   protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
-    const title = this.getSafeTitle(s.title);
-    return {
-      documentationComment: this.buildDocs(s),
-      prefix: "type",
-      typing: `${title} = NewType(${title}, Union[${this.getJoinedSafeTitles(s.anyOf, ", ")}])`,
-    };
+    // should filter out anything that isnt an object when doing this.
+    const merged = s.anyOf
+      .filter((subSchemas: Schema) => subSchemas.type === "object")
+      .reduce((mergedSchema: Schema[], oneOfSchema: Schema) => {
+        return { ...mergedSchema, ...oneOfSchema };
+      }, s);
+
+    delete merged.anyOf;
+
+    return this.handleObject(merged);
   }
 
   protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
+    const typeLines = s.enum
+      .filter((enumString: any) => typeof enumString === "string")
+      .map((enumString: string, i: number) => `    ${enumString.toUpperCase()} = ${i}`);
+
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
