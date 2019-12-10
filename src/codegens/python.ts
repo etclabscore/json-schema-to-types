@@ -5,11 +5,10 @@ import traverse from "../traverse";
 export default class Python extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
     return [
+      ir.macros,
+      "\n",
       ir.documentationComment,
-      `export ${ir.prefix} ${this.getSafeTitle(s.title)}`,
-      ir.prefix === "type" ? " = " : " ",
       ir.typing,
-      ir.prefix === "type" ? ";" : "",
     ].join("");
   }
 
@@ -181,7 +180,7 @@ export default class Python extends CodeGen {
   }
 
   private buildDocs(s: Schema): string | undefined {
-    const docStringLines = [];
+    const docStringLines: string[] = [];
 
     if (s.description) {
       docStringLines.push(` * ${s.description}`);
