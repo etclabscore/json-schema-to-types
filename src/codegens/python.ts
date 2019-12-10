@@ -183,30 +183,14 @@ export default class Python extends CodeGen {
     const docStringLines: string[] = [];
 
     if (s.description) {
-      docStringLines.push(` * ${s.description}`);
-      docStringLines.push(" *");
-    }
-
-    if (s.default) {
-      docStringLines.push(` * @default  ${s.default}`);
-      docStringLines.push(` *`);
-    }
-
-    if (s.examples) {
-      s.examples.forEach((example: string) => {
-        docStringLines.push(" * @example");
-        docStringLines.push(` * \`${example}\``);
-        docStringLines.push(" *");
-      });
+      docStringLines.push(`${s.description}`);
+      docStringLines.push("");
     }
 
     if (docStringLines.length > 0) {
       return [
-        "/**",
-        " *",
-        ...docStringLines,
-        " */",
-        "",
+        `"""${s.description}}`,
+        `"""`,
       ].join("\n");
     }
   }
