@@ -16,6 +16,9 @@ from enum import Enum
 class Bopper(Enum):
     ASD = 0
     BCA = 1
+from typing import NewType
+
+Swicker = NewType("Swicker", float)
 from typing import Any, NewType
 
 Skibb = NewType("Skibb", Any)

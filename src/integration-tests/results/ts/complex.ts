@@ -19,6 +19,7 @@ export type Bip = number;
 export type Bipper = number;
 export type Bop = number;
 export type Bopper = "asd" | "bca";
+export type Swicker = 123 | 321;
 export type Skibb = any;
 export type Skibbidippy = Bop[];
 export type Bopskippity = string;
@@ -50,6 +51,7 @@ export interface BippyskippyBoppy {
   number?: Bipper;
   string?: Bop;
   stringEnum?: Bopper;
+  numbericalEnum?: Swicker;
   orderedArray?: Skibbidippy;
   unorderedArray?: Skibbidippy;
   object?: Floopdidoop;
