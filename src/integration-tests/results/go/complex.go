@@ -1,6 +1,10 @@
 type Skip bool
 // abc 123
 //
+// --- Default ---
+//
+// 123
+//
 // --- Example ---
 //
 // `123`
@@ -29,7 +33,7 @@ type Skiperydippery struct {
 	Fooberdoober *Bop         `json:"fooberdoober,omitempty"`
 	Gibbledybits *Bopskippity `json:"gibbledybits,omitempty"`
 }
-type Doppler string
+type Doppler map[string]interface{}
 type Gorbelchov float64
 type Bonkiedonky struct {
 	Shopper     *Doppler    `json:"shopper,omitempty"`

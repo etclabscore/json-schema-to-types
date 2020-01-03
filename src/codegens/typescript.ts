@@ -97,7 +97,7 @@ export default class Typescript extends CodeGen {
   protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "interface",
-      typing: "{ [key: string]: any }",
+      typing: "{ [key: string]: any; }",
       documentationComment: this.buildDocs(s),
     };
   }

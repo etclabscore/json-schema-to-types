@@ -166,6 +166,7 @@ export default class Rust extends CodeGen {
       docStringLines.push("/// # Default");
       docStringLines.push("///");
       docStringLines.push(`/// ${s.default}`);
+      docStringLines.push("///");
     }
 
     if (s.examples) {

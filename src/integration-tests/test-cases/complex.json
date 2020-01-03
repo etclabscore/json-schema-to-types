@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "bool": { "type": "boolean", "title": "skip" },
-    "int": {  "examples": [ 123, 456, 789 ], "description": "abc 123", "type": "integer", "title": "bip" },
+    "int": {  "examples": [ 123, 456, 789 ], "description": "abc 123", "type": "integer", "title": "bip", "default": 123 },
     "number": { "type": "number", "title": "bipper" },
     "string": { "type": "string", "title": "bop" },
     "stringEnum": { "type": "string", "title": "bopper", "enum": [ "asd", "bca" ] },
@@ -40,7 +40,7 @@
           "type": "object",
           "title": "bonkiedonky",
           "properties": {
-            "shopper": { "type": "string", "title": "doppler" },
+            "shopper": { "type": "object", "title": "doppler" },
             "badmirputin": { "type": "number", "title": "gorbelchov" }
           }
         }

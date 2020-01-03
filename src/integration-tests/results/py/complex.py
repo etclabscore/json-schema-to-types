@@ -31,9 +31,9 @@ Floopdidoop = NewType("Floopdidoop", Mapping[Any, Any])
 from typing import NewType, Any, Mapping
 
 Skiperydippery = NewType("Skiperydippery", Mapping[Any, Any])
-from typing import NewType
+from typing import NewType, Any, Mapping
 
-Doppler = NewType("Doppler", str)
+Doppler = NewType("Doppler", Mapping[Any, Any])
 from typing import NewType
 
 Gorbelchov = NewType("Gorbelchov", float)

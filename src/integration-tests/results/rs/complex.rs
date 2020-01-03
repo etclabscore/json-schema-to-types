@@ -5,6 +5,10 @@ pub type Skip = bool;
 ///
 /// abc 123
 ///
+/// # Default
+///
+/// 123
+///
 /// # Example
 ///
 /// `123`
@@ -36,7 +40,7 @@ pub struct Skiperydippery {
     pub(crate) fooberdoober: Option<Bop>,
     pub(crate) gibbledybits: Option<Bopskippity>,
 }
-pub type Doppler = String;
+pub type Doppler = HashMap<String, Option<serde_json::Value>>;
 pub type Gorbelchov = f64;
 #[derive(Serialize, Deserialize)]
 pub struct Bonkiedonky {

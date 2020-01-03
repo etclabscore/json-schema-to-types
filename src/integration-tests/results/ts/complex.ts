@@ -3,6 +3,8 @@ export type Skip = boolean;
  *
  * abc 123
  *
+ * @default  123
+ *
  * @example
  * `123`
  *
@@ -26,7 +28,7 @@ export interface Skiperydippery {
   gibbledybits?: Bopskippity;
   [k: string]: any;
 }
-export type Doppler = string;
+export interface Doppler { [key: string]: any; }
 export type Gorbelchov = number;
 export interface Bonkiedonky {
   shopper?: Doppler;
