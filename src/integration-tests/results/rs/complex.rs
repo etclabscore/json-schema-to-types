@@ -53,10 +53,12 @@ pub struct Bonkiedonky {
 }
 pub type Justworkalready = HashMap<String, Option<serde_json::Value>>;
 pub type Zip = i64;
+pub type Nullgasm = serde_json::Value;
 #[derive(Serialize, Deserialize)]
 pub enum Skorpionuts {
     Skip,
-    Zip
+    Zip,
+    Nullgasm
 }
 #[derive(Serialize, Deserialize)]
 pub enum Chikypoops {

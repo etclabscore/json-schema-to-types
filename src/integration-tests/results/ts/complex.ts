@@ -41,7 +41,8 @@ export interface Bonkiedonky {
 }
 export type Justworkalready = Skiperydippery & Bonkiedonky;
 export type Zip = number;
-export type Skorpionuts = Skip | Zip;
+export type Nullgasm = null;
+export type Skorpionuts = Skip | Zip | Nullgasm;
 export type Chikypoops = Skip | Zip;
 export interface BippyskippyBoppy {
   bool?: Skip;

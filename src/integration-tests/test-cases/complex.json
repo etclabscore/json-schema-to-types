@@ -51,7 +51,8 @@
       "title": "skorpionuts",
       "anyOf": [
         { "type": "boolean", "title": "skip" },
-        { "type": "integer", "title": "zip" }
+        { "type": "integer", "title": "zip" },
+        { "type": "null", "title": "nullgasm" }
       ]
     },
     "oneOf": {

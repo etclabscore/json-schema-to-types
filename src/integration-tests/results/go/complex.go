@@ -44,9 +44,11 @@ type Bonkiedonky struct {
 type Justworkalready struct {
 }
 type Zip int64
+type Nullgasm interface{}
 type Skorpionuts struct {
-	Skip *Skip
-	Zip  *Zip
+	Skip     *Skip
+	Zip      *Zip
+	Nullgasm *Nullgasm
 }
 type Chikypoops struct {
 	Skip *Skip

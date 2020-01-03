@@ -46,9 +46,12 @@ Justworkalready = NewType("Justworkalready", Mapping[Any, Any])
 from typing import NewType
 
 Zip = NewType("Zip", int)
+from typing import NewType
+
+Nullgasm = NewType("Nullgasm", None)
 from typing import NewType, Union
 
-Skorpionuts = NewType("Skorpionuts", Union[Skip, Zip])
+Skorpionuts = NewType("Skorpionuts", Union[Skip, Zip, Nullgasm])
 from typing import NewType, Union
 
 Chikypoops = NewType("Chikypoops", Union[Skip, Zip])

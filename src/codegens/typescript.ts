@@ -17,7 +17,7 @@ export default class Typescript extends CodeGen {
   }
 
   protected handleNull(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "null" };
+    return { prefix: "type", typing: "null", documentationComment: this.buildDocs(s) };
   }
 
   protected handleNumber(s: Schema): TypeIntermediateRepresentation {

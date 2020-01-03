@@ -26,7 +26,7 @@ export default class Python extends CodeGen {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
-      macros: "from typing import NewType, None",
+      macros: "from typing import NewType",
       typing: `${title} = NewType("${title}", None)`,
     };
   }
