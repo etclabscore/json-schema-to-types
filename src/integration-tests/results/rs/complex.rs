@@ -34,7 +34,11 @@ pub enum Bopper {
 pub type Skibb = serde_json::Value;
 pub type Skibbidippy = Vec<Bop>;
 pub type Bopskippity = String;
-pub type Floopdidoop = HashMap<String, Option<serde_json::Value>>;
+#[derive(Serialize, Deserialize)]
+pub struct Floopdidoop {
+    pub(crate) fooberdoober: Bop,
+    pub(crate) gibbledybits: Option<Bopskippity>,
+}
 #[derive(Serialize, Deserialize)]
 pub struct Skiperydippery {
     pub(crate) fooberdoober: Option<Bop>,
@@ -47,6 +51,7 @@ pub struct Bonkiedonky {
     pub(crate) shopper: Option<Doppler>,
     pub(crate) badmirputin: Option<Gorbelchov>,
 }
+pub type Justworkalready = HashMap<String, Option<serde_json::Value>>;
 pub type Zip = i64;
 #[derive(Serialize, Deserialize)]
 pub enum Skorpionuts {
@@ -68,7 +73,7 @@ pub struct BippyskippyBoppy {
     pub(crate) orderedArray: Option<Skibbidippy>,
     pub(crate) unorderedArray: Option<Skibbidippy>,
     pub(crate) object: Option<Floopdidoop>,
-    pub(crate) allOf: Option<Floopdidoop>,
+    pub(crate) allOf: Option<Justworkalready>,
     pub(crate) anyOf: Option<Skorpionuts>,
     pub(crate) oneOf: Option<Chikypoops>,
 }

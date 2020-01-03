@@ -28,6 +28,8 @@ type Skibb interface{}
 type Skibbidippy []Bop
 type Bopskippity string
 type Floopdidoop struct {
+	Fooberdoober *Bop         `json:"fooberdoober"`
+	Gibbledybits *Bopskippity `json:"gibbledybits,omitempty"`
 }
 type Skiperydippery struct {
 	Fooberdoober *Bop         `json:"fooberdoober,omitempty"`
@@ -39,6 +41,8 @@ type Bonkiedonky struct {
 	Shopper     *Doppler    `json:"shopper,omitempty"`
 	Badmirputin *Gorbelchov `json:"badmirputin,omitempty"`
 }
+type Justworkalready struct {
+}
 type Zip int64
 type Skorpionuts struct {
 	Skip *Skip
@@ -49,15 +53,15 @@ type Chikypoops struct {
 	Zip  *Zip
 }
 type BippyskippyBoppy struct {
-	Bool           *Skip        `json:"bool,omitempty"`
-	Int            *Bip         `json:"int,omitempty"`
-	Number         *Bipper      `json:"number,omitempty"`
-	String         *Bop         `json:"string,omitempty"`
-	StringEnum     *Bopper      `json:"stringEnum,omitempty"`
-	OrderedArray   *Skibbidippy `json:"orderedArray,omitempty"`
-	UnorderedArray *Skibbidippy `json:"unorderedArray,omitempty"`
-	Object         *Floopdidoop `json:"object,omitempty"`
-	AllOf          *Floopdidoop `json:"allOf,omitempty"`
-	AnyOf          *Skorpionuts `json:"anyOf,omitempty"`
-	OneOf          *Chikypoops  `json:"oneOf,omitempty"`
+	Bool           *Skip            `json:"bool,omitempty"`
+	Int            *Bip             `json:"int,omitempty"`
+	Number         *Bipper          `json:"number,omitempty"`
+	String         *Bop             `json:"string,omitempty"`
+	StringEnum     *Bopper          `json:"stringEnum,omitempty"`
+	OrderedArray   *Skibbidippy     `json:"orderedArray,omitempty"`
+	UnorderedArray *Skibbidippy     `json:"unorderedArray,omitempty"`
+	Object         *Floopdidoop     `json:"object,omitempty"`
+	AllOf          *Justworkalready `json:"allOf,omitempty"`
+	AnyOf          *Skorpionuts     `json:"anyOf,omitempty"`
+	OneOf          *Chikypoops      `json:"oneOf,omitempty"`
 }

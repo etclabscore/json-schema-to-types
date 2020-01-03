@@ -22,7 +22,11 @@ export type Bopper = "asd" | "bca";
 export type Skibb = any;
 export type Skibbidippy = Bop[];
 export type Bopskippity = string;
-export type Floopdidoop = Skiperydippery & Bonkiedonky;
+export interface Floopdidoop {
+  fooberdoober: Bop;
+  gibbledybits?: Bopskippity;
+  [k: string]: any;
+}
 export interface Skiperydippery {
   fooberdoober?: Bop;
   gibbledybits?: Bopskippity;
@@ -35,6 +39,7 @@ export interface Bonkiedonky {
   badmirputin?: Gorbelchov;
   [k: string]: any;
 }
+export type Justworkalready = Skiperydippery & Bonkiedonky;
 export type Zip = number;
 export type Skorpionuts = Skip | Zip;
 export type Chikypoops = Skip | Zip;
@@ -47,7 +52,7 @@ export interface BippyskippyBoppy {
   orderedArray?: Skibbidippy;
   unorderedArray?: Skibbidippy;
   object?: Floopdidoop;
-  allOf?: Floopdidoop;
+  allOf?: Justworkalready;
   anyOf?: Skorpionuts;
   oneOf?: Chikypoops;
   [k: string]: any;

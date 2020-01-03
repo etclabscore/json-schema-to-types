@@ -40,6 +40,9 @@ Gorbelchov = NewType("Gorbelchov", float)
 from typing import NewType, Any, Mapping
 
 Bonkiedonky = NewType("Bonkiedonky", Mapping[Any, Any])
+from typing import NewType, Any, Mapping
+
+Justworkalready = NewType("Justworkalready", Mapping[Any, Any])
 from typing import NewType
 
 Zip = NewType("Zip", int)
