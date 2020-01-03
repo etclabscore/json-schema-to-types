@@ -14,6 +14,7 @@ describe("JsonSchemaToTypes", () => {
 
     it("can be instantiated with a schema with subschemas", () => {
       const t = new JsonSchemaToTypes({
+        title: "test",
         type: "object",
         properties: {
           foo: { type: "string" },

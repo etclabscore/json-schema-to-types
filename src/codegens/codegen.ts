@@ -28,8 +28,8 @@ export abstract class CodeGen {
     }
 
     return [
-      rootSchemaTypes,
       ...defsSchemaTypes,
+      rootSchemaTypes,
     ].join("\n").trim();
   }
 

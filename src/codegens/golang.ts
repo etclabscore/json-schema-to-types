@@ -6,6 +6,10 @@ import { capitalize } from "../utils";
 
 export default class Golang extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
+    if (s.title === undefined) {
+      console.log("boob balls"); //tslint:disable-line
+      console.log(s); //tslint:disable-line
+    }
     return [
       ir.documentationComment,
       [
@@ -88,13 +92,11 @@ export default class Golang extends CodeGen {
       if (s.required) {
         isRequired = s.required.indexOf(key) !== -1;
       }
+      const safeTitle = this.getSafeTitle(key);
+      const safeTitleForPropSchema = this.getSafeTitle(this.refToTitle(propSchema));
       return [
         ...typings,
-        "\t" + [
-          this.getSafeTitle(key),
-          `*${this.getSafeTitle(this.refToTitle(propSchema))}`,
-          `\`json:"${key}${isRequired ? "" : ",omitempty"}"\``,
-        ].join(" "),
+        `\t${safeTitle} *${safeTitleForPropSchema} \`json:"${key}${isRequired ? "" : ",omitempty"}"\``,
       ];
     }, []);
     return {
@@ -114,14 +116,7 @@ export default class Golang extends CodeGen {
     const anyOfType = s.anyOf.reduce((typings: string[], oneOfSchema: Schema) => {
       const title = this.getSafeTitle(this.refToTitle(oneOfSchema));
 
-      return [
-        ...typings,
-        [
-          "\t",
-          title,
-          `*${title}`,
-        ].join(" "),
-      ];
+      return [...typings, `\t${title} *${title}`];
     }, []);
 
     return {

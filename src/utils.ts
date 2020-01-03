@@ -141,20 +141,45 @@ export function collectAndRefSchemas(s: Schema): Schema {
 }
 
 export function combineSchemas(s: Schema[]): Schema {
-  const combined = { ...s[0] };
-  combined.definitions = {
-    ...combined.definitions,
-    ...s.slice(1).reduce((def, schema) => {
-      const schemaCopy = { ...schema };
-      delete schemaCopy.definitions;
+  const combinedDefinitions = s.reduce((comb, schema) => ({
+    ...comb,
+    ...schema.definitions,
+  }), {});
 
-      return {
-        ...def,
-        ...schema.definitions,
-        [schema.title]: schemaCopy,
-      };
-    }, {}),
+  const withoutDefinitions = s.map((ss) => {
+    const copy = { ...ss };
+    delete copy.definitions;
+    return copy;
+  });
+
+  const uniquedSchemas = withoutDefinitions.reduce((uniqued: Schema[], schema: Schema) => {
+    if (uniqued.find(({ title }: Schema) => title === schema.title) === undefined) {
+      return [
+        ...uniqued,
+        schema,
+      ];
+    }
+    return uniqued;
+  }, []);
+
+  return {
+    title: `AnyOf_${joinSchemaTitles(s)}`,
+    description: "Generated! Represents an alias to any of the provided schemas",
+    anyOf: uniquedSchemas.map(schemaToRef),
+    definitions: {
+      ...combinedDefinitions,
+      ...uniquedSchemas.reduce((allOfs, schema) => ({
+        ...allOfs,
+        [schema.title]: schema,
+      }), {}),
+    },
   };
-  delete combined.definitions[combined.title];
-  return combined;
+}
+
+export function mergeObjectProperties(schemas: Schema[]): Schema {
+  const merged = schemas
+    .filter(({ properties }: Schema) => properties)
+    .map(({ properties }: Schema) => properties)
+    .reduce((all: Schema, schema: Schema) => ({ ...all, ...schema }), {});
+  return merged;
 }

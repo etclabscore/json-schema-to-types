@@ -1,6 +1,7 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 import traverse from "../traverse";
+import { mergeObjectProperties } from "../utils";
 
 export default class Python extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
@@ -8,32 +9,45 @@ export default class Python extends CodeGen {
       ir.macros,
       "\n",
       ir.documentationComment,
+      "\n",
       ir.typing,
     ].join("");
   }
 
   protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    return { typing: `${title} = NewType(${title}, bool)` };
+    return {
+      documentationComment: this.buildDocs(s),
+      macros: "from typing import NewType",
+      typing: `${title} = NewType("${title}", bool)`,
+    };
   }
 
   protected handleNull(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    return { typing: `${title} = NewType(${title}, float)` };
     return {
       documentationComment: this.buildDocs(s),
-      typing: "`${title} = NewType(${title}, None)`",
+      macros: "from typing import NewType, None",
+      typing: `${title} = NewType("${title}", None)`,
     };
   }
 
   protected handleNumber(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    return { typing: `${title} = NewType(${title}, float)` };
+    return {
+      documentationComment: this.buildDocs(s),
+      macros: "from typing import NewType",
+      typing: `${title} = NewType("${title}", float)`,
+    };
   }
 
   protected handleInteger(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    return { typing: `${title} = NewType(${title}, int)` };
+    return {
+      documentationComment: this.buildDocs(s),
+      macros: "from typing import NewType",
+      typing: `${title} = NewType("${title}", int)`,
+    };
   }
 
   protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
@@ -47,7 +61,11 @@ export default class Python extends CodeGen {
 
   protected handleString(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    return { typing: `${title} = NewType(${title}, str)` };
+    return {
+      documentationComment: this.buildDocs(s),
+      macros: "from typing import NewType",
+      typing: `${title} = NewType("${title}", str)`,
+    };
   }
 
   protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
@@ -58,6 +76,7 @@ export default class Python extends CodeGen {
     const title = this.getSafeTitle(s.title);
     return {
       macros: "from enum import Enum",
+      documentationComment: this.buildDocs(s),
       typing: [
         `class ${title}(Enum):`,
         ...typeLines,
@@ -67,30 +86,30 @@ export default class Python extends CodeGen {
 
   protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    const itemTitles = s.items.map((item: Schema) => this.refToTitle(this.getSafeTitle(item.title)));
+    const itemTitles = s.items.map((item: Schema) => this.getSafeTitle(this.refToTitle(item)));
     return {
+      macros: "from typing import NewType, Tuple",
       documentationComment: this.buildDocs(s),
-      typing: `${title} = NewType(${title}, Tuple[${itemTitles.join(", ")}])`
+      typing: `${title} = NewType("${title}", Tuple[${itemTitles.join(", ")}])`,
     };
   }
 
   protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    const itemsTitle = this.refToTitle(this.getSafeTitle(s.items.title));
+    const itemsTitle = this.getSafeTitle(this.refToTitle(s.items));
     return {
       documentationComment: this.buildDocs(s),
-      macros: "from typing import List",
-      typing: `${title} = NewType(${title}, List[${itemsTitle}])`
+      macros: "from typing import List, NewType",
+      typing: `${title} = NewType("${title}", List[${itemsTitle}])`,
     };
   }
 
   protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    const itemsTitle = this.refToTitle(this.getSafeTitle(s.items.title));
     return {
       documentationComment: this.buildDocs(s),
-      macros: "from typing import List, Any",
-      typing: `${title} = NewType(${title}, List[Any])`
+      macros: "from typing import List, Any, NewType",
+      typing: `${title} = NewType("${title}", List[Any])`,
     };
   }
 
@@ -101,9 +120,9 @@ export default class Python extends CodeGen {
       if (s.required) {
         isRequired = s.required.indexOf(propSchema.title) !== -1;
       }
-      const title = this.getSafeTitle(this.refToTitle(propSchema));
+      const safeTitle = this.getSafeTitle(this.refToTitle(propSchema));
       // first expression of right hand side
-      const rhs = isRequired ? title : `Optional[${title}]`
+      const rhs = isRequired ? title : `Optional[${safeTitle}]`;
       return [...typings, `    ${key}: ${rhs}`];
     }, []);
 
@@ -115,7 +134,7 @@ export default class Python extends CodeGen {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
-      macros: "from typing import TypedDict",
+      macros: "from typing import TypedDict, Optional",
       typing: [
         `class ${title}(TypedDict):`,
         ...propertyTypings,
@@ -127,51 +146,43 @@ export default class Python extends CodeGen {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
-      typing: `${title} = NewType(${title}, Mapping[Any, Any])`,
+      macros: "from typing import NewType, Any, Mapping",
+      typing: `${title} = NewType("${title}", Mapping[Any, Any])`,
     };
   }
 
   protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
-    // should filter out anything that isnt an object when doing this.
-    const merged = s.anyOf
-      .filter((subSchemas: Schema) => subSchemas.type === "object")
-      .reduce((mergedSchema: Schema[], oneOfSchema: Schema) => {
-        return { ...mergedSchema, ...oneOfSchema };
-      }, s);
-
-    delete merged.anyOf;
-
-    return this.handleObject(merged);
+    const title = this.getSafeTitle(s.title);
+    return {
+      macros: "from typing import NewType, Union",
+      documentationComment: this.buildDocs(s),
+      prefix: "type",
+      typing: `${title} = NewType("${title}", Union[${this.getJoinedSafeTitles(s.anyOf, ", ")}])`,
+    };
   }
 
   protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
-    const typeLines = s.enum
-      .filter((enumString: any) => typeof enumString === "string")
-      .map((enumString: string, i: number) => `    ${enumString.toUpperCase()} = ${i}`);
-
-    return {
-      documentationComment: this.buildDocs(s),
-      prefix: "type",
-      typing: this.getJoinedSafeTitles(s.allOf, " & "),
-    };
+    const copy = { ...s };
+    copy.properties = mergeObjectProperties(s.allOf);
+    return this.handleObject(copy);
   }
 
   protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
+      macros: "from typing import NewType, Union",
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: `${title} = NewType(${title}, Union[${this.getJoinedSafeTitles(s.oneOf, ", ")}])`,
+      typing: `${title} = NewType("${title}", Union[${this.getJoinedSafeTitles(s.oneOf, ", ")}])`,
     };
   }
 
   protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    return { typing: `${title} = NewType(${title}, int)` };
     return {
       documentationComment: this.buildDocs(s),
-      macros: "from typing import Any",
-      typing: `${title} = NewType(${title}, Any)`,
+      macros: "from typing import Any, NewType",
+      typing: `${title} = NewType("${title}", Any)`,
     };
   }
 
@@ -189,7 +200,7 @@ export default class Python extends CodeGen {
 
     if (docStringLines.length > 0) {
       return [
-        `"""${s.description}}`,
+        `"""${s.description}`,
         `"""`,
       ].join("\n");
     }
