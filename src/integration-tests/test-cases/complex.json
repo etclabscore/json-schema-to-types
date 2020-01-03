@@ -8,6 +8,7 @@
     "string": { "type": "string", "title": "bop" },
     "stringEnum": { "type": "string", "title": "bopper", "enum": [ "asd", "bca" ] },
     "numbericalEnum": { "type": "number", "title": "swicker", "enum": [ 123, 321 ] },
+    "integerEnum": { "type": "integer", "title": "slicker", "enum": [ 123, 321 ] },
     "untypedArray": { "type": "array", "title": "splinter" },
     "orderedArray": {
       "type": "array",
@@ -23,6 +24,7 @@
       "required": ["fooberdoober"],
       "type": "object",
       "title": "floopdidoop",
+      "additionalProperties": false,
       "properties": {
         "fooberdoober": { "type": "number", "title": "bop" },
         "gibbledybits": { "type": "string", "title": "bopskippity" }
@@ -34,6 +36,7 @@
         {
           "type": "object",
           "title": "skiperydippery",
+          "additionalProperties": false,
           "properties": {
             "fooberdoober": { "type": "number", "title": "bop" },
             "gibbledybits": { "type": "string", "title": "bopskippity" }
@@ -42,6 +45,7 @@
         {
           "type": "object",
           "title": "bonkiedonky",
+          "additionalProperties": false,
           "properties": {
             "shopper": { "type": "object", "title": "doppler" },
             "badmirputin": { "type": "number", "title": "gorbelchov" }

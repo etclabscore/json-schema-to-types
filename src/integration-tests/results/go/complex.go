@@ -29,6 +29,11 @@ const (
 	SwickerEnum0 Swicker = 123
 	SwickerEnum1 Swicker = 321
 )
+type Slicker int64
+const (
+	SlickerEnum0 Slicker = 123
+	SlickerEnum1 Slicker = 321
+)
 type Splinter []interface{}
 type Skibb interface{}
 type Skibbidippy []Bop
@@ -47,8 +52,7 @@ type Bonkiedonky struct {
 	Shopper     *Doppler    `json:"shopper,omitempty"`
 	Badmirputin *Gorbelchov `json:"badmirputin,omitempty"`
 }
-type Justworkalready struct {
-}
+type Justworkalready map[string]interface{}
 type Zip int64
 type Nullgasm interface{}
 type Skorpionuts struct {
@@ -67,6 +71,7 @@ type BippyskippyBoppy struct {
 	String         *Bop             `json:"string,omitempty"`
 	StringEnum     *Bopper          `json:"stringEnum,omitempty"`
 	NumbericalEnum *Swicker         `json:"numbericalEnum,omitempty"`
+	IntegerEnum    *Slicker         `json:"integerEnum,omitempty"`
 	UntypedArray   *Splinter        `json:"untypedArray,omitempty"`
 	OrderedArray   *Skibbidippy     `json:"orderedArray,omitempty"`
 	UnorderedArray *Skibbidippy     `json:"unorderedArray,omitempty"`

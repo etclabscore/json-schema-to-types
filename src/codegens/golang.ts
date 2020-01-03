@@ -132,14 +132,8 @@ export default class Golang extends CodeGen {
    * must be a set of schemas with type: object
    */
   protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
-    const allOf = s.allOf
-      .filter(({ properties }: Schema) => properties)
-      .map(({ properties }: Schema) => properties)
-      .reduce((all: Schema, schema: Schema) => ({ ...all, ...schema }), {});
-
-    const copy = { ...s };
-    copy.properties = allOf;
-    return this.handleObject(copy);
+    this.warnNotWellSupported("allOf");
+    return this.handleUntypedObject(s);
   }
 
   protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
@@ -195,5 +189,9 @@ export default class Golang extends CodeGen {
       docStringLines.push("");
       return docStringLines.join("\n");
     }
+  }
+
+  private warnNotWellSupported(typing: string) {
+    console.warn(`In Python, ${typing} is not well supported.`);
   }
 }

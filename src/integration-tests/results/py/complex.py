@@ -19,6 +19,9 @@ class Bopper(Enum):
 from typing import NewType
 
 Swicker = NewType("Swicker", float)
+from typing import NewType
+
+Slicker = NewType("Slicker", int)
 from typing import List, Any, NewType
 
 Splinter = NewType("Splinter", List[Any])
@@ -31,21 +34,27 @@ Skibbidippy = NewType("Skibbidippy", List[Bop])
 from typing import NewType
 
 Bopskippity = NewType("Bopskippity", str)
-from typing import NewType, Any, Mapping
+from typing import TypedDict, Optional
 
-Floopdidoop = NewType("Floopdidoop", Mapping[Any, Any])
-from typing import NewType, Any, Mapping
+class Floopdidoop(TypedDict):
+    fooberdoober: Optional[Bop]
+    gibbledybits: Optional[Bopskippity]
+from typing import TypedDict, Optional
 
-Skiperydippery = NewType("Skiperydippery", Mapping[Any, Any])
+class Skiperydippery(TypedDict):
+    fooberdoober: Optional[Bop]
+    gibbledybits: Optional[Bopskippity]
 from typing import NewType, Any, Mapping
 
 Doppler = NewType("Doppler", Mapping[Any, Any])
 from typing import NewType
 
 Gorbelchov = NewType("Gorbelchov", float)
-from typing import NewType, Any, Mapping
+from typing import TypedDict, Optional
 
-Bonkiedonky = NewType("Bonkiedonky", Mapping[Any, Any])
+class Bonkiedonky(TypedDict):
+    shopper: Optional[Doppler]
+    badmirputin: Optional[Gorbelchov]
 from typing import NewType, Any, Mapping
 
 Justworkalready = NewType("Justworkalready", Mapping[Any, Any])
