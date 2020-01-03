@@ -6,10 +6,6 @@ import { capitalize } from "../utils";
 
 export default class Golang extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
-    if (s.title === undefined) {
-      console.log("boob balls"); //tslint:disable-line
-      console.log(s); //tslint:disable-line
-    }
     return [
       ir.documentationComment,
       [
