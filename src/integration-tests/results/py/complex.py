@@ -19,6 +19,9 @@ class Bopper(Enum):
 from typing import NewType
 
 Swicker = NewType("Swicker", float)
+from typing import List, Any, NewType
+
+Splinter = NewType("Splinter", List[Any])
 from typing import Any, NewType
 
 Skibb = NewType("Skibb", Any)

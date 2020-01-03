@@ -29,6 +29,7 @@ const (
 	SwickerEnum0 Swicker = 123
 	SwickerEnum1 Swicker = 321
 )
+type Splinter []interface{}
 type Skibb interface{}
 type Skibbidippy []Bop
 type Bopskippity string
@@ -66,6 +67,7 @@ type BippyskippyBoppy struct {
 	String         *Bop             `json:"string,omitempty"`
 	StringEnum     *Bopper          `json:"stringEnum,omitempty"`
 	NumbericalEnum *Swicker         `json:"numbericalEnum,omitempty"`
+	UntypedArray   *Splinter        `json:"untypedArray,omitempty"`
 	OrderedArray   *Skibbidippy     `json:"orderedArray,omitempty"`
 	UnorderedArray *Skibbidippy     `json:"unorderedArray,omitempty"`
 	Object         *Floopdidoop     `json:"object,omitempty"`

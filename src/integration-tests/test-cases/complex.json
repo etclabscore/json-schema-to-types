@@ -8,6 +8,7 @@
     "string": { "type": "string", "title": "bop" },
     "stringEnum": { "type": "string", "title": "bopper", "enum": [ "asd", "bca" ] },
     "numbericalEnum": { "type": "number", "title": "swicker", "enum": [ 123, 321 ] },
+    "untypedArray": { "type": "array", "title": "splinter" },
     "orderedArray": {
       "type": "array",
       "title": "skibbidippy",

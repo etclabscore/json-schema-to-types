@@ -32,6 +32,7 @@ pub enum Bopper {
     Bca,
 }
 pub type Swicker = f64;
+pub type Splinter = Vec<serde_json::Value>;
 pub type Skibb = serde_json::Value;
 pub type Skibbidippy = Vec<Bop>;
 pub type Bopskippity = String;
@@ -74,6 +75,7 @@ pub struct BippyskippyBoppy {
     pub(crate) string: Option<Bop>,
     pub(crate) stringEnum: Option<Bopper>,
     pub(crate) numbericalEnum: Option<Swicker>,
+    pub(crate) untypedArray: Option<Splinter>,
     pub(crate) orderedArray: Option<Skibbidippy>,
     pub(crate) unorderedArray: Option<Skibbidippy>,
     pub(crate) object: Option<Floopdidoop>,
