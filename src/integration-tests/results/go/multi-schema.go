@@ -10,7 +10,7 @@ type StringLxWtMXSJ string
 type Man interface{}
 // Generated! Represents an alias to any of the provided schemas
 type AnyOfPetsStringLxWtMXSJMan struct {
-	Pets *Pets
+	Pets           *Pets
 	StringLxWtMXSJ *StringLxWtMXSJ
-	Man *Man
+	Man            *Man
 }

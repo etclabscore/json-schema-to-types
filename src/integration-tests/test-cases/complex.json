@@ -1,0 +1,65 @@
+{
+  "title": "BippyskippyBoppy",
+  "type": "object",
+  "properties": {
+    "bool": { "type": "boolean", "title": "skip" },
+    "int": {  "examples": [ 123, 456, 789 ], "description": "abc 123", "type": "integer", "title": "bip" },
+    "number": { "type": "number", "title": "bipper" },
+    "string": { "type": "string", "title": "bop" },
+    "stringEnum": { "type": "string", "title": "bopper", "enum": [ "asd", "bca" ] },
+    "orderedArray": {
+      "type": "array",
+      "title": "skibbidippy",
+      "items": [ { "type": "number", "title": "bop" }, { "type": "bool", "title": "skibb" } ]
+    },
+    "unorderedArray": {
+      "type": "array",
+      "title": "skibbidippy",
+      "items": { "type": "number", "title": "bop" }
+    },
+    "object": {
+      "type": "object",
+      "title": "floopdidoop",
+      "properties": {
+        "fooberdoober": { "type": "number", "title": "bop" },
+        "gibbledybits": { "type": "string", "title": "bopskippity" }
+      }
+    },
+    "allOf": {
+      "title": "floopdidoop",
+      "allOf": [
+        {
+          "type": "object",
+          "title": "skiperydippery",
+          "properties": {
+            "fooberdoober": { "type": "number", "title": "bop" },
+            "gibbledybits": { "type": "string", "title": "bopskippity" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "bonkiedonky",
+          "properties": {
+            "shopper": { "type": "string", "title": "doppler" },
+            "badmirputin": { "type": "number", "title": "gorbelchov" }
+          }
+        }
+      ]
+    },
+    "anyOf": {
+      "title": "skorpionuts",
+      "anyOf": [
+        { "type": "boolean", "title": "skip" },
+        { "type": "integer", "title": "zip" }
+      ]
+    },
+    "oneOf": {
+      "title": "chikypoops",
+      "anyOf": [
+        { "type": "boolean", "title": "skip" },
+        { "type": "integer", "title": "zip" }
+      ]
+    }
+
+  }
+}

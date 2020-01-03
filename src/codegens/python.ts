@@ -1,6 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
-import traverse from "../traverse";
 import { mergeObjectProperties } from "../utils";
 
 export default class Python extends CodeGen {

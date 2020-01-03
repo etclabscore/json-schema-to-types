@@ -1,6 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
-import traverse from "../traverse";
 
 export default class Typescript extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {

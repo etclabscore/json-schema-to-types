@@ -60,7 +60,6 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
 
   const subSchemaTitleErrors = ensureSubschemaTitles(schema);
   if (subSchemaTitleErrors.length > 0) {
-    subSchemaTitleErrors.forEach((e) => console.error);
     throw subSchemaTitleErrors[0];
   }
 

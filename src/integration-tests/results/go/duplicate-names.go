@@ -9,12 +9,12 @@ type ObjectOfBazX101YId8 struct {
 }
 type OneOfStuff struct {
 	UnorderedSetOfFooz1UBFn8B *UnorderedSetOfFooz1UBFn8B
-	BunchaNumbers *BunchaNumbers
+	BunchaNumbers             *BunchaNumbers
 }
 // Generated! Represents an alias to any of the provided schemas
 type AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar struct {
-	Foo *Foo
+	Foo                 *Foo
 	ObjectOfBazX101YId8 *ObjectOfBazX101YId8
-	OneOfStuff *OneOfStuff
-	Bar *Bar
+	OneOfStuff          *OneOfStuff
+	Bar                 *Bar
 }

@@ -1,7 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
-import traverse from "../traverse";
-import { capitalize } from "../utils";
 
 export default class Rust extends CodeGen {
   public getCodePrefix() {

@@ -1,5 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
-import { capitalize, languageSafeName } from "../utils";
+import { languageSafeName } from "../utils";
 
 export interface TypeIntermediateRepresentation {
   macros?: string;
