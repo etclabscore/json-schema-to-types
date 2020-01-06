@@ -1,3 +1,41 @@
+# [1.7.0](https://github.com/etclabscore/json-schema-to-types/compare/1.6.3...1.7.0) (2020-01-06)
+
+
+### Bug Fixes
+
+* believe it or not, more test cov ([06d933f](https://github.com/etclabscore/json-schema-to-types/commit/06d933f8026878e6fb03fa6da5a9ade1d2fd3b24))
+* even more test coverage, done now ([d831bc0](https://github.com/etclabscore/json-schema-to-types/commit/d831bc006b417fabd726431bfba1d6938a8a2774))
+* even. more. test. coverage. ([3172e6b](https://github.com/etclabscore/json-schema-to-types/commit/3172e6b89fb1716eeb8f19942095fb7e64726537))
+* get things going ([7993c45](https://github.com/etclabscore/json-schema-to-types/commit/7993c45479abd8651f70142cf7fdfa439c95b964))
+* get things ordered appropriately ([afd1886](https://github.com/etclabscore/json-schema-to-types/commit/afd1886216ee3e5ab392743db057925d069730d3))
+* handle additionalProperties a tiny bit better ([0fc770e](https://github.com/etclabscore/json-schema-to-types/commit/0fc770e524f11de2cedae6e08d7b09f2965fc847))
+* handle untyped array ([6a0d98c](https://github.com/etclabscore/json-schema-to-types/commit/6a0d98c1d3ab9034b14d12ed6b07f1b84f57c535))
+* implement generate docsString ([fd27444](https://github.com/etclabscore/json-schema-to-types/commit/fd2744435f8139e0d64e283386c74f14ca3b8faa))
+* improve coverage more ([b45adcd](https://github.com/etclabscore/json-schema-to-types/commit/b45adcd8652394edad9636b0eb8dfd9e9f596860))
+* improve test coverage ([1d84c43](https://github.com/etclabscore/json-schema-to-types/commit/1d84c438ec71b8997ab1b213989276f47b2927de))
+* missing getsafetitle ([564536f](https://github.com/etclabscore/json-schema-to-types/commit/564536f3df9adbb5cd92026ea4c90e8aa227bc2a))
+* more test coverage ([48870b8](https://github.com/etclabscore/json-schema-to-types/commit/48870b8fc28ca2185e9de889034cb40451ac362a))
+* more test fix ([38063fc](https://github.com/etclabscore/json-schema-to-types/commit/38063fc90ef812b45daf6886497994b49e42adab))
+* nodegyp madness ([c3fa453](https://github.com/etclabscore/json-schema-to-types/commit/c3fa45304735fb9c1daf6137a50f303b1a251561))
+* remove trash ([b446234](https://github.com/etclabscore/json-schema-to-types/commit/b44623448904205a776f328a8065e7dcebc05219))
+* restore package lock ([9f31d01](https://github.com/etclabscore/json-schema-to-types/commit/9f31d01c1d3cdd78c9ba851c84d426dd686dca17))
+* update docs ([f7ff074](https://github.com/etclabscore/json-schema-to-types/commit/f7ff074d145a17f94332cc0acf4ea7f171e7d38f))
+* update generate method ([c0bf381](https://github.com/etclabscore/json-schema-to-types/commit/c0bf3819d6b8e8edd98b1e96c0e4c40a66957d50))
+
+
+### Features
+
+* enums ([ccd5ed4](https://github.com/etclabscore/json-schema-to-types/commit/ccd5ed4141cf6a9025775c787567909f38916b80))
+* handle anyof ([3c7f7ff](https://github.com/etclabscore/json-schema-to-types/commit/3c7f7ffd6edeeaa0b7cf94defbdd51bec381f027))
+* handle object mostly ([6f3c83f](https://github.com/etclabscore/json-schema-to-types/commit/6f3c83f8f9717cb1979c17bf3a9dbf8a86110a3d))
+* handle oneOf ([6aadc99](https://github.com/etclabscore/json-schema-to-types/commit/6aadc99e3123e5267005f2d01b02bd9d8a841fac))
+* handle ordered array ([5a4be6a](https://github.com/etclabscore/json-schema-to-types/commit/5a4be6a1ebe432146a0b351529ab399e518c89e5))
+* handle unordered array ([72df431](https://github.com/etclabscore/json-schema-to-types/commit/72df4316684aebfe08cc7f81f9d55cbd781db20a))
+* implement anyOf ([838c37e](https://github.com/etclabscore/json-schema-to-types/commit/838c37ecf303950f1633faefbbf7a69610ff1794))
+* null and untyped ([766fb31](https://github.com/etclabscore/json-schema-to-types/commit/766fb319489b6e8939d3add538010458e1a036e8))
+* python ([41ca89f](https://github.com/etclabscore/json-schema-to-types/commit/41ca89ff6e71566ba87001fbae7b0af7a4e53ae4))
+* untyped object ([c78b4a1](https://github.com/etclabscore/json-schema-to-types/commit/c78b4a1676c88f7a74f85dbf6c496bd8af82da68))
+
 ## [1.6.3](https://github.com/etclabscore/json-schema-to-types/compare/1.6.2...1.6.3) (2019-11-19)
 
 
