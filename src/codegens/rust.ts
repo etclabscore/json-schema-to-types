@@ -1,7 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
-import traverse from "../traverse";
-import { capitalize } from "../utils";
 
 export default class Rust extends CodeGen {
   public getCodePrefix() {
@@ -157,7 +155,7 @@ export default class Rust extends CodeGen {
   }
 
   private buildDocs(s: Schema): string | undefined {
-    const docStringLines = [];
+    const docStringLines: string[] = [];
 
     if (s.description) {
       docStringLines.push(`/// ${s.description}`);
@@ -168,6 +166,7 @@ export default class Rust extends CodeGen {
       docStringLines.push("/// # Default");
       docStringLines.push("///");
       docStringLines.push(`/// ${s.default}`);
+      docStringLines.push("///");
     }
 
     if (s.examples) {

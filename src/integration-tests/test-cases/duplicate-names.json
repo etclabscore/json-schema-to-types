@@ -1,13 +1,16 @@
 [
   {
+    "title": "foo",
     "type": "string"
   },
   {
+    "title": "foo",
     "type": "string"
   },
   {
     "properties": {
       "ripslip": {
+        "title": "baz",
         "type": "boolean"
       }
     },
@@ -19,6 +22,7 @@
       {
         "description": "array of strings is all...",
         "items": {
+          "title": "foo",
           "type": "string"
         },
         "type": "array"
@@ -27,6 +31,7 @@
         "title": "Buncha Numbers",
         "items": [
           {
+            "title": "bar",
             "format": "int64",
             "type": "integer"
           }
@@ -36,6 +41,7 @@
     ]
   },
   {
+    "title": "bar",
     "format": "int64",
     "type": "integer"
   }

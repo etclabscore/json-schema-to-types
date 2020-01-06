@@ -1,0 +1,73 @@
+{
+  "title": "BippyskippyBoppy",
+  "type": "object",
+  "properties": {
+    "bool": { "type": "boolean", "title": "skip" },
+    "int": {  "examples": [ 123, 456, 789 ], "description": "abc 123", "type": "integer", "title": "bip", "default": 123 },
+    "number": { "type": "number", "title": "bipper" },
+    "string": { "type": "string", "title": "bop" },
+    "stringEnum": { "type": "string", "title": "bopper", "enum": [ "asd", "bca" ] },
+    "numbericalEnum": { "type": "number", "title": "swicker", "enum": [ 123, 321 ] },
+    "integerEnum": { "type": "integer", "title": "slicker", "enum": [ 123, 321 ] },
+    "untypedArray": { "type": "array", "title": "splinter" },
+    "orderedArray": {
+      "type": "array",
+      "title": "skibbidippy",
+      "items": [ { "type": "number", "title": "bop" }, { "type": "bool", "title": "skibb" } ]
+    },
+    "unorderedArray": {
+      "type": "array",
+      "title": "skibbidippy",
+      "items": { "type": "number", "title": "bop" }
+    },
+    "object": {
+      "required": ["fooberdoober"],
+      "type": "object",
+      "title": "floopdidoop",
+      "additionalProperties": false,
+      "properties": {
+        "fooberdoober": { "type": "number", "title": "bop" },
+        "gibbledybits": { "type": "string", "title": "bopskippity" }
+      }
+    },
+    "allOf": {
+      "title": "justworkalready",
+      "allOf": [
+        {
+          "type": "object",
+          "title": "skiperydippery",
+          "additionalProperties": false,
+          "properties": {
+            "fooberdoober": { "type": "number", "title": "bop" },
+            "gibbledybits": { "type": "string", "title": "bopskippity" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "bonkiedonky",
+          "additionalProperties": false,
+          "properties": {
+            "shopper": { "type": "object", "title": "doppler" },
+            "badmirputin": { "type": "number", "title": "gorbelchov" }
+          }
+        }
+      ]
+    },
+    "anyOf": {
+      "title": "skorpionuts",
+      "anyOf": [
+        { "type": "boolean", "title": "skip" },
+        { "type": "integer", "title": "zip" },
+        { "type": "null", "title": "nullgasm" }
+      ]
+    },
+    "oneOf": {
+      "title": "chikypoops",
+      "anyOf": [
+        { "type": "boolean", "title": "skip" },
+        { "type": "integer", "title": "zip" }
+      ]
+    }
+
+  }
+}

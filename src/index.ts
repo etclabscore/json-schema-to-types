@@ -1,12 +1,12 @@
 import { Schema } from "@open-rpc/meta-schema";
-import traverse from "./traverse";
 import { capitalize, ensureSchemaTitles, collectAndRefSchemas, combineSchemas } from "./utils";
 import { CodeGen } from "./codegens/codegen";
 import TypescriptGenerator from "./codegens/typescript";
 import RustGenerator from "./codegens/rust";
 import GolangGenerator from "./codegens/golang";
+import PythonGenerator from "./codegens/python";
 
-export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "golang";
+export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "golang" | "python" | "py";
 /**
  * Provides a high-level interface for getting typings given a schema.
  */
@@ -15,10 +15,15 @@ export class JsonSchemaToTypes {
   public megaSchema: Schema;
 
   constructor(s: Schema | Schema[]) {
-    const inputSchema = s instanceof Array ? s : [s];
+    const useMerge = s instanceof Array;
+    const inputSchema: Schema[] = useMerge ? s as Schema[] : [s];
     const schemaWithTitles = inputSchema.map((ss) => ensureSchemaTitles(ss));
     const reffed = schemaWithTitles.map((ss) => collectAndRefSchemas(ss));
-    this.megaSchema = combineSchemas(reffed);
+    if (useMerge) {
+      this.megaSchema = combineSchemas(reffed);
+    } else {
+      [this.megaSchema] = reffed;
+    }
   }
 
   /**
@@ -102,6 +107,32 @@ export class JsonSchemaToTypes {
    */
   public toGo(): string {
     return this.toGolang();
+  }
+
+  /**
+   * Returns the types in Python
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Python
+   * @category TargetCodeGenerator
+   *
+   */
+  public toPython(): string {
+    return this.transpile(new PythonGenerator(this.megaSchema));
+  }
+
+  /**
+   * Returns the types in Python
+   *
+   * @returns The types present in the megaSchema, seperated by newlines.
+   *
+   * @category Python
+   * @category TargetCodeGenerator
+   *
+   */
+  public toPy(): string {
+    return this.toPython();
   }
 
   private transpile(gen: CodeGen): string {

@@ -1,6 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
-import traverse from "../traverse";
 
 export default class Typescript extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
@@ -18,7 +17,7 @@ export default class Typescript extends CodeGen {
   }
 
   protected handleNull(s: Schema): TypeIntermediateRepresentation {
-    return { prefix: "type", typing: "null" };
+    return { prefix: "type", typing: "null", documentationComment: this.buildDocs(s) };
   }
 
   protected handleNumber(s: Schema): TypeIntermediateRepresentation {
@@ -98,7 +97,7 @@ export default class Typescript extends CodeGen {
   protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
     return {
       prefix: "interface",
-      typing: "{ [key: string]: any }",
+      typing: "{ [key: string]: any; }",
       documentationComment: this.buildDocs(s),
     };
   }

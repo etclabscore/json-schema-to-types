@@ -1,15 +1,21 @@
-export type StringDoaGddGA = string;
-export type BooleanVyG3AETh = boolean;
-export interface ObjectOfBooleanVyG3AETh5PX0GXMY {
-  ripslip?: BooleanVyG3AETh;
-  [k: string]: any;
-}
+export type Baz = boolean;
+export type Foo = string;
 /**
  *
  * array of strings is all...
  *
  */
-export type UnorderedSetOfStringDoaGddGAmrf5BlCm = StringDoaGddGA[];
-export type IntegerXZTmW7Mv = number;
-export type BunchaNumbers = [IntegerXZTmW7Mv];
-export type OneOfStuff = UnorderedSetOfStringDoaGddGAmrf5BlCm | BunchaNumbers;
+export type UnorderedSetOfFooz1UBFn8B = Foo[];
+export type Bar = number;
+export type BunchaNumbers = [Bar];
+export interface ObjectOfBazX101YId8 {
+  ripslip?: Baz;
+  [k: string]: any;
+}
+export type OneOfStuff = UnorderedSetOfFooz1UBFn8B | BunchaNumbers;
+/**
+ *
+ * Generated! Represents an alias to any of the provided schemas
+ *
+ */
+export type AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar = Foo | ObjectOfBazX101YId8 | OneOfStuff | Bar;

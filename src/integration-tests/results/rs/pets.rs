@@ -1,10 +1,5 @@
 extern crate serde_json;
 
-/// Pets
-///
-/// a bunch of pets
-///
-pub type Pets = Vec<OneOfBearManPigRIVnq1Ij>;
 pub type Man = serde_json::Value;
 pub type Bear = serde_json::Value;
 pub type Pig = serde_json::Value;
@@ -14,3 +9,8 @@ pub enum OneOfBearManPigRIVnq1Ij {
     Bear,
     Pig
 }
+/// Pets
+///
+/// a bunch of pets
+///
+pub type Pets = Vec<OneOfBearManPigRIVnq1Ij>;

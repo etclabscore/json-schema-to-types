@@ -1,8 +1,5 @@
-
 import { Schema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
-import traverse from "../traverse";
-import { capitalize } from "../utils";
 
 export default class Golang extends CodeGen {
   protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
@@ -37,11 +34,11 @@ export default class Golang extends CodeGen {
     const safeTitle = this.getSafeTitle(s.title);
     const enumFields = s.enum
       .filter((enumField: any) => typeof enumField === "number")
-      .map((enumField: string, i: number) => `\t${safeTitle}Enum${i} ${safeTitle} = ${enumField},`)
+      .map((enumField: string, i: number) => `\t${safeTitle}Enum${i} ${safeTitle} = ${enumField}`)
       .join("\n");
 
     const ir = s.type === "number" ? this.handleNumber(s) : this.handleInteger(s);
-    ir.typing = ir.typing + "\n" + ["const {", ...enumFields, "}"].join("\n");
+    ir.typing = ir.typing + "\n" + ["const (", ...enumFields, ")"].join("\n");
     return ir;
   }
 
@@ -53,11 +50,11 @@ export default class Golang extends CodeGen {
     const safeTitle = this.getSafeTitle(s.title);
     const enumFields = s.enum
       .filter((enumField: any) => typeof enumField === "string")
-      .map((enumField: string, i: number) => `\t${safeTitle}Enum${i} ${safeTitle} = "${enumField}",`)
+      .map((enumField: string, i: number) => `\t${safeTitle}Enum${i} ${safeTitle} = "${enumField}"`)
       .join("\n");
 
     const ir = this.handleString(s);
-    ir.typing = ir.typing + "\n" + ["const {", ...enumFields, "}"].join("\n");
+    ir.typing = ir.typing + "\n" + ["const (", ...enumFields, ")"].join("\n");
     return ir;
   }
 
@@ -82,21 +79,28 @@ export default class Golang extends CodeGen {
   }
 
   protected handleObject(s: Schema): TypeIntermediateRepresentation {
-    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      const propSchema = s.properties[key];
+    const propKeys = Object.keys(s.properties);
+    const safeTitles = propKeys.map((k) => this.getSafeTitle(k));
+    const propSchemaTitles = propKeys.map((k) => this.getSafeTitle(this.refToTitle(s.properties[k])));
+
+    const titleMaxLength = Math.max(...safeTitles.map((t) => t.length));
+    const propTitleMaxLength = Math.max(...propSchemaTitles.map((t) => t.length));
+
+    const propertyTypings = propKeys.reduce((typings: string[], key: string, i: number) => {
       let isRequired = false;
       if (s.required) {
         isRequired = s.required.indexOf(key) !== -1;
       }
+      let safeTitle = safeTitles[i];
+      safeTitle = safeTitle.padEnd(titleMaxLength);
+      let safeTitleForPropSchema = propSchemaTitles[i];
+      safeTitleForPropSchema = safeTitleForPropSchema.padEnd(propTitleMaxLength);
       return [
         ...typings,
-        "\t" + [
-          this.getSafeTitle(key),
-          `*${this.getSafeTitle(this.refToTitle(propSchema))}`,
-          `\`json:"${key}${isRequired ? "" : ",omitempty"}"\``,
-        ].join(" "),
+        `\t${safeTitle} *${safeTitleForPropSchema} \`json:"${key}${isRequired ? "" : ",omitempty"}"\``,
       ];
     }, []);
+
     return {
       prefix: "struct",
       typing: [`{`, ...propertyTypings, "}"].join("\n"),
@@ -111,17 +115,10 @@ export default class Golang extends CodeGen {
   }
 
   protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
-    const anyOfType = s.anyOf.reduce((typings: string[], oneOfSchema: Schema) => {
-      const title = this.getSafeTitle(this.refToTitle(oneOfSchema));
-
-      return [
-        ...typings,
-        [
-          "\t",
-          title,
-          `*${title}`,
-        ].join(" "),
-      ];
+    const titles = s.anyOf.map((ss: Schema) => this.getSafeTitle(this.refToTitle(ss)));
+    const titleMaxLength = Math.max(...titles.map((t: string) => t.length));
+    const anyOfType = titles.reduce((typings: string[], title: string) => {
+      return [...typings, `\t${title.padEnd(titleMaxLength)} *${title}`];
     }, []);
 
     return {
@@ -135,24 +132,20 @@ export default class Golang extends CodeGen {
    * must be a set of schemas with type: object
    */
   protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
-    const allOf = s.allOf
-      .filter(({ properties }: Schema) => properties)
-      .map(({ properties }: Schema) => properties)
-      .reduce((all: Schema, schema: Schema) => ({ ...all, ...schema }), {});
-
-    const copy = { ...s };
-    copy.properties = allOf;
-    return this.handleObject(copy);
+    this.warnNotWellSupported("allOf");
+    return this.handleUntypedObject(s);
   }
 
   protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
-    const oneOfType = s.oneOf.reduce((typings: string[], oneOfSchema: Schema) => {
-      const title = this.getSafeTitle(this.refToTitle(oneOfSchema));
+    const titles = s.oneOf.map((ss: Schema) => this.getSafeTitle(this.refToTitle(ss)));
+    const titleMaxLength = Math.max(...titles.map((t: string) => t.length));
+    const oneOfType = s.oneOf.reduce((typings: string[], oneOfSchema: Schema, i: number) => {
+      const title = titles[i];
 
       return [
         ...typings,
         "\t" + [
-          title,
+          title.padEnd(titleMaxLength),
           `*${title}`,
         ].join(" "),
       ];
@@ -184,7 +177,7 @@ export default class Golang extends CodeGen {
     }
 
     if (s.examples) {
-      s.examples.forEach((example: string) => {
+      s.examples.forEach((example: any) => {
         docStringLines.push("//");
         docStringLines.push("// --- Example ---");
         docStringLines.push("//");
@@ -196,5 +189,9 @@ export default class Golang extends CodeGen {
       docStringLines.push("");
       return docStringLines.join("\n");
     }
+  }
+
+  private warnNotWellSupported(typing: string) {
+    console.warn(`In Python, ${typing} is not well supported.`);
   }
 }
