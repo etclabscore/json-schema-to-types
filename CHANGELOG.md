@@ -1,3 +1,11 @@
+## [1.7.2](https://github.com/etclabscore/json-schema-to-types/compare/1.7.1...1.7.2) (2020-01-07)
+
+
+### Bug Fixes
+
+* set node-version to lts ([d009b47](https://github.com/etclabscore/json-schema-to-types/commit/d009b47d96a76ff79a64e4a3b19a0986085cc277))
+* use lts node version in circle ([63af88a](https://github.com/etclabscore/json-schema-to-types/commit/63af88acaab383b2e26f73da4825304cc57bee0c))
+
 ## [1.7.1](https://github.com/etclabscore/json-schema-to-types/compare/1.7.0...1.7.1) (2020-01-07)
 
 
