@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/etclabscore/json-schema-to-types/compare/1.7.0...1.7.1) (2020-01-07)
+
+
+### Bug Fixes
+
+* run audit fix ([a38ec83](https://github.com/etclabscore/json-schema-to-types/commit/a38ec830e64e707f6a8d4f3d12670ae3a3d9bd9c))
+
 # [1.7.0](https://github.com/etclabscore/json-schema-to-types/compare/1.6.3...1.7.0) (2020-01-06)
 
 
