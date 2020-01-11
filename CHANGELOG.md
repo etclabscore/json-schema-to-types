@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/etclabscore/json-schema-to-types/compare/1.7.2...1.8.0) (2020-01-11)
+
+
+### Bug Fixes
+
+* install missing types ([61245bd](https://github.com/etclabscore/json-schema-to-types/commit/61245bd00d9290d0b13a63f7142d2c0bf221ea78))
+* update package lock ([daf4391](https://github.com/etclabscore/json-schema-to-types/commit/daf4391f4f0de41ddfd30f306f0e94ce18b29ba7))
+
+
+### Features
+
+* handle circular references with grace ([82eed56](https://github.com/etclabscore/json-schema-to-types/commit/82eed568342bded9f797eeed5d5f254154d469e9)), closes [#14](https://github.com/etclabscore/json-schema-to-types/issues/14)
+
 ## [1.7.2](https://github.com/etclabscore/json-schema-to-types/compare/1.7.1...1.7.2) (2020-01-07)
 
 
