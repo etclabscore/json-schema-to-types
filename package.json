@@ -8,7 +8,8 @@
   "main": "build/index.js",
   "files": [
     "build",
-    "!build/**/*.test.*"
+    "!build/**/*.test.*",
+    "!build/integration-tests"
   ],
   "scripts": {
     "build": "npm run build:code && npm run build:docs",
