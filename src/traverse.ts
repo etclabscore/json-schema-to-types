@@ -19,6 +19,8 @@ export const defaultOptions: TraverseOptions = {
   skipFirstMutation: false,
 };
 
+const isCycle = (s: Schema, n: Schema) => s === n;
+
 /**
  * Traverse all subschema of a schema, calling the mutator function with each.
  * The mutator is called on leaf nodes first.
@@ -38,7 +40,10 @@ export default function traverse(
 ) {
   const mutableSchema: Schema = { ...schema };
 
-  const rec = (s: Schema) => traverse(s, mutation, traverseOptions, depth + 1);
+  const rec = (s: Schema) => {
+    if (isCycle(s, schema)) { return mutation(s); }
+    return traverse(s, mutation, traverseOptions, depth + 1);
+  };
 
   if (schema.anyOf) {
     mutableSchema.anyOf = schema.anyOf.map(rec);

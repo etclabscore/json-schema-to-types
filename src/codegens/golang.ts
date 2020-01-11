@@ -192,6 +192,6 @@ export default class Golang extends CodeGen {
   }
 
   private warnNotWellSupported(typing: string) {
-    console.warn(`In Python, ${typing} is not well supported.`);
+    console.warn(`In Golang, ${typing} is not well supported.`);
   }
 }

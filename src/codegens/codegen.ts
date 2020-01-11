@@ -24,6 +24,7 @@ export abstract class CodeGen {
     if (this.schema.definitions) {
       Object
         .entries(this.schema.definitions)
+        .filter(([n]: [string, any]) => n !== this.schema.title)
         .forEach(([n, schema]: [string, any]) => defsSchemaTypes.push(this.generate(schema, this.toIR(schema))));
     }
 
