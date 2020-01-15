@@ -18,7 +18,9 @@ export class JsonSchemaToTypes {
     const useMerge = s instanceof Array;
     const inputSchema: Schema[] = useMerge ? s as Schema[] : [s];
     const schemaWithTitles = inputSchema.map((ss) => ensureSchemaTitles(ss));
+    console.log("titles have been created"); // tslint:disable-line
     const reffed = schemaWithTitles.map((ss) => collectAndRefSchemas(ss));
+    console.log("Finished collecting and reffing"); // tslint:disable-line
     if (useMerge) {
       this.megaSchema = combineSchemas(reffed);
     } else {

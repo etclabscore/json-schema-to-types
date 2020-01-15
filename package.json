@@ -36,7 +36,9 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
+    "@types/lodash.merge": "^4.6.6",
     "lodash.deburr": "^4.1.0",
+    "lodash.merge": "^4.6.2",
     "lodash.trim": "^4.5.1"
   }
 }
