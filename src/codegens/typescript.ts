@@ -147,7 +147,12 @@ export default class Typescript extends CodeGen {
     }
 
     if (s.default) {
-      docStringLines.push(` * @default  ${s.default}`);
+      const def = s.default;
+      let defAsStr = `${def}`;
+      if (def instanceof Array || (typeof def === "object" && def !== null)) {
+        defAsStr = JSON.stringify(def);
+      }
+      docStringLines.push(` * @default ${defAsStr}`);
       docStringLines.push(` *`);
     }
 

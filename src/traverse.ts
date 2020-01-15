@@ -28,11 +28,6 @@ const isCycle = (s: Schema, recursiveStack: Schema[]) => {
   return false;
 };
 
-// takes the properties of b and copies them to a.
-const applyDiff = (a: any, b: any) => {
-  Object.entries(a);
-};
-
 /**
  * Traverse all subschema of a schema, calling the mutator function with each.
  * The mutator is called on leaf nodes first.

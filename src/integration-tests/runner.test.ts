@@ -24,18 +24,13 @@ describe("Integration tests", () => {
 
   it("checks out", async () => {
     const entries = Object.entries(testCases);
-    expect.assertions(1); // entries.length * languages.length);
+    expect.assertions(entries.length * languages.length);
 
     languages.forEach((lang) => {
       entries.forEach(async ([name, schema]: any) => {
-        if (name !== "json-schema-meta-schema" || lang !== "ts") {
-          console.log('skipping');//tslint:disable-line
-          return;
-        }
         const result = fs.readFileSync(`${resultsDir}/${lang}/${name}.${lang}`, "utf8").trim();
         const transpiler = new JsonSchemaToTypes(await schema);
         const typings = transpiler[`to${capitalize(lang)}`]();
-        console.log(typings); //tslint:disable-line
         expect(typings).toBe(result);
       });
     });

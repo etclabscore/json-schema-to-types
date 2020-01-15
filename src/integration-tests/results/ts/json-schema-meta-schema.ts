@@ -13,19 +13,19 @@ export type String3JBlmrip = string;
 export type SchemaArray = JSONSchema[];
 /**
  *
- * @default  true
+ * @default true
  *
  */
 export type AnyOfJSONSchemaSchemaArrayCotc6H6U = JSONSchema | SchemaArray;
 /**
  *
- * @default··
+ * @default []
  *
  */
 export type UnorderedSetOfStringDoaGddGAIEp1G0PF = StringDoaGddGA[];
 /**
  *
- * @default  [object Object]
+ * @default {}
  *
  */
 export interface ObjectWrpyYBUS { [key: string]: any; }
@@ -36,7 +36,7 @@ export type UnorderedSetOfAny17L18NF5VWcS9ROi = Any17L18NF5[];
 export type SchemaType = Any17L18NF5 | UnorderedSetOfAny17L18NF5VWcS9ROi;
 /**
  *
- * @default  true
+ * @default true
  *
  */
 export type JSONSchema = any;
