@@ -1,5 +1,6 @@
 import JsonSchemaToTypes from "./index";
 import { getDefaultTitleForSchema } from "./utils";
+import { JSONSchema } from "@open-rpc/meta-schema";
 
 describe("JsonSchemaToTypes", () => {
 
@@ -21,7 +22,8 @@ describe("JsonSchemaToTypes", () => {
           bar: { type: "string" },
         },
       });
-      expect(t.megaSchema.definitions.string_doaGddGA).toBeDefined();
+      const megaDefs = t.megaSchema.definitions as JSONSchema;
+      expect(megaDefs.string_doaGddGA).toBeDefined();
     });
 
     it("can output to typescript", () => {

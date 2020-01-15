@@ -4,9 +4,6 @@ Foo = NewType("Foo", str)
 from typing import NewType
 
 Baz = NewType("Baz", bool)
-from typing import NewType, Any, Mapping
-
-ObjectOfBazX101YId8 = NewType("ObjectOfBazX101YId8", Mapping[Any, Any])
 from typing import List, NewType
 """array of strings is all...
 """
@@ -17,6 +14,10 @@ Bar = NewType("Bar", int)
 from typing import NewType, Tuple
 
 BunchaNumbers = NewType("BunchaNumbers", Tuple[Bar])
+from typing import TypedDict, Optional
+
+class ObjectOfBazX101YId8(TypedDict):
+    ripslip: Optional[Baz]
 from typing import NewType, Union
 
 OneOfStuff = NewType("OneOfStuff", Union[UnorderedSetOfFooz1UBFn8B, BunchaNumbers])

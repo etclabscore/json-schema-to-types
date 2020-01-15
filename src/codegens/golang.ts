@@ -1,4 +1,4 @@
-import { JSONSchema } from "@open-rpc/meta-schema";
+import { JSONSchema, UnorderedSetOfAnyL9Fw4VUOyeAFYsFq } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 
 export default class Golang extends CodeGen {
@@ -7,7 +7,7 @@ export default class Golang extends CodeGen {
       ir.documentationComment,
       [
         "type ",
-        `${this.getSafeTitle(s.title)} `,
+        `${this.getSafeTitle(s.title as string)} `,
         ir.prefix ? `${ir.prefix} ` : "",
       ].join(""),
       ir.typing,
@@ -31,8 +31,9 @@ export default class Golang extends CodeGen {
   }
 
   protected handleNumericalEnum(s: JSONSchema): TypeIntermediateRepresentation {
-    const safeTitle = this.getSafeTitle(s.title);
-    const enumFields = s.enum
+    const safeTitle = this.getSafeTitle(s.title as string);
+    const sEnum = s.enum as UnorderedSetOfAnyL9Fw4VUOyeAFYsFq;
+    const enumFields = sEnum
       .filter((enumField: any) => typeof enumField === "number")
       .map((enumField: string, i: number) => `\t${safeTitle}Enum${i} ${safeTitle} = ${enumField}`)
       .join("\n");
@@ -47,8 +48,9 @@ export default class Golang extends CodeGen {
   }
 
   protected handleStringEnum(s: JSONSchema): TypeIntermediateRepresentation {
-    const safeTitle = this.getSafeTitle(s.title);
-    const enumFields = s.enum
+    const safeTitle = this.getSafeTitle(s.title as string);
+    const sEnum = s.enum as UnorderedSetOfAnyL9Fw4VUOyeAFYsFq;
+    const enumFields = sEnum
       .filter((enumField: any) => typeof enumField === "string")
       .map((enumField: string, i: number) => `\t${safeTitle}Enum${i} ${safeTitle} = "${enumField}"`)
       .join("\n");
@@ -60,14 +62,14 @@ export default class Golang extends CodeGen {
 
   protected handleOrderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
-      typing: `(${this.getJoinedSafeTitles(s.items)})`,
+      typing: `(${this.getJoinedSafeTitles(s.items as JSONSchema[])})`,
       documentationComment: this.buildDocs(s),
     };
   }
 
   protected handleUnorderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
-      typing: `[]${this.getSafeTitle(this.refToTitle(s.items))}`,
+      typing: `[]${this.getSafeTitle(this.refToTitle(s.items as JSONSchema))}`,
       documentationComment: this.buildDocs(s),
     };
   }
@@ -79,9 +81,10 @@ export default class Golang extends CodeGen {
   }
 
   protected handleObject(s: JSONSchema): TypeIntermediateRepresentation {
-    const propKeys = Object.keys(s.properties);
+    const sProps = s.properties as { [k: string]: JSONSchema };
+    const propKeys = Object.keys(sProps);
     const safeTitles = propKeys.map((k) => this.getSafeTitle(k));
-    const propSchemaTitles = propKeys.map((k) => this.getSafeTitle(this.refToTitle(s.properties[k])));
+    const propSchemaTitles = propKeys.map((k) => this.getSafeTitle(this.refToTitle(sProps[k])));
 
     const titleMaxLength = Math.max(...safeTitles.map((t) => t.length));
     const propTitleMaxLength = Math.max(...propSchemaTitles.map((t) => t.length));
@@ -115,7 +118,8 @@ export default class Golang extends CodeGen {
   }
 
   protected handleAnyOf(s: JSONSchema): TypeIntermediateRepresentation {
-    const titles = s.anyOf.map((ss: JSONSchema) => this.getSafeTitle(this.refToTitle(ss)));
+    const sAny = s.anyOf as JSONSchema[];
+    const titles = sAny.map((ss: JSONSchema) => this.getSafeTitle(this.refToTitle(ss)));
     const titleMaxLength = Math.max(...titles.map((t: string) => t.length));
     const anyOfType = titles.reduce((typings: string[], title: string) => {
       return [...typings, `\t${title.padEnd(titleMaxLength)} *${title}`];
@@ -137,9 +141,10 @@ export default class Golang extends CodeGen {
   }
 
   protected handleOneOf(s: JSONSchema): TypeIntermediateRepresentation {
-    const titles = s.oneOf.map((ss: JSONSchema) => this.getSafeTitle(this.refToTitle(ss)));
+    const sOne = s.oneOf as JSONSchema[];
+    const titles = sOne.map((ss: JSONSchema) => this.getSafeTitle(this.refToTitle(ss)));
     const titleMaxLength = Math.max(...titles.map((t: string) => t.length));
-    const oneOfType = s.oneOf.reduce((typings: string[], oneOfSchema: Schema, i: number) => {
+    const oneOfType = sOne.reduce((typings: string[], oneOfSchema: JSONSchema, i: number) => {
       const title = titles[i];
 
       return [

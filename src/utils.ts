@@ -1,6 +1,6 @@
 import deburr from "lodash.deburr";
 import trim from "lodash.trim";
-import { JSONSchema, UnorderedSetOfJSONSchemawrpyYBUS } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 import { createHash } from "crypto";
 import traverse from "./traverse";

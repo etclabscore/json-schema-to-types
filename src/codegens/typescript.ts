@@ -1,11 +1,11 @@
-import { JSONSchema } from "@open-rpc/meta-schema";
+import { JSONSchema, UnorderedSetOfAnyL9Fw4VUOyeAFYsFq } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 
 export default class Typescript extends CodeGen {
   protected generate(s: JSONSchema, ir: TypeIntermediateRepresentation) {
     return [
       ir.documentationComment,
-      `export ${ir.prefix} ${this.getSafeTitle(s.title)}`,
+      `export ${ir.prefix} ${this.getSafeTitle(s.title as string)}`,
       ir.prefix === "type" ? " = " : " ",
       ir.typing,
       ir.prefix === "type" ? ";" : "",
@@ -52,7 +52,7 @@ export default class Typescript extends CodeGen {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: `[${this.getJoinedSafeTitles(s.items)}]`,
+      typing: `[${this.getJoinedSafeTitles(s.items as JSONSchema[])}]`,
     };
   }
 
@@ -60,7 +60,7 @@ export default class Typescript extends CodeGen {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: `${this.getSafeTitle(this.refToTitle(s.items))}[]`,
+      typing: `${this.getSafeTitle(this.refToTitle(s.items as JSONSchema))}[]`,
     };
   }
 
@@ -73,8 +73,9 @@ export default class Typescript extends CodeGen {
   }
 
   protected handleObject(s: JSONSchema): TypeIntermediateRepresentation {
-    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      const propSchema = s.properties[key];
+    const sProps = s.properties as { [k: string]: JSONSchema };
+    const propertyTypings = Object.keys(sProps).reduce((typings: string[], key: string) => {
+      const propSchema = sProps[key];
       let isRequired = false;
       if (s.required) {
         isRequired = s.required.indexOf(key) !== -1;
@@ -83,7 +84,7 @@ export default class Typescript extends CodeGen {
       return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
     }, []);
 
-    if (s.additionalProperties !== false) {
+    if (s.additionalProperties === undefined) {
       propertyTypings.push("  [k: string]: any;");
     }
 
@@ -103,26 +104,29 @@ export default class Typescript extends CodeGen {
   }
 
   protected handleAnyOf(s: JSONSchema): TypeIntermediateRepresentation {
+    const sAny = s.anyOf as JSONSchema[];
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.anyOf, " | "),
+      typing: this.getJoinedSafeTitles(sAny, " | "),
     };
   }
 
   protected handleAllOf(s: JSONSchema): TypeIntermediateRepresentation {
+    const sAll = s.allOf as JSONSchema[];
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.allOf, " & "),
+      typing: this.getJoinedSafeTitles(sAll, " & "),
     };
   }
 
   protected handleOneOf(s: JSONSchema): TypeIntermediateRepresentation {
+    const sOne = s.oneOf as JSONSchema[];
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.oneOf, " | "),
+      typing: this.getJoinedSafeTitles(sOne, " | "),
     };
   }
 
@@ -132,7 +136,8 @@ export default class Typescript extends CodeGen {
 
   private buildEnum(schema: JSONSchema): string {
     const typeOf = schema.type === "string" ? "string" : "number";
-    return schema.enum
+    const sEnum = schema.enum as UnorderedSetOfAnyL9Fw4VUOyeAFYsFq;
+    return sEnum
       .filter((s: any) => typeof s === typeOf)
       .map((s: string) => typeOf === "string" ? `"${s}"` : s)
       .join(" | ");

@@ -1,4 +1,4 @@
-import { JSONSchema } from "@open-rpc/meta-schema";
+import { JSONSchema, UnorderedSetOfAnyL9Fw4VUOyeAFYsFq } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 
 export default class Rust extends CodeGen {
@@ -11,7 +11,7 @@ export default class Rust extends CodeGen {
       ir.documentationComment,
       ir.macros,
       ir.macros ? "\n" : "",
-      `pub ${ir.prefix} ${this.getSafeTitle(s.title)}`,
+      `pub ${ir.prefix} ${this.getSafeTitle(s.title as string)}`,
       ir.prefix === "type" ? " = " : " ",
       ir.typing,
       ir.prefix === "type" ? ";" : "",
@@ -49,7 +49,8 @@ export default class Rust extends CodeGen {
   }
 
   protected handleStringEnum(s: JSONSchema): TypeIntermediateRepresentation {
-    const enumFields = s.enum
+    const sEnum = s.enum as UnorderedSetOfAnyL9Fw4VUOyeAFYsFq;
+    const enumFields = sEnum
       .filter((enumField: any) => typeof enumField === "string")
       .map((enumField: string) => [
         `    #[serde(rename = ${enumField})]`,
@@ -67,7 +68,7 @@ export default class Rust extends CodeGen {
   protected handleOrderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: `(${this.getJoinedSafeTitles(s.items)})`,
+      typing: `(${this.getJoinedSafeTitles(s.items as JSONSchema[])})`,
       documentationComment: this.buildDocs(s),
     };
   }
@@ -75,7 +76,7 @@ export default class Rust extends CodeGen {
   protected handleUnorderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       prefix: "type",
-      typing: `Vec<${this.getSafeTitle(this.refToTitle(s.items))}>`,
+      typing: `Vec<${this.getSafeTitle(this.refToTitle(s.items as JSONSchema))}>`,
       documentationComment: this.buildDocs(s),
     };
   }
@@ -89,8 +90,9 @@ export default class Rust extends CodeGen {
   }
 
   protected handleObject(s: JSONSchema): TypeIntermediateRepresentation {
-    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      const propSchema = s.properties[key];
+    const sProps = s.properties as { [k: string]: JSONSchema };
+    const propertyTypings = Object.keys(sProps).reduce((typings: string[], key: string) => {
+      const propSchema = sProps[key];
       let isRequired = false;
       if (s.required) {
         isRequired = s.required.indexOf(key) !== -1;
@@ -124,7 +126,7 @@ export default class Rust extends CodeGen {
   }
 
   protected handleAnyOf(s: JSONSchema): TypeIntermediateRepresentation {
-    return this.buildEnum(s.anyOf);
+    return this.buildEnum(s.anyOf as JSONSchema[]);
   }
 
   /**
@@ -135,7 +137,7 @@ export default class Rust extends CodeGen {
   }
 
   protected handleOneOf(s: JSONSchema): TypeIntermediateRepresentation {
-    return this.buildEnum(s.oneOf);
+    return this.buildEnum(s.oneOf as JSONSchema[]);
   }
 
   protected handleUntyped(s: JSONSchema): TypeIntermediateRepresentation {
@@ -185,7 +187,7 @@ export default class Rust extends CodeGen {
 
     if (docStringLines.length > 0) {
       return [
-        `/// ${this.getSafeTitle(s.title)}`,
+        `/// ${this.getSafeTitle(s.title as string)}`,
         "///",
         ...docStringLines,
         "",
