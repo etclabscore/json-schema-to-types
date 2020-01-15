@@ -80,7 +80,7 @@ export abstract class CodeGen {
   }
 
   private toIR(s: Schema): TypeIntermediateRepresentation {
-    switch (s.type) {
+    switch (s.type instanceof Array ? s.type[0] : s.type) {
       case "boolean": return this.handleBoolean(s);
 
       case "null": return this.handleNull(s);

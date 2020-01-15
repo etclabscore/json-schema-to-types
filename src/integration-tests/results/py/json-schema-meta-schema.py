@@ -61,6 +61,6 @@ UnorderedSetOfAny17L18NF5VWcS9ROi = NewType("UnorderedSetOfAny17L18NF5VWcS9ROi",
 from typing import NewType, Union
 
 SchemaType = NewType("SchemaType", Union[Any17L18NF5, UnorderedSetOfAny17L18NF5VWcS9ROi])
-from typing import Any, NewType
+from typing import NewType, Any, Mapping
 
-JSONSchema = NewType("JSONSchema", Any)
+JSONSchema = NewType("JSONSchema", Mapping[Any, Any])
