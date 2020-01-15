@@ -20,7 +20,6 @@ export abstract class CodeGen {
   public transpile() {
     const rootSchemaTypes = this.generate(this.schema, this.toIR(this.schema));
     const defsSchemaTypes: string[] = [];
-
     if (this.schema.definitions) {
       Object
         .entries(this.schema.definitions)
@@ -81,7 +80,7 @@ export abstract class CodeGen {
   }
 
   private toIR(s: Schema): TypeIntermediateRepresentation {
-    switch (s.type) {
+    switch (s.type instanceof Array ? s.type[0] : s.type) {
       case "boolean": return this.handleBoolean(s);
 
       case "null": return this.handleNull(s);

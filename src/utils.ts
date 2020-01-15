@@ -96,7 +96,24 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
 
   const asEntries = Object.entries(deterministicSchema).sort(sortEntriesByKey);
 
-  const hash = createHash("sha1").update(JSON.stringify(asEntries)).digest("base64");
+  // circular refs can't be stringified
+  let asString;
+  try {
+    asString = JSON.stringify(asEntries);
+  } catch (e) {
+    asString = JSON.stringify(asEntries, (key, value) => {
+      if (value instanceof Array) {
+        return `${key}[]`;
+      }
+
+      if (typeof value === "object") {
+        return `${key}{}`;
+      }
+      return `${key}${value}`;
+    });
+  }
+
+  const hash = createHash("sha1").update(asString).digest("base64");
   const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
   return { ...schema, title: `${prefix}${friendlyHash}` };
 }
@@ -134,7 +151,7 @@ export function collectAndRefSchemas(s: Schema): Schema {
     ...traverse(s, (subSchema: Schema) => {
       definitions[subSchema.title] = subSchema;
       return { $ref: `#/definitions/${subSchema.title}` };
-    }, { skipFirstMutation: true }),
+    }),
     definitions,
   };
 }

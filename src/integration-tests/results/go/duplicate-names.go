@@ -1,12 +1,12 @@
-type Baz bool
 type Foo string
+type Baz bool
+type ObjectOfBazX101YId8 struct {
+	Ripslip *Baz `json:"ripslip,omitempty"`
+}
 // array of strings is all...
 type UnorderedSetOfFooz1UBFn8B []Foo
 type Bar int64
 type BunchaNumbers (Bar)
-type ObjectOfBazX101YId8 struct {
-	Ripslip *Baz `json:"ripslip,omitempty"`
-}
 type OneOfStuff struct {
 	UnorderedSetOfFooz1UBFn8B *UnorderedSetOfFooz1UBFn8B
 	BunchaNumbers             *BunchaNumbers

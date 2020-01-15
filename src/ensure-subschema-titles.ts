@@ -36,7 +36,7 @@ export const ensureSubschemaTitles = (s: Schema): NoTitleError[] => {
 
   if (s.items) {
     if (s.items instanceof Array) {
-      s.items.forEach((ss: Schema, i) => {
+      s.items.forEach((ss: Schema) => {
         if (ss.title === undefined) { errors.push(new NoTitleError(s, "items[i]", ss)); }
       });
     } else {
