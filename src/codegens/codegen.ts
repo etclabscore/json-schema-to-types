@@ -20,7 +20,6 @@ export abstract class CodeGen {
   public transpile() {
     const rootSchemaTypes = this.generate(this.schema, this.toIR(this.schema));
     const defsSchemaTypes: string[] = [];
-    console.log("generated types for root schema: ", rootSchemaTypes); //tslint:disable-line
     if (this.schema.definitions) {
       Object
         .entries(this.schema.definitions)
