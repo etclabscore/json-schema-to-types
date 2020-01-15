@@ -1,4 +1,5 @@
 import { Schema } from "@open-rpc/meta-schema";
+import merge from "lodash.merge";
 
 /**
  * Signature of the mutation method passed to traverse.
@@ -19,7 +20,13 @@ export const defaultOptions: TraverseOptions = {
   skipFirstMutation: false,
 };
 
-const isCycle = (s: Schema, n: Schema) => s === n;
+const isCycle = (s: Schema, recursiveStack: Schema[]) => {
+  const foundInRecursiveStack = recursiveStack.find((recSchema) => recSchema === s);
+  if (foundInRecursiveStack) {
+    return foundInRecursiveStack;
+  }
+  return false;
+};
 
 /**
  * Traverse all subschema of a schema, calling the mutator function with each.
@@ -37,12 +44,31 @@ export default function traverse(
   mutation: MutationFunction,
   traverseOptions = defaultOptions,
   depth = 0,
+  recursiveStack: Schema[] = [],
+  prePostMap: Array<[Schema, Schema]> = [],
 ) {
   const mutableSchema: Schema = { ...schema };
+  recursiveStack.push(schema);
+
+  prePostMap.push([schema, mutableSchema]);
 
   const rec = (s: Schema) => {
-    if (isCycle(s, schema)) { return mutation(s); }
-    return traverse(s, mutation, traverseOptions, depth + 1);
+    const foundCycle = isCycle(s, recursiveStack);
+    if (foundCycle) {
+      const [, cycledMutableSchema] = prePostMap.find(
+        ([orig]) => foundCycle === orig,
+      ) as [Schema, Schema];
+      return cycledMutableSchema;
+    }
+
+    return traverse(
+      s,
+      mutation,
+      traverseOptions,
+      depth + 1,
+      recursiveStack,
+      prePostMap,
+    );
   };
 
   if (schema.anyOf) {
@@ -54,8 +80,25 @@ export default function traverse(
   } else if (schema.items) {
     if (schema.items instanceof Array) {
       mutableSchema.items = schema.items.map(rec);
+    } else if (schema.items === true) {
+      mutableSchema.items = mutation(schema.items);
     } else {
-      mutableSchema.items = traverse(schema.items, mutation);
+      const foundCycle = isCycle(schema.items, recursiveStack);
+      if (foundCycle) {
+        const [, cycledMutableSchema] = prePostMap.find(
+          ([orig]) => foundCycle === orig,
+        ) as [Schema, Schema];
+        mutableSchema.items = cycledMutableSchema;
+      } else {
+        mutableSchema.items = traverse(
+          schema.items,
+          mutation,
+          traverseOptions,
+          depth + 1,
+          recursiveStack,
+          prePostMap,
+        );
+      }
     }
   } else if (schema.properties) {
     mutableSchema.properties = Object.keys(schema.properties)
@@ -68,6 +111,7 @@ export default function traverse(
   if (traverseOptions.skipFirstMutation === true && depth === 0) {
     return mutableSchema;
   } else {
-    return mutation(mutableSchema);
+    merge(mutableSchema, mutation(mutableSchema));
+    return mutableSchema;
   }
 }

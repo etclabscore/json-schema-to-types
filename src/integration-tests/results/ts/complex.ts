@@ -3,7 +3,7 @@ export type Skip = boolean;
  *
  * abc 123
  *
- * @default  123
+ * @default 123
  *
  * @example
  * `123`

@@ -1,3 +1,20 @@
+# [1.9.0](https://github.com/etclabscore/json-schema-to-types/compare/1.8.0...1.9.0) (2020-01-15)
+
+
+### Bug Fixes
+
+* cleanups ([c3746d9](https://github.com/etclabscore/json-schema-to-types/commit/c3746d96657b66e6576bbe5889ddec8b9638c54b))
+* fix a bug with generating enums ([d616a0c](https://github.com/etclabscore/json-schema-to-types/commit/d616a0cfc392a36c76239925640d19d927812376))
+* get tests all passing except the one crazy one ([8f93ebf](https://github.com/etclabscore/json-schema-to-types/commit/8f93ebf1a40c32981dbd519242c117fe11ffe44b))
+* implement naive fix for [#44](https://github.com/etclabscore/json-schema-to-types/issues/44) ([0e9c0c4](https://github.com/etclabscore/json-schema-to-types/commit/0e9c0c4a67ee7326dfa94e2999ea4fe56e29ed22))
+* regenerate package-lock ([41854cc](https://github.com/etclabscore/json-schema-to-types/commit/41854cc681734a164f2bed63426060d5c613f527))
+* remove commented code ([5e434e7](https://github.com/etclabscore/json-schema-to-types/commit/5e434e7637465eef5fcd2b8926901cf3bebc55e6))
+
+
+### Features
+
+* Massive fix to circular reference detection & more ([1cb967b](https://github.com/etclabscore/json-schema-to-types/commit/1cb967b9431fc1991c9222203b22e2ab94dc809c))
+
 # [1.8.0](https://github.com/etclabscore/json-schema-to-types/compare/1.7.2...1.8.0) (2020-01-11)
 
 

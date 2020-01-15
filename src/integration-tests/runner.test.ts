@@ -30,7 +30,8 @@ describe("Integration tests", () => {
       entries.forEach(async ([name, schema]: any) => {
         const result = fs.readFileSync(`${resultsDir}/${lang}/${name}.${lang}`, "utf8").trim();
         const transpiler = new JsonSchemaToTypes(await schema);
-        expect(transpiler[`to${capitalize(lang)}`]()).toBe(result);
+        const typings = transpiler[`to${capitalize(lang)}`]();
+        expect(typings).toBe(result);
       });
     });
   });

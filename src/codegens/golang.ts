@@ -38,7 +38,7 @@ export default class Golang extends CodeGen {
       .join("\n");
 
     const ir = s.type === "number" ? this.handleNumber(s) : this.handleInteger(s);
-    ir.typing = ir.typing + "\n" + ["const (", ...enumFields, ")"].join("\n");
+    ir.typing = ir.typing + "\n" + ["const (", enumFields, ")"].join("\n");
     return ir;
   }
 
@@ -54,7 +54,7 @@ export default class Golang extends CodeGen {
       .join("\n");
 
     const ir = this.handleString(s);
-    ir.typing = ir.typing + "\n" + ["const (", ...enumFields, ")"].join("\n");
+    ir.typing = ir.typing + "\n" + ["const (", enumFields, ")"].join("\n");
     return ir;
   }
 
@@ -170,10 +170,15 @@ export default class Golang extends CodeGen {
     }
 
     if (s.default) {
+      const def = s.default;
+      let defAsStr = `${def}`;
+      if (def instanceof Array || (typeof def === "object" && def !== null)) {
+        defAsStr = JSON.stringify(def);
+      }
       docStringLines.push("//");
       docStringLines.push("// --- Default ---");
       docStringLines.push("//");
-      docStringLines.push(`// ${s.default}`);
+      docStringLines.push(`// ${defAsStr}`);
     }
 
     if (s.examples) {
