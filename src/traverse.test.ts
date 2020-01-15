@@ -1,5 +1,4 @@
 import traverse from "./traverse";
-import { Schema } from "@open-rpc/meta-schema";
 
 describe("traverse", () => {
   it("it calls mutate only once when there are no subschemas", () => {

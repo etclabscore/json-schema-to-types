@@ -1,6 +1,6 @@
 import deburr from "lodash.deburr";
 import trim from "lodash.trim";
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 import { ensureSubschemaTitles } from "./ensure-subschema-titles";
 import { createHash } from "crypto";
 import traverse from "./traverse";
@@ -33,8 +33,8 @@ export const languageSafeName = (title: string) => {
       .replace(regexes[5], ""));
 };
 
-export const schemaToRef = (s: Schema) => ({ $ref: `#/definitions/${s.title}` });
-export const joinSchemaTitles = (s: Schema[]): string => s.map(({ title }: Schema) => title).join("_");
+export const schemaToRef = (s: JSONSchema) => ({ $ref: `#/definitions/${s.title}` });
+export const joinSchemaTitles = (s: JSONSchema[]): string => s.map(({ title }: JSONSchema) => title).join("_");
 export const sortEntriesByKey = ([key1]: any, [key2]: any) => key1 > key2 ? -1 : 1;
 
 const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
@@ -55,7 +55,7 @@ const hashRegex = new RegExp("[^A-z | 0-9]+", "g");
  * @category SchemaImprover
  *
  */
-export function getDefaultTitleForSchema(schema: Schema): Schema {
+export function getDefaultTitleForSchema(schema: JSONSchema): JSONSchema {
   if (schema.title) { return schema; }
 
   const subSchemaTitleErrors = ensureSubschemaTitles(schema);
@@ -68,7 +68,7 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
 
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
     if (schema[k]) {
-      deterministicSchema[k] = schema[k].map((s: Schema) => s.title).sort();
+      deterministicSchema[k] = schema[k].map((s: JSONSchema) => s.title).sort();
       prefix = `${k}_${deterministicSchema[k].join("_")}_`;
     }
   });
@@ -132,7 +132,7 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
  * @category SchemaImprover
  *
  */
-export const ensureSchemaTitles = (s: Schema): Schema => traverse(s, getDefaultTitleForSchema);
+export const ensureSchemaTitles = (s: JSONSchema): JSONSchema => traverse(s, getDefaultTitleForSchema);
 
 /**
  * Returns the schema where all subschemas have been replaced with $refs and added to definitions
@@ -145,10 +145,10 @@ export const ensureSchemaTitles = (s: Schema): Schema => traverse(s, getDefaultT
  * @category SchemaImprover
  *
  */
-export function collectAndRefSchemas(s: Schema): Schema {
+export function collectAndRefSchemas(s: JSONSchema): JSONSchema {
   const definitions: any = {};
   return {
-    ...traverse(s, (subSchema: Schema) => {
+    ...traverse(s, (subSchema: JSONSchema) => {
       definitions[subSchema.title] = subSchema;
       return { $ref: `#/definitions/${subSchema.title}` };
     }),
@@ -156,7 +156,7 @@ export function collectAndRefSchemas(s: Schema): Schema {
   };
 }
 
-export function combineSchemas(s: Schema[]): Schema {
+export function combineSchemas(s: JSONSchema[]): JSONSchema {
   const combinedDefinitions = s.reduce((comb, schema) => ({
     ...comb,
     ...schema.definitions,
@@ -168,8 +168,8 @@ export function combineSchemas(s: Schema[]): Schema {
     return copy;
   });
 
-  const uniquedSchemas = withoutDefinitions.reduce((uniqued: Schema[], schema: Schema) => {
-    if (uniqued.find(({ title }: Schema) => title === schema.title) === undefined) {
+  const uniquedSchemas = withoutDefinitions.reduce((uniqued: JSONSchema[], schema: JSONSchema) => {
+    if (uniqued.find(({ title }: JSONSchema) => title === schema.title) === undefined) {
       return [
         ...uniqued,
         schema,
@@ -192,10 +192,10 @@ export function combineSchemas(s: Schema[]): Schema {
   };
 }
 
-export function mergeObjectProperties(schemas: Schema[]): Schema {
+export function mergeObjectProperties(schemas: JSONSchema[]): JSONSchema {
   const merged = schemas
-    .filter(({ properties }: Schema) => properties)
-    .map(({ properties }: Schema) => properties)
-    .reduce((all: Schema, schema: Schema) => ({ ...all, ...schema }), {});
+    .filter(({ properties }: JSONSchema) => properties)
+    .map(({ properties }: JSONSchema) => properties)
+    .reduce((all: JSONSchema, schema: JSONSchema) => ({ ...all, ...schema }), {});
   return merged;
 }

@@ -1,9 +1,9 @@
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 import { mergeObjectProperties } from "../utils";
 
 export default class Python extends CodeGen {
-  protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
+  protected generate(s: JSONSchema, ir: TypeIntermediateRepresentation) {
     return [
       ir.macros,
       "\n",
@@ -13,7 +13,7 @@ export default class Python extends CodeGen {
     ].join("");
   }
 
-  protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
+  protected handleBoolean(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -22,7 +22,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleNull(s: Schema): TypeIntermediateRepresentation {
+  protected handleNull(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -31,7 +31,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleNumber(s: Schema): TypeIntermediateRepresentation {
+  protected handleNumber(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -40,7 +40,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleInteger(s: Schema): TypeIntermediateRepresentation {
+  protected handleInteger(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -49,7 +49,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
+  protected handleNumericalEnum(s: JSONSchema): TypeIntermediateRepresentation {
     this.warnNotWellSupported("numericalEnum");
     if (s.type === "integer") {
       return this.handleInteger(s);
@@ -58,7 +58,7 @@ export default class Python extends CodeGen {
     }
   }
 
-  protected handleString(s: Schema): TypeIntermediateRepresentation {
+  protected handleString(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -67,7 +67,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
+  protected handleStringEnum(s: JSONSchema): TypeIntermediateRepresentation {
     const typeLines = s.enum
       .filter((enumString: any) => typeof enumString === "string")
       .map((enumString: string, i: number) => `    ${enumString.toUpperCase()} = ${i}`);
@@ -83,9 +83,9 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
+  protected handleOrderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
-    const itemTitles = s.items.map((item: Schema) => this.getSafeTitle(this.refToTitle(item)));
+    const itemTitles = s.items.map((item: JSONSchema) => this.getSafeTitle(this.refToTitle(item)));
     return {
       macros: "from typing import NewType, Tuple",
       documentationComment: this.buildDocs(s),
@@ -93,7 +93,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
+  protected handleUnorderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     const itemsTitle = this.getSafeTitle(this.refToTitle(s.items));
     return {
@@ -103,7 +103,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
+  protected handleUntypedArray(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -112,7 +112,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleObject(s: Schema): TypeIntermediateRepresentation {
+  protected handleObject(s: JSONSchema): TypeIntermediateRepresentation {
     const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
       const propSchema = s.properties[key];
       let isRequired = false;
@@ -141,7 +141,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
+  protected handleUntypedObject(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -150,7 +150,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
+  protected handleAnyOf(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       macros: "from typing import NewType, Union",
@@ -160,13 +160,13 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
+  protected handleAllOf(s: JSONSchema): TypeIntermediateRepresentation {
     const copy = { ...s };
     copy.properties = mergeObjectProperties(s.allOf);
     return this.handleObject(copy);
   }
 
-  protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
+  protected handleOneOf(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       macros: "from typing import NewType, Union",
@@ -176,7 +176,7 @@ export default class Python extends CodeGen {
     };
   }
 
-  protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
+  protected handleUntyped(s: JSONSchema): TypeIntermediateRepresentation {
     const title = this.getSafeTitle(s.title);
     return {
       documentationComment: this.buildDocs(s),
@@ -189,7 +189,7 @@ export default class Python extends CodeGen {
     console.warn(`In Python, ${typing} is not well supported.`);
   }
 
-  private buildDocs(s: Schema): string | undefined {
+  private buildDocs(s: JSONSchema): string | undefined {
     const docStringLines: string[] = [];
 
     if (s.description) {

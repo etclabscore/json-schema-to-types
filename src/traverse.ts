@@ -1,10 +1,10 @@
-import { Schema } from "@open-rpc/meta-schema";
 import merge from "lodash.merge";
+import { JSONSchema } from "@open-rpc/meta-schema";
 
 /**
  * Signature of the mutation method passed to traverse.
  */
-export type MutationFunction = (schema: Schema) => Schema;
+export type MutationFunction = (schema: JSONSchema) => JSONSchema;
 
 /**
  * The options you can use when traversing.
@@ -20,7 +20,7 @@ export const defaultOptions: TraverseOptions = {
   skipFirstMutation: false,
 };
 
-const isCycle = (s: Schema, recursiveStack: Schema[]) => {
+const isCycle = (s: JSONSchema, recursiveStack: JSONSchema[]) => {
   const foundInRecursiveStack = recursiveStack.find((recSchema) => recSchema === s);
   if (foundInRecursiveStack) {
     return foundInRecursiveStack;
@@ -40,24 +40,24 @@ const isCycle = (s: Schema, recursiveStack: Schema[]) => {
  *
  */
 export default function traverse(
-  schema: Schema,
+  schema: JSONSchema,
   mutation: MutationFunction,
   traverseOptions = defaultOptions,
   depth = 0,
-  recursiveStack: Schema[] = [],
-  prePostMap: Array<[Schema, Schema]> = [],
+  recursiveStack: JSONSchema[] = [],
+  prePostMap: Array<[JSONSchema, JSONSchema]> = [],
 ) {
-  const mutableSchema: Schema = { ...schema };
+  const mutableSchema: JSONSchema = { ...schema };
   recursiveStack.push(schema);
 
   prePostMap.push([schema, mutableSchema]);
 
-  const rec = (s: Schema) => {
+  const rec = (s: JSONSchema) => {
     const foundCycle = isCycle(s, recursiveStack);
     if (foundCycle) {
       const [, cycledMutableSchema] = prePostMap.find(
         ([orig]) => foundCycle === orig,
-      ) as [Schema, Schema];
+      ) as [JSONSchema, JSONSchema];
       return cycledMutableSchema;
     }
 
@@ -80,14 +80,14 @@ export default function traverse(
   } else if (schema.items) {
     if (schema.items instanceof Array) {
       mutableSchema.items = schema.items.map(rec);
-    } else if (schema.items === true) {
+    } else if (schema.items as any === true) {
       mutableSchema.items = mutation(schema.items);
     } else {
       const foundCycle = isCycle(schema.items, recursiveStack);
       if (foundCycle) {
         const [, cycledMutableSchema] = prePostMap.find(
           ([orig]) => foundCycle === orig,
-        ) as [Schema, Schema];
+        ) as [JSONSchema, JSONSchema];
         mutableSchema.items = cycledMutableSchema;
       } else {
         mutableSchema.items = traverse(
@@ -101,9 +101,10 @@ export default function traverse(
       }
     }
   } else if (schema.properties) {
-    mutableSchema.properties = Object.keys(schema.properties)
+    const sProps = schema.properties;
+    mutableSchema.properties = Object.keys(sProps)
       .reduce(
-        (r: Schema, v: string) => ({ ...r, ...{ [v]: rec(schema.properties[v]) } }),
+        (r: JSONSchema, v: string) => ({ ...r, ...{ [v]: rec(sProps[v]) } }),
         {},
       );
   }

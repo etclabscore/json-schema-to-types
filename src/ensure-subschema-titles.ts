@@ -1,10 +1,10 @@
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 
 /**
  * Structures a nice error message
  */
 export class NoTitleError extends Error {
-  constructor(schema: Schema, subSchemaKey: string, subschema: Schema) {
+  constructor(schema: JSONSchema, subSchemaKey: string, subschema: JSONSchema) {
     super([
       "Title is required on subschemas.",
       "Without title, identical schemas would return differing names.",
@@ -24,19 +24,19 @@ export class NoTitleError extends Error {
 /**
  * Check all subschemas of the passed in schema to ensure that they have a title.
  */
-export const ensureSubschemaTitles = (s: Schema): NoTitleError[] => {
+export const ensureSubschemaTitles = (s: JSONSchema): NoTitleError[] => {
   const errors = [];
 
   ["anyOf", "oneOf", "allOf"].forEach((k) => {
     if (!s[k]) { return; }
-    s[k].forEach((ss: Schema, i: number) => {
+    s[k].forEach((ss: JSONSchema, i: number) => {
       if (ss.title === undefined) { errors.push(new NoTitleError(s, `${k}[${i}]`, ss)); }
     });
   });
 
   if (s.items) {
     if (s.items instanceof Array) {
-      s.items.forEach((ss: Schema) => {
+      s.items.forEach((ss: JSONSchema, i: number) => {
         if (ss.title === undefined) { errors.push(new NoTitleError(s, "items[i]", ss)); }
       });
     } else {
@@ -45,8 +45,8 @@ export const ensureSubschemaTitles = (s: Schema): NoTitleError[] => {
   }
 
   if (s.properties) {
-    const propVals = Object.entries(s.properties) as Array<[string, Schema]>;
-    propVals.forEach(([key, ss]: [string, Schema]) => {
+    const propVals = Object.entries(s.properties) as Array<[string, JSONSchema]>;
+    propVals.forEach(([key, ss]: [string, JSONSchema]) => {
       if (ss.title === undefined) { errors.push(new NoTitleError(s, `properties.${key}`, ss)); }
     });
   }
