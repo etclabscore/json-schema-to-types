@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CodeGen | @open-rpc/schema-utils-js</title>
+	<title>ObjectWrpyYBUS | @open-rpc/schema-utils-js</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="codegen.html">CodeGen</a>
+					<a href="objectwrpyybus.html">ObjectWrpyYBUS</a>
 				</li>
 			</ul>
-			<h1>Class CodeGen</h1>
+			<h1>Interface ObjectWrpyYBUS</h1>
 		</div>
 	</div>
 </header>
@@ -66,150 +66,24 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Base class for all code generators.</p>
-					</div>
+					<dl class="tsd-comment-tags">
+						<dt>default</dt>
+						<dd><p>{}</p>
+						</dd>
+					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CodeGen</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="typescript.html" class="tsd-signature-type">Typescript</a>
-							</li>
-							<li>
-								<a href="rust.html" class="tsd-signature-type">Rust</a>
-							</li>
-							<li>
-								<a href="golang.html" class="tsd-signature-type">Golang</a>
-							</li>
-							<li>
-								<a href="python.html" class="tsd-signature-type">Python</a>
-							</li>
-						</ul>
+						<span class="target">ObjectWrpyYBUS</span>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel-group tsd-index-group">
-				<h2>Index</h2>
-				<section class="tsd-panel tsd-index-panel">
-					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="codegen.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="codegen.html#getcodeprefix" class="tsd-kind-icon">get<wbr>Code<wbr>Prefix</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="codegen.html#getsafetitle" class="tsd-kind-icon">get<wbr>Safe<wbr>Title</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="codegen.html#transpile" class="tsd-kind-icon">transpile</a></li>
-							</ul>
-						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Code<wbr>Gen<span class="tsd-signature-symbol">(</span>schema<span class="tsd-signature-symbol">: </span><a href="../interfaces/schema.html" class="tsd-signature-type">Schema</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="codegen.html" class="tsd-signature-type">CodeGen</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/etclabscore/json-schema-to-types/blob/ef07286/src/codegens/codegen.ts#L14">src/codegens/codegen.ts:14</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>schema: <a href="../interfaces/schema.html" class="tsd-signature-type">Schema</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="codegen.html" class="tsd-signature-type">CodeGen</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcodeprefix" class="tsd-anchor"></a>
-					<h3>get<wbr>Code<wbr>Prefix</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Code<wbr>Prefix<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/etclabscore/json-schema-to-types/blob/ef07286/src/codegens/codegen.ts#L44">src/codegens/codegen.ts:44</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getsafetitle" class="tsd-anchor"></a>
-					<h3>get<wbr>Safe<wbr>Title</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Safe<wbr>Title<span class="tsd-signature-symbol">(</span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/etclabscore/json-schema-to-types/blob/ef07286/src/codegens/codegen.ts#L40">src/codegens/codegen.ts:40</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Generic title transform that gives a title without special characters or spaces. It may be overriden if
-									this implementation does not suffice.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>title: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="transpile" class="tsd-anchor"></a>
-					<h3>transpile</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">transpile<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/etclabscore/json-schema-to-types/blob/ef07286/src/codegens/codegen.ts#L20">src/codegens/codegen.ts:20</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Given a schema, it will generate code for both the schema and the schemas in its definitions section</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
+			<section class="tsd-panel tsd-kind-interface">
+				<h3 class="tsd-before-signature">Indexable</h3>
+				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -224,22 +98,8 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="codegen.html" class="tsd-kind-icon">Code<wbr>Gen</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="codegen.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="codegen.html#getcodeprefix" class="tsd-kind-icon">get<wbr>Code<wbr>Prefix</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="codegen.html#getsafetitle" class="tsd-kind-icon">get<wbr>Safe<wbr>Title</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="codegen.html#transpile" class="tsd-kind-icon">transpile</a>
-							</li>
-						</ul>
+					<li class="current tsd-kind-interface">
+						<a href="objectwrpyybus.html" class="tsd-kind-icon">Object<wbr>WrpyYBUS</a>
 					</li>
 				</ul>
 				<ul class="after-current">
