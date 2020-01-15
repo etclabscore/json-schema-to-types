@@ -115,7 +115,6 @@ export function getDefaultTitleForSchema(schema: Schema): Schema {
 
   const hash = createHash("sha1").update(asString).digest("base64");
   const friendlyHash = hash.replace(hashRegex, "").slice(0, 8);
-  console.log(`${prefix}${friendlyHash}`); //tslint:disable-line
   return { ...schema, title: `${prefix}${friendlyHash}` };
 }
 
@@ -152,7 +151,7 @@ export function collectAndRefSchemas(s: Schema): Schema {
     ...traverse(s, (subSchema: Schema) => {
       definitions[subSchema.title] = subSchema;
       return { $ref: `#/definitions/${subSchema.title}` };
-    }, { skipFirstMutation: true }),
+    }), // , { skipFirstMutation: true }),
     definitions,
   };
 }

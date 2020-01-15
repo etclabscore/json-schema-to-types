@@ -61,7 +61,7 @@ export default function traverse(
     const foundCycle = isCycle(s, recursiveStack);
     if (foundCycle) {
       const [, cycledMutableSchema] = prePostMap.find(
-        ([orig]) => foundCycle === orig
+        ([orig]) => foundCycle === orig,
       ) as [Schema, Schema];
       return cycledMutableSchema;
     }

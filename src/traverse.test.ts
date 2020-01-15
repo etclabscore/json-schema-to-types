@@ -219,11 +219,9 @@ describe("traverse", () => {
         i += 1;
         return s;
       });
-      console.log(result.properties.foo.items[0]);
       expect(result.i).toBe(2);
       expect(result.properties.foo.items[0].i).toBe(0);
       expect(result.properties.foo.items[0].items.i).toBe(result.i);
-
     });
   });
 });

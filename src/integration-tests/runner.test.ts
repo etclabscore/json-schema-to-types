@@ -32,7 +32,6 @@ describe("Integration tests", () => {
           console.log('skipping');//tslint:disable-line
           return;
         }
-        console.log(name, await schema); //tslint:disable-line
         const result = fs.readFileSync(`${resultsDir}/${lang}/${name}.${lang}`, "utf8").trim();
         const transpiler = new JsonSchemaToTypes(await schema);
         const typings = transpiler[`to${capitalize(lang)}`]();
