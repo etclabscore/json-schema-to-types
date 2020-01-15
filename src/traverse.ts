@@ -101,7 +101,7 @@ export default function traverse(
       }
     }
   } else if (schema.properties) {
-    const sProps = schema.properties;
+    const sProps: { [key: string]: JSONSchema } = schema.properties;
     mutableSchema.properties = Object.keys(sProps)
       .reduce(
         (r: JSONSchema, v: string) => ({ ...r, ...{ [v]: rec(sProps[v]) } }),
