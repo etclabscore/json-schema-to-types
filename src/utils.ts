@@ -151,7 +151,7 @@ export function collectAndRefSchemas(s: Schema): Schema {
     ...traverse(s, (subSchema: Schema) => {
       definitions[subSchema.title] = subSchema;
       return { $ref: `#/definitions/${subSchema.title}` };
-    }), // , { skipFirstMutation: true }),
+    }),
     definitions,
   };
 }
