@@ -1,4 +1,4 @@
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 import { capitalize, ensureSchemaTitles, collectAndRefSchemas, combineSchemas } from "./utils";
 import { CodeGen } from "./codegens/codegen";
 import TypescriptGenerator from "./codegens/typescript";
@@ -12,11 +12,11 @@ export type SupportedLanguages = "rust" | "rs" | "typescript" | "ts" | "go" | "g
  */
 export class JsonSchemaToTypes {
   [toLang: string]: any;
-  public megaSchema: Schema;
+  public megaSchema: JSONSchema;
 
-  constructor(s: Schema | Schema[]) {
+  constructor(s: JSONSchema | JSONSchema[]) {
     const useMerge = s instanceof Array;
-    const inputSchema: Schema[] = useMerge ? s as Schema[] : [s];
+    const inputSchema: JSONSchema[] = useMerge ? s as JSONSchema[] : [s];
     const schemaWithTitles = inputSchema.map((ss) => ensureSchemaTitles(ss));
     const reffed = schemaWithTitles.map((ss) => collectAndRefSchemas(ss));
     if (useMerge) {

@@ -70,6 +70,20 @@ Skorpionuts = NewType("Skorpionuts", Union[Skip, Zip, Nullgasm])
 from typing import NewType, Union
 
 Chikypoops = NewType("Chikypoops", Union[Skip, Zip])
-from typing import NewType, Any, Mapping
+from typing import TypedDict, Optional
 
-BippyskippyBoppy = NewType("BippyskippyBoppy", Mapping[Any, Any])
+class BippyskippyBoppy(TypedDict):
+    bool: Optional[Skip]
+    int: Optional[Bip]
+    number: Optional[Bipper]
+    string: Optional[Bop]
+    stringEnum: Optional[Bopper]
+    numbericalEnum: Optional[Swicker]
+    integerEnum: Optional[Slicker]
+    untypedArray: Optional[Splinter]
+    orderedArray: Optional[Skibbidippy]
+    unorderedArray: Optional[Skibbidippy]
+    object: Optional[Floopdidoop]
+    allOf: Optional[Justworkalready]
+    anyOf: Optional[Skorpionuts]
+    oneOf: Optional[Chikypoops]

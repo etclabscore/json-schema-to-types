@@ -1,3 +1,4 @@
-from typing import NewType, Any, Mapping
+from typing import TypedDict, Optional
 
-CircularRefs = NewType("CircularRefs", Mapping[Any, Any])
+class CircularRefs(TypedDict):
+    LeFoo: Optional[CircularRefs]
