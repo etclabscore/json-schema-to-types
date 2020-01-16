@@ -1,3 +1,18 @@
+# [1.10.0](https://github.com/etclabscore/json-schema-to-types/compare/1.9.0...1.10.0) (2020-01-16)
+
+
+### Bug Fixes
+
+* many bug fixes from using proper schema ([d28a22c](https://github.com/etclabscore/json-schema-to-types/commit/d28a22c928e4716125f58ea46e7da1a4a213e8b7))
+* millions of issues uncovered by ts types ([1955823](https://github.com/etclabscore/json-schema-to-types/commit/19558230fc8fbfe11da75cdb190de11b4fdcb943))
+* rebase issues ([b731cae](https://github.com/etclabscore/json-schema-to-types/commit/b731caeac16d9f3cc1115c9da90dad9b6e57ab19))
+* respect that properties can be undefined ([0ed7b95](https://github.com/etclabscore/json-schema-to-types/commit/0ed7b95ed48480542454f49ef082d77978e8df69))
+
+
+### Features
+
+* dogfood by using meta schemas schema that uses self ([417c16e](https://github.com/etclabscore/json-schema-to-types/commit/417c16e99cd0bbdfd67e2c7f493b08e7c422a7bd))
+
 # [1.9.0](https://github.com/etclabscore/json-schema-to-types/compare/1.8.0...1.9.0) (2020-01-15)
 
 
