@@ -53,7 +53,7 @@ export default class Rust extends CodeGen {
     const enumFields = sEnum
       .filter((enumField: any) => typeof enumField === "string")
       .map((enumField: string) => [
-        `    #[serde(rename = ${enumField})]`,
+        `    #[serde(rename = "${enumField}")]`,
         `    ${this.getSafeTitle(enumField)},`,
       ].join("\n"));
 
