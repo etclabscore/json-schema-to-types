@@ -1,3 +1,5 @@
+use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 extern crate serde_json;
 
 pub type StringVPPt56NS = String;
