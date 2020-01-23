@@ -26,9 +26,9 @@ pub type Bipper = f64;
 pub type Bop = f64;
 #[derive(Serialize, Deserialize)]
 pub enum Bopper {
-    #[serde(rename = asd)]
+    #[serde(rename = "asd")]
     Asd,
-    #[serde(rename = bca)]
+    #[serde(rename = "bca")]
     Bca,
 }
 pub type Swicker = f64;
