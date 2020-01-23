@@ -1,3 +1,15 @@
+## [1.10.1](https://github.com/etclabscore/json-schema-to-types/compare/1.10.0...1.10.1) (2020-01-23)
+
+
+### Bug Fixes
+
+* make tests pass ([518cb83](https://github.com/etclabscore/json-schema-to-types/commit/518cb83f9ace91008c9c6410bc2ec20ef398f80a))
+* **rust:** missing HashMap dep ([ce742ae](https://github.com/etclabscore/json-schema-to-types/commit/ce742ae8012f14252a1300a322f07b91e5441462))
+* **rust:** ordering of prefix and include serde methods ([4b5ca5d](https://github.com/etclabscore/json-schema-to-types/commit/4b5ca5d1d1ef3c2c9f6f4c3d308b1335560b703f))
+* dont include integration tests in published package ([750f064](https://github.com/etclabscore/json-schema-to-types/commit/750f0647ac1166b3d73a33160d041957d8a7d7d1))
+* rust is missing some quotes ([2fc8410](https://github.com/etclabscore/json-schema-to-types/commit/2fc841029316de4b27d82559b855743b9bb7ffbc))
+* test now reflects proper quoting ([b1c8d25](https://github.com/etclabscore/json-schema-to-types/commit/b1c8d252bc103ab1e43da8aba5bb2260889fabb7))
+
 # [1.10.0](https://github.com/etclabscore/json-schema-to-types/compare/1.9.0...1.10.0) (2020-01-16)
 
 
