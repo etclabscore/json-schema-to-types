@@ -4,8 +4,9 @@ import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 export default class Rust extends CodeGen {
   public getCodePrefix() {
     return [
-      "extern crate serde_json;",
+      "use serde::{Serialize, Deserialize};",
       "use std::collections::HashMap;",
+      "extern crate serde_json;",
     ].join("\n");
   }
 
