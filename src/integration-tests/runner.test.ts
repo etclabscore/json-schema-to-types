@@ -1,11 +1,11 @@
 import * as fs from "fs";
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 import JsonSchemaToTypes from "../index";
 import { capitalize } from "../utils";
 import refParser from "json-schema-ref-parser";
 
 describe("Integration tests", () => {
-  let testCases: { [key: string]: Schema };
+  let testCases: { [key: string]: JSONSchema };
   beforeAll(() => {
     const testCaseDir = `${__dirname}/test-cases`;
     const testCaseFilenames: string[] = fs.readdirSync(testCaseDir);

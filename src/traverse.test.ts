@@ -1,5 +1,5 @@
 import traverse from "./traverse";
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 
 describe("traverse", () => {
   it("it calls mutate only once when there are no subschemas", () => {
@@ -214,14 +214,15 @@ describe("traverse", () => {
       };
       schema.properties.foo.items[0].items = schema; // set the leaf to a ref back to root schema
       let i = 0;
-      const result = traverse(schema, (s: Schema) => {
+      const result = traverse(schema, (s: JSONSchema) => {
         s.i = i;
         i += 1;
         return s;
       });
+      const rProps = result.properties as any;
       expect(result.i).toBe(2);
-      expect(result.properties.foo.items[0].i).toBe(0);
-      expect(result.properties.foo.items[0].items.i).toBe(result.i);
+      expect(rProps.foo.items[0].i).toBe(0);
+      expect(rProps.foo.items[0].items.i).toBe(result.i);
     });
   });
 });

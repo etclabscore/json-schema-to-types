@@ -1,34 +1,34 @@
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema, UnorderedSetOfAnyL9Fw4VUOyeAFYsFq } from "@open-rpc/meta-schema";
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 
 export default class Typescript extends CodeGen {
-  protected generate(s: Schema, ir: TypeIntermediateRepresentation) {
+  protected generate(s: JSONSchema, ir: TypeIntermediateRepresentation) {
     return [
       ir.documentationComment,
-      `export ${ir.prefix} ${this.getSafeTitle(s.title)}`,
+      `export ${ir.prefix} ${this.getSafeTitle(s.title as string)}`,
       ir.prefix === "type" ? " = " : " ",
       ir.typing,
       ir.prefix === "type" ? ";" : "",
     ].join("");
   }
 
-  protected handleBoolean(s: Schema): TypeIntermediateRepresentation {
+  protected handleBoolean(s: JSONSchema): TypeIntermediateRepresentation {
     return { documentationComment: this.buildDocs(s), prefix: "type", typing: "boolean" };
   }
 
-  protected handleNull(s: Schema): TypeIntermediateRepresentation {
+  protected handleNull(s: JSONSchema): TypeIntermediateRepresentation {
     return { prefix: "type", typing: "null", documentationComment: this.buildDocs(s) };
   }
 
-  protected handleNumber(s: Schema): TypeIntermediateRepresentation {
+  protected handleNumber(s: JSONSchema): TypeIntermediateRepresentation {
     return { documentationComment: this.buildDocs(s), prefix: "type", typing: "number" };
   }
 
-  protected handleInteger(s: Schema): TypeIntermediateRepresentation {
+  protected handleInteger(s: JSONSchema): TypeIntermediateRepresentation {
     return this.handleNumber(s);
   }
 
-  protected handleNumericalEnum(s: Schema): TypeIntermediateRepresentation {
+  protected handleNumericalEnum(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
@@ -36,11 +36,11 @@ export default class Typescript extends CodeGen {
     };
   }
 
-  protected handleString(s: Schema): TypeIntermediateRepresentation {
+  protected handleString(s: JSONSchema): TypeIntermediateRepresentation {
     return { documentationComment: this.buildDocs(s), prefix: "type", typing: "string" };
   }
 
-  protected handleStringEnum(s: Schema): TypeIntermediateRepresentation {
+  protected handleStringEnum(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
@@ -48,23 +48,23 @@ export default class Typescript extends CodeGen {
     };
   }
 
-  protected handleOrderedArray(s: Schema): TypeIntermediateRepresentation {
+  protected handleOrderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: `[${this.getJoinedSafeTitles(s.items)}]`,
+      typing: `[${this.getJoinedSafeTitles(s.items as JSONSchema[])}]`,
     };
   }
 
-  protected handleUnorderedArray(s: Schema): TypeIntermediateRepresentation {
+  protected handleUnorderedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: `${this.getSafeTitle(this.refToTitle(s.items))}[]`,
+      typing: `${this.getSafeTitle(this.refToTitle(s.items as JSONSchema))}[]`,
     };
   }
 
-  protected handleUntypedArray(s: Schema): TypeIntermediateRepresentation {
+  protected handleUntypedArray(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
@@ -72,9 +72,10 @@ export default class Typescript extends CodeGen {
     };
   }
 
-  protected handleObject(s: Schema): TypeIntermediateRepresentation {
-    const propertyTypings = Object.keys(s.properties).reduce((typings: string[], key: string) => {
-      const propSchema = s.properties[key];
+  protected handleObject(s: JSONSchema): TypeIntermediateRepresentation {
+    const sProps = s.properties as { [k: string]: JSONSchema };
+    const propertyTypings = Object.keys(sProps).reduce((typings: string[], key: string) => {
+      const propSchema = sProps[key];
       let isRequired = false;
       if (s.required) {
         isRequired = s.required.indexOf(key) !== -1;
@@ -83,7 +84,7 @@ export default class Typescript extends CodeGen {
       return [...typings, `  ${key}${isRequired ? "" : "?"}: ${title};`];
     }, []);
 
-    if (s.additionalProperties !== false) {
+    if (s.additionalProperties === undefined) {
       propertyTypings.push("  [k: string]: any;");
     }
 
@@ -94,7 +95,7 @@ export default class Typescript extends CodeGen {
     };
   }
 
-  protected handleUntypedObject(s: Schema): TypeIntermediateRepresentation {
+  protected handleUntypedObject(s: JSONSchema): TypeIntermediateRepresentation {
     return {
       prefix: "interface",
       typing: "{ [key: string]: any; }",
@@ -102,43 +103,47 @@ export default class Typescript extends CodeGen {
     };
   }
 
-  protected handleAnyOf(s: Schema): TypeIntermediateRepresentation {
+  protected handleAnyOf(s: JSONSchema): TypeIntermediateRepresentation {
+    const sAny = s.anyOf as JSONSchema[];
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.anyOf, " | "),
+      typing: this.getJoinedSafeTitles(sAny, " | "),
     };
   }
 
-  protected handleAllOf(s: Schema): TypeIntermediateRepresentation {
+  protected handleAllOf(s: JSONSchema): TypeIntermediateRepresentation {
+    const sAll = s.allOf as JSONSchema[];
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.allOf, " & "),
+      typing: this.getJoinedSafeTitles(sAll, " & "),
     };
   }
 
-  protected handleOneOf(s: Schema): TypeIntermediateRepresentation {
+  protected handleOneOf(s: JSONSchema): TypeIntermediateRepresentation {
+    const sOne = s.oneOf as JSONSchema[];
     return {
       documentationComment: this.buildDocs(s),
       prefix: "type",
-      typing: this.getJoinedSafeTitles(s.oneOf, " | "),
+      typing: this.getJoinedSafeTitles(sOne, " | "),
     };
   }
 
-  protected handleUntyped(s: Schema): TypeIntermediateRepresentation {
+  protected handleUntyped(s: JSONSchema): TypeIntermediateRepresentation {
     return { documentationComment: this.buildDocs(s), prefix: "type", typing: "any" };
   }
 
-  private buildEnum(schema: Schema): string {
+  private buildEnum(schema: JSONSchema): string {
     const typeOf = schema.type === "string" ? "string" : "number";
-    return schema.enum
+    const sEnum = schema.enum as UnorderedSetOfAnyL9Fw4VUOyeAFYsFq;
+    return sEnum
       .filter((s: any) => typeof s === typeOf)
       .map((s: string) => typeOf === "string" ? `"${s}"` : s)
       .join(" | ");
   }
 
-  private buildDocs(s: Schema): string | undefined {
+  private buildDocs(s: JSONSchema): string | undefined {
     const docStringLines = [];
 
     if (s.description) {

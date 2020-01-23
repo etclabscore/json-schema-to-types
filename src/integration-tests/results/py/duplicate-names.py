@@ -4,9 +4,10 @@ Foo = NewType("Foo", str)
 from typing import NewType
 
 Baz = NewType("Baz", bool)
-from typing import NewType, Any, Mapping
+from typing import TypedDict, Optional
 
-ObjectOfBazX101YId8 = NewType("ObjectOfBazX101YId8", Mapping[Any, Any])
+class ObjectOfBazX101YId8(TypedDict):
+    ripslip: Optional[Baz]
 from typing import List, NewType
 """array of strings is all...
 """

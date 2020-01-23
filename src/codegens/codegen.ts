@@ -1,4 +1,4 @@
-import { Schema } from "@open-rpc/meta-schema";
+import { JSONSchema } from "@open-rpc/meta-schema";
 import { languageSafeName } from "../utils";
 
 export interface TypeIntermediateRepresentation {
@@ -12,7 +12,7 @@ export interface TypeIntermediateRepresentation {
  * Base class for all code generators.
  */
 export abstract class CodeGen {
-  constructor(protected schema: Schema) { }
+  constructor(protected schema: JSONSchema) { }
 
   /**
    * Given a schema, it will generate code for both the schema and the schemas in its definitions section
@@ -43,43 +43,43 @@ export abstract class CodeGen {
 
   public getCodePrefix(): string { return ""; }
 
-  protected abstract generate(s: Schema, ir: TypeIntermediateRepresentation): string;
+  protected abstract generate(s: JSONSchema, ir: TypeIntermediateRepresentation): string;
 
-  protected abstract handleBoolean(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleNull(schema: Schema): TypeIntermediateRepresentation;
+  protected abstract handleBoolean(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleNull(schema: JSONSchema): TypeIntermediateRepresentation;
 
-  protected abstract handleNumber(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleInteger(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleNumericalEnum(s: Schema): TypeIntermediateRepresentation;
+  protected abstract handleNumber(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleInteger(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleNumericalEnum(s: JSONSchema): TypeIntermediateRepresentation;
 
-  protected abstract handleString(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleStringEnum(s: Schema): TypeIntermediateRepresentation;
+  protected abstract handleString(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleStringEnum(s: JSONSchema): TypeIntermediateRepresentation;
 
-  protected abstract handleOrderedArray(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleUnorderedArray(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleUntypedArray(schema: Schema): TypeIntermediateRepresentation;
+  protected abstract handleOrderedArray(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleUnorderedArray(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleUntypedArray(schema: JSONSchema): TypeIntermediateRepresentation;
 
-  protected abstract handleObject(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleUntypedObject(schema: Schema): TypeIntermediateRepresentation;
+  protected abstract handleObject(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleUntypedObject(schema: JSONSchema): TypeIntermediateRepresentation;
 
-  protected abstract handleAnyOf(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleAllOf(schema: Schema): TypeIntermediateRepresentation;
-  protected abstract handleOneOf(schema: Schema): TypeIntermediateRepresentation;
+  protected abstract handleAnyOf(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleAllOf(schema: JSONSchema): TypeIntermediateRepresentation;
+  protected abstract handleOneOf(schema: JSONSchema): TypeIntermediateRepresentation;
 
-  protected abstract handleUntyped(s: Schema): TypeIntermediateRepresentation;
+  protected abstract handleUntyped(s: JSONSchema): TypeIntermediateRepresentation;
 
-  protected refToTitle(schema: Schema) {
+  protected refToTitle(schema: JSONSchema) {
     if (schema.$ref === undefined) {
       throw new Error("the Subschemas of the schema must use $ref. Inline subschemas are not allowed.");
     }
     return schema.$ref.replace("#/definitions/", "");
   }
 
-  protected getJoinedSafeTitles(schemas: Schema[], seperator = ", ") {
+  protected getJoinedSafeTitles(schemas: JSONSchema[], seperator = ", ") {
     return schemas.map(this.refToTitle).map(this.getSafeTitle.bind(this)).join(seperator);
   }
 
-  private toIR(s: Schema): TypeIntermediateRepresentation {
+  private toIR(s: JSONSchema): TypeIntermediateRepresentation {
     switch (s.type instanceof Array ? s.type[0] : s.type) {
       case "boolean": return this.handleBoolean(s);
 
