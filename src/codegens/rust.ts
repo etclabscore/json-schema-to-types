@@ -3,7 +3,10 @@ import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 
 export default class Rust extends CodeGen {
   public getCodePrefix() {
-    return "extern crate serde_json;";
+    return [
+      "extern crate serde_json;",
+      "use std::collections::HashMap;",
+    ].join("\n");
   }
 
   protected generate(s: JSONSchema, ir: TypeIntermediateRepresentation) {
