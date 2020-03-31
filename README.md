@@ -18,7 +18,7 @@ Features:
 ## Installing
 
 ```
-npm install --save @etclabscore/typings
+npm install --save @etclabscore/json-schema-to-types
 ```
 
 ## Usage
