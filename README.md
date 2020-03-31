@@ -10,6 +10,7 @@ Features:
    - Go
    - Python
  - minimal external dependencies
+ - circular JSON structure handling
  - Supports merging multiple JSONSchema into one set of types
  - Generates titles for schemas that are missing them
  - Run in browser / node
