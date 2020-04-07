@@ -76,6 +76,7 @@
 						</ul>
 					</li>
 					<li>minimal external dependencies</li>
+					<li>circular JSON structure handling</li>
 					<li>Supports merging multiple JSONSchema into one set of types</li>
 					<li>Generates titles for schemas that are missing them</li>
 					<li>Run in browser / node</li>
@@ -83,7 +84,7 @@
 				<a href="#installing" id="installing" style="color: inherit; text-decoration: none;">
 					<h2>Installing</h2>
 				</a>
-				<pre><code><span class="hljs-built_in">npm</span> install --save @etclabscore/typings</code></pre>
+				<pre><code><span class="hljs-built_in">npm</span> install --save @etclabscore/json-schema-<span class="hljs-keyword">to</span>-types</code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
@@ -118,6 +119,10 @@ export type foo = string;
 export type bar = string;"
 **/</span>
 </code></pre>
+				<a href="#to-add-a-new-integration-test-case" id="to-add-a-new-integration-test-case" style="color: inherit; text-decoration: none;">
+					<h2>To add a new integration test case</h2>
+				</a>
+				<p><code>npm run test:generate</code></p>
 				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
 					<h3>Contributing</h3>
 				</a>
