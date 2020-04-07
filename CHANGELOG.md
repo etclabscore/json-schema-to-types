@@ -1,3 +1,19 @@
+# [1.11.0](https://github.com/etclabscore/json-schema-to-types/compare/1.10.1...1.11.0) (2020-04-07)
+
+
+### Bug Fixes
+
+* readme typo ([0bd4c09](https://github.com/etclabscore/json-schema-to-types/commit/0bd4c09aabdb2b10edb79218d7399ad9c7f873c4))
+* update deps ([e55444f](https://github.com/etclabscore/json-schema-to-types/commit/e55444fdac8c02930c0be555ca2fcc5b155f9291))
+* **README:** npm install ([e9c9a0d](https://github.com/etclabscore/json-schema-to-types/commit/e9c9a0d091d76b034a8dfc4b00c8a0801d62c5b3))
+* add section about using test generator ([0084c6e](https://github.com/etclabscore/json-schema-to-types/commit/0084c6e9d98e74d9d6ee7d25f6b28af503d72d75))
+* update docs with features ([8b9a264](https://github.com/etclabscore/json-schema-to-types/commit/8b9a264c4794ff89df03d1d5ec8b97cc577364d3))
+
+
+### Features
+
+* greatly improve integration test suite ([4efa066](https://github.com/etclabscore/json-schema-to-types/commit/4efa066a9fdd594a8c023c11a29919f85575795f))
+
 ## [1.10.1](https://github.com/etclabscore/json-schema-to-types/compare/1.10.0...1.10.1) (2020-01-23)
 
 
