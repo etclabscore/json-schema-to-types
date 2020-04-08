@@ -14,6 +14,13 @@ export default class Golang extends CodeGen {
     ].join("");
   }
 
+  protected getSafeTitle(title: string): string {
+    const n = super(title);
+    
+    // Remove all non-capitalized-alpha characters before the first capitalized alpha character.
+    return n.replace(/[^A-Z]+/, "");
+  }
+
   protected handleBoolean(s: JSONSchema): TypeIntermediateRepresentation {
     return { typing: "bool", documentationComment: this.buildDocs(s) };
   }
