@@ -2,6 +2,14 @@ import { JSONSchema, UnorderedSetOfAnyL9Fw4VUOyeAFYsFq } from "@open-rpc/meta-sc
 import { CodeGen, TypeIntermediateRepresentation } from "./codegen";
 
 export default class Golang extends CodeGen {
+
+  public getSafeTitle(title: string): string {
+    const n = super.getSafeTitle(title);
+
+    // Remove all non-capitalized-alpha characters before the first capitalized alpha character.
+    return n.replace(/[^A-Z]+/, "");
+  }
+
   protected generate(s: JSONSchema, ir: TypeIntermediateRepresentation) {
     return [
       ir.documentationComment,
@@ -12,13 +20,6 @@ export default class Golang extends CodeGen {
       ].join(""),
       ir.typing,
     ].join("");
-  }
-
-  protected getSafeTitle(title: string): string {
-    const n = super(title);
-    
-    // Remove all non-capitalized-alpha characters before the first capitalized alpha character.
-    return n.replace(/[^A-Z]+/, "");
   }
 
   protected handleBoolean(s: JSONSchema): TypeIntermediateRepresentation {
