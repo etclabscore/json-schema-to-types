@@ -1,3 +1,11 @@
+## [1.11.1](https://github.com/etclabscore/json-schema-to-types/compare/1.11.0...1.11.1) (2020-04-11)
+
+
+### Bug Fixes
+
+* **go:** fix Golang class getSafeTitle ([39bf83b](https://github.com/etclabscore/json-schema-to-types/commit/39bf83b9c96f72d50e5529dbbdec55081bcbb284))
+* **go:** title leading non-cap alpha chars ([7b3365e](https://github.com/etclabscore/json-schema-to-types/commit/7b3365e281288a5887cd5174198e85f010c1035d))
+
 # [1.11.0](https://github.com/etclabscore/json-schema-to-types/compare/1.10.1...1.11.0) (2020-04-07)
 
 
