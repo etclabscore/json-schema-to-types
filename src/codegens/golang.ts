@@ -7,7 +7,7 @@ export default class Golang extends CodeGen {
     const n = super.getSafeTitle(title);
 
     // Remove all non-capitalized-alpha characters before the first capitalized alpha character.
-    return n.replace(/[^A-Z]+/, "");
+    return n.replace(/^[^A-Z]+/m, "");
   }
 
   protected generate(s: JSONSchema, ir: TypeIntermediateRepresentation) {
