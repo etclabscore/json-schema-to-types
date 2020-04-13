@@ -149,7 +149,7 @@ export default class Golang extends CodeGen {
 
     return {
       macros: `
-func (t *${tit}) MarshalJSON() ([]byte, error) {
+func (t ${tit}) MarshalJSON() ([]byte, error) {
   if t.${anyOfOneTit} != nil {
     return json.Marshal(t.${anyOfOneTit})
   }
