@@ -135,7 +135,7 @@ export default class Golang extends CodeGen {
 
     return {
       prefix: "struct",
-      typing: [`{`, ...anyOfType, "}"].join("\n"),
+      typing: ["{", ...anyOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),
     };
   }
