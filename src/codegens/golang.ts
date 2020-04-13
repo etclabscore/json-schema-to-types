@@ -19,6 +19,8 @@ export default class Golang extends CodeGen {
         ir.prefix ? `${ir.prefix} ` : "",
       ].join(""),
       ir.typing,
+      "\n",
+      ir.macros
     ].join("");
   }
 
@@ -133,7 +135,47 @@ export default class Golang extends CodeGen {
       return [...typings, `\t${title.padEnd(titleMaxLength)} *${title}`];
     }, []);
 
+    const tit = this.getSafeTitle(s.title as string);
+
+    // Assuming that AnyOfs are either an {}, or an [];
+    // ie. there are TWO possibilities of reduction;
+    // either a single thing or an array (slice) of things.
+    // ALSO
+    // Assuming that the first title represents the single,
+    // and the second represents the set (arraytype).
+
+    const anyOfOneTit = titles[0];
+    const anyOfTwoTit = titles[1];
+
     return {
+      macros: `
+func (t *${tit}) MarshalJSON() ([]byte, error) {
+  if t.${anyOfOneTit} != nil {
+    return json.Marshal(t.${anyOfOneTit})
+  }
+  return json.Marshal(t.${anyOfTwoTit})
+}
+
+func (t *${tit}) UnmarshalJSON(data []byte) error {
+  var first byte
+  if len(data) > 1 {
+    first = data[0]
+  }
+  if first == '[' {
+    var parsed = ${anyOfTwoTit}{}
+    if err := json.Unmarshal(data, &parsed); err != nil {
+      return err
+    }
+    t.${anyOfTwoTit} = &parsed
+    return nil
+  }
+  var single ${anyOfOneTit}
+  if err := json.Unmarshal(data, &single); err != nil {
+    return err
+  }
+  t.${anyOfOneTit} = &single
+  return nil
+}`,
       prefix: "struct",
       typing: ["{", ...anyOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),
