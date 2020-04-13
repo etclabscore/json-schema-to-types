@@ -20,7 +20,7 @@ export default class Golang extends CodeGen {
       ].join(""),
       ir.typing,
       "\n",
-      ir.macros
+      ir.macros,
     ].join("");
   }
 
@@ -212,19 +212,19 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
     // last or not. For error handling.
 
     // Non-last.
-    const titleMarshalers = titles.map((tit: string) => {
+    const titleMarshalers = titles.map((oneOfTitle: string) => {
       return `
-  if t.${tit} != nil {
-    return json.Marshal(t.${tit})
+  if t.${oneOfTitle} != nil {
+    return json.Marshal(t.${oneOfTitle})
   }`;
     });
 
-    const titleUnmarshalers = titles.map((tit: string, ind: number) => {
+    const titleUnmarshalers = titles.map((oneOfTitle: string, ind: number) => {
       return `
-  try${ind} := ${tit}{}
+  try${ind} := ${oneOfTitle}{}
   err = json.Unmarshal(bytes, &try${ind})
   if err == nil {
-    t.${tit} = &try${ind}
+    t.${oneOfTitle} = &try${ind}
     return nil
   }`;
     });
