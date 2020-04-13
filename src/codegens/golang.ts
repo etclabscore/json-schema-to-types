@@ -198,6 +198,7 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
       const title = titles[i];
 
       return [
+        macros,
         ...typings,
         "\t" + [
           title.padEnd(titleMaxLength),
@@ -206,7 +207,58 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
       ];
     }, []);
 
+    // We need different templates for titles depending
+    // on if they'll be used in the un/marshal function
+    // last or not. For error handling.
+
+    // Non-last.
+    const titleMarshalers = titles.map((tit: string) => {
+      return `
+  if t.${tit} != nil {
+    return json.Marshal(t.${tit})
+  }`;
+    });
+
+    const titleUnmarshalers = titles.map((tit: string, ind: number) => {
+      return `
+  try${ind} := ${tit}{}
+  err = json.Unmarshal(bytes, &try${ind})
+  if err == nil {
+    t.${tit} = &try${ind}
+    return nil
+  }`;
+    });
+
+    const lastTitIndex = titles.length - 1;
+    const lastTit = titles[lastTitIndex];
+
+    const tit = this.getSafeTitle(s.title as string);
+
+    const marshaler = `func (t ${tit}) MarshalJSON() ([]byte, error) {
+  ${titleMarshalers.slice(0, lastTitIndex).join("\n")}
+  return json.Marshal(t.${lastTit})
+}`;
+
+    const unmarshaler = `func (t *${tit}) UnmarshalJSON(bytes []byte) error {
+  var err error
+  ${titleUnmarshalers.slice(0, lastTitIndex).join("\n")}
+  try${lastTitIndex} := ${lastTit}{}
+  err = json.Unmarshal(bytes, &try${lastTitIndex})
+  if err != nil {
+    return err
+  }
+  t.${lastTit} = &try${lastTitIndex}
+  return nil
+}`;
+
+    const macros = [
+      marshaler,
+      "",
+      unmarshaler,
+    ].join("\n");
+
     return {
+      macros,
       prefix: "struct",
       typing: [`{`, ...oneOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),
