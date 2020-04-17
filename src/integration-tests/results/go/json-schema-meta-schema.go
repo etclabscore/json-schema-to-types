@@ -42,10 +42,10 @@ type SchemaType struct {
 //
 // true
 type JSONSchema struct {
-	$Id                  *StringVPPt56NS                       `json:"$id,omitempty"`
-	$Schema              *StringNQRYvFt5                       `json:"$schema,omitempty"`
-	$Ref                 *StringVPPt56NS                       `json:"$ref,omitempty"`
-	$Comment             *StringDoaGddGA                       `json:"$comment,omitempty"`
+	Id                   *StringVPPt56NS                       `json:"$id,omitempty"`
+	Schema               *StringNQRYvFt5                       `json:"$schema,omitempty"`
+	Ref                  *StringVPPt56NS                       `json:"$ref,omitempty"`
+	Comment              *StringDoaGddGA                       `json:"$comment,omitempty"`
 	Title                *StringDoaGddGA                       `json:"title,omitempty"`
 	Description          *StringDoaGddGA                       `json:"description,omitempty"`
 	Default              *AnyL9Fw4VUO                          `json:"default,omitempty"`

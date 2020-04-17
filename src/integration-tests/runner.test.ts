@@ -86,10 +86,12 @@ describe("Integration tests", () => {
   it("checks out", async () => {
     expect.assertions(testCases.length);
 
-    testCases.forEach(async (testCase: TestCase) => {
+    const proms = testCases.map(async (testCase: TestCase) => {
       const transpiler = new JsonSchemaToTypes(await testCase.schema);
       const typings = transpiler[`to${capitalize(testCase.language)}`]();
-      expect(typings).toBe(await testCase.expectedTypings);
+      return expect(typings).toBe(await testCase.expectedTypings);
     });
+
+    return Promise.all(proms);
   });
 });
