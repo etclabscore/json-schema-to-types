@@ -16,18 +16,18 @@ func (t OneOfStringDoaGddGAStringDoaGddGABERs71N5) MarshalJSON() ([]byte, error)
 func (t *OneOfStringDoaGddGAStringDoaGddGABERs71N5) UnmarshalJSON(bytes []byte) error {
 	var err error
 
-	try0 := StringDoaGddGA{}
-	err = json.Unmarshal(bytes, &try0)
+	var myVar0 StringDoaGddGA
+	err = json.Unmarshal(bytes, &myVar0)
 	if err == nil {
-		t.StringDoaGddGA = &try0
+		t.StringDoaGddGA = &myVar0
 		return nil
 }
-	try1 := StringDoaGddGA{}
-	err = json.Unmarshal(bytes, &try1)
+	var myVar1 StringDoaGddGA
+	err = json.Unmarshal(bytes, &myVar1)
 	if err != nil {
 		return err
 	}
-	t.StringDoaGddGA = &try1
+	t.StringDoaGddGA = &myVar1
 	return nil
 }
 
@@ -55,7 +55,7 @@ func (t *AnyOfPetsStringLxWtMXSJMan) UnmarshalJSON(data []byte) error {
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = StringLxWtMXSJ{}
+		var parsed StringLxWtMXSJ
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}

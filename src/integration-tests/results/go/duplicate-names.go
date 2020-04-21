@@ -24,18 +24,18 @@ func (t OneOfStuff) MarshalJSON() ([]byte, error) {
 func (t *OneOfStuff) UnmarshalJSON(bytes []byte) error {
 	var err error
 
-	try0 := UnorderedSetOfFooz1UBFn8B{}
-	err = json.Unmarshal(bytes, &try0)
+	var myVar0 UnorderedSetOfFooz1UBFn8B
+	err = json.Unmarshal(bytes, &myVar0)
 	if err == nil {
-		t.UnorderedSetOfFooz1UBFn8B = &try0
+		t.UnorderedSetOfFooz1UBFn8B = &myVar0
 		return nil
 }
-	try1 := BunchaNumbers{}
-	err = json.Unmarshal(bytes, &try1)
+	var myVar1 BunchaNumbers
+	err = json.Unmarshal(bytes, &myVar1)
 	if err != nil {
 		return err
 	}
-	t.BunchaNumbers = &try1
+	t.BunchaNumbers = &myVar1
 	return nil
 }
 
@@ -59,7 +59,7 @@ func (t *AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar) UnmarshalJSON(data []byte)
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = ObjectOfBazX101YId8{}
+		var parsed ObjectOfBazX101YId8
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}

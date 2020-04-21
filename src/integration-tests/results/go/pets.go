@@ -24,25 +24,25 @@ func (t OneOfBearManPigRIVnq1Ij) MarshalJSON() ([]byte, error) {
 func (t *OneOfBearManPigRIVnq1Ij) UnmarshalJSON(bytes []byte) error {
 	var err error
 
-	try0 := Man{}
-	err = json.Unmarshal(bytes, &try0)
+	var myVar0 Man
+	err = json.Unmarshal(bytes, &myVar0)
 	if err == nil {
-		t.Man = &try0
+		t.Man = &myVar0
 		return nil
 }	
 
-	try1 := Bear{}
-	err = json.Unmarshal(bytes, &try1)
+	var myVar1 Bear
+	err = json.Unmarshal(bytes, &myVar1)
 	if err == nil {
-		t.Bear = &try1
+		t.Bear = &myVar1
 		return nil
 }
-	try2 := Pig{}
-	err = json.Unmarshal(bytes, &try2)
+	var myVar2 Pig
+	err = json.Unmarshal(bytes, &myVar2)
 	if err != nil {
 		return err
 	}
-	t.Pig = &try2
+	t.Pig = &myVar2
 	return nil
 }
 

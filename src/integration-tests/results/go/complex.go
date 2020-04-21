@@ -73,7 +73,7 @@ func (t *Skorpionuts) UnmarshalJSON(data []byte) error {
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = Zip{}
+		var parsed Zip
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}
@@ -104,7 +104,7 @@ func (t *Chikypoops) UnmarshalJSON(data []byte) error {
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = Zip{}
+		var parsed Zip
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}

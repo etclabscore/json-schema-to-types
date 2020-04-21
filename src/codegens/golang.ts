@@ -161,7 +161,7 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = ${anyOfTwoTit}{}
+		var parsed ${anyOfTwoTit}
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}
@@ -220,10 +220,10 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
 
     const titleUnmarshalers = titles.map((oneOfTitle: string, ind: number) => {
       return `
-\ttry${ind} := ${oneOfTitle}{}
-\terr = json.Unmarshal(bytes, &try${ind})
+\tvar myVar${ind} ${oneOfTitle}
+\terr = json.Unmarshal(bytes, &myVar${ind})
 \tif err == nil {
-\t\tt.${oneOfTitle} = &try${ind}
+\t\tt.${oneOfTitle} = &myVar${ind}
 \t\treturn nil
 }`;
     });
@@ -243,12 +243,12 @@ ${titleMarshalers.slice(0, lastTitIndex).join("\t\n")}
 func (t *${tit}) UnmarshalJSON(bytes []byte) error {
 \tvar err error
 ${titleUnmarshalers.slice(0, lastTitIndex).join("\t\n")}
-\ttry${lastTitIndex} := ${lastTit}{}
-\terr = json.Unmarshal(bytes, &try${lastTitIndex})
+\tvar myVar${lastTitIndex} ${lastTit}
+\terr = json.Unmarshal(bytes, &myVar${lastTitIndex})
 \tif err != nil {
 \t\treturn err
 \t}
-\tt.${lastTit} = &try${lastTitIndex}
+\tt.${lastTit} = &myVar${lastTitIndex}
 \treturn nil
 }
 `;

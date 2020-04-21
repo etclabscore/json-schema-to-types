@@ -32,7 +32,7 @@ func (t *AnyOfJSONSchemaSchemaArrayCotc6H6U) UnmarshalJSON(data []byte) error {
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = SchemaArray{}
+		var parsed SchemaArray
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}
@@ -77,7 +77,7 @@ func (t *SchemaType) UnmarshalJSON(data []byte) error {
 		first = data[0]
 	}
 	if first == '[' {
-		var parsed = UnorderedSetOfAny17L18NF5VWcS9ROi{}
+		var parsed UnorderedSetOfAny17L18NF5VWcS9ROi
 		if err := json.Unmarshal(data, &parsed); err != nil {
 			return err
 		}
