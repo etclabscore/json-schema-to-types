@@ -134,7 +134,7 @@ export default class Golang extends CodeGen {
       return [...typings, `\t${title.padEnd(titleMaxLength)} *${title}`];
     }, []);
 
-    const tit = this.getSafeTitle(s.title as string);
+    const title = this.getSafeTitle(s.title as string);
 
     // Assuming that AnyOfs are either an {}, or an [];
     // ie. there are TWO possibilities of reduction;
@@ -148,14 +148,14 @@ export default class Golang extends CodeGen {
 
     return {
       macros: `
-func (t ${tit}) MarshalJSON() ([]byte, error) {
+func (t ${title}) MarshalJSON() ([]byte, error) {
 	if t.${anyOfOneTit} != nil {
 		return json.Marshal(t.${anyOfOneTit})
 	}
 	return json.Marshal(t.${anyOfTwoTit})
 }
 
-func (t *${tit}) UnmarshalJSON(data []byte) error {
+func (t *${title}) UnmarshalJSON(data []byte) error {
 	var first byte
 	if len(data) > 1 {
 		first = data[0]
