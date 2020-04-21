@@ -19,7 +19,6 @@ export default class Golang extends CodeGen {
         ir.prefix ? `${ir.prefix} ` : "",
       ].join(""),
       ir.typing,
-      "\n",
       ir.macros,
     ].join("");
   }

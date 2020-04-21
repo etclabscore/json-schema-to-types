@@ -60,9 +60,63 @@ type Skorpionuts struct {
 	Zip      *Zip
 	Nullgasm *Nullgasm
 }
+func (t Skorpionuts) MarshalJSON() ([]byte, error) {
+	if t.Skip != nil {
+		return json.Marshal(t.Skip)
+	}
+	return json.Marshal(t.Zip)
+}
+
+func (t *Skorpionuts) UnmarshalJSON(data []byte) error {
+	var first byte
+	if len(data) > 1 {
+		first = data[0]
+	}
+	if first == '[' {
+		var parsed = Zip{}
+		if err := json.Unmarshal(data, &parsed); err != nil {
+			return err
+		}
+		t.Zip = &parsed
+		return nil
+	}
+	var single Skip
+	if err := json.Unmarshal(data, &single); err != nil {
+		return err
+	}
+	t.Skip = &single
+	return nil
+}
 type Chikypoops struct {
 	Skip *Skip
 	Zip  *Zip
+}
+func (t Chikypoops) MarshalJSON() ([]byte, error) {
+	if t.Skip != nil {
+		return json.Marshal(t.Skip)
+	}
+	return json.Marshal(t.Zip)
+}
+
+func (t *Chikypoops) UnmarshalJSON(data []byte) error {
+	var first byte
+	if len(data) > 1 {
+		first = data[0]
+	}
+	if first == '[' {
+		var parsed = Zip{}
+		if err := json.Unmarshal(data, &parsed); err != nil {
+			return err
+		}
+		t.Zip = &parsed
+		return nil
+	}
+	var single Skip
+	if err := json.Unmarshal(data, &single); err != nil {
+		return err
+	}
+	t.Skip = &single
+	return nil
 }
 type BippyskippyBoppy struct {
 	Bool           *Skip            `json:"bool,omitempty"`
