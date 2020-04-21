@@ -126,55 +126,61 @@ export default class Golang extends CodeGen {
     return ir;
   }
 
+  protected unmarshalOfMacro(typeTitle: string, items: string[]): any {
+    const conditions = items.map((itemTitle) => {
+        return `if c, ok := i.(*${itemTitle}); ok {
+\t\t\ta.${itemTitle} = c
+\t\t}`;
+     }).join(" else ");
+
+    return `
+func (a *${typeTitle}) UnmarshalJSON(bytes []byte) error {
+\t// Unmarshaling should assume the input is an array.
+\tin := []interface{}{}
+\tif err := json.Unmarshal(bytes, &in); err != nil {
+\t\treturn err
+\t}
+\tif len(in) == 0 {
+\t\treturn nil
+\t}
+\tfor _, i := range in {
+\t\t// This does not handle the case of duplicates in the incoming
+\t\t// array. Assuming that is not allowed by JSON schema spec.
+\t\t${conditions} else {
+\t\t\treturn errors.New("unknown anyOf type")
+\t\t}
+\t}
+\treturn nil
+}`;
+  }
+
+  protected marshalOfMacro(typeTitle: string, items: string[]): any {
+    const conditions = items.map((itemTitle: string) => {
+      return `\tif a.${itemTitle} != nil {
+\t\tout = append(out, a.${itemTitle})
+\t}`;
+    }).join("\n");
+
+    return `
+func (a ${typeTitle}) MarshalJSON() ([]byte, error) {
+\t// Marshaling should always return an array.
+\tout := []interface{}{}
+\t${conditions}
+\treturn json.Marshal(out)
+}`;
+  }
+
   protected handleAnyOf(s: JSONSchema): TypeIntermediateRepresentation {
     const sAny = s.anyOf as JSONSchema[];
     const titles = sAny.map((ss: JSONSchema) => this.getSafeTitle(this.refToTitle(ss)));
     const titleMaxLength = Math.max(...titles.map((t: string) => t.length));
-    const anyOfType = titles.reduce((typings: string[], title: string) => {
-      return [...typings, `\t${title.padEnd(titleMaxLength)} *${title}`];
+    const anyOfType = titles.reduce((typings: string[], anyOfTitle: string) => {
+      return [...typings, `\t${anyOfTitle.padEnd(titleMaxLength)} *${anyOfTitle}`]; // Here, the pointer is added.
     }, []);
 
     const title = this.getSafeTitle(s.title as string);
-
-    // Assuming that AnyOfs are either an {}, or an [];
-    // ie. there are TWO possibilities of reduction;
-    // either a single thing or an array (slice) of things.
-    // ALSO
-    // Assuming that the first title represents the single,
-    // and the second represents the set (arraytype).
-
-    const anyOfOneTit = titles[0];
-    const anyOfTwoTit = titles[1];
-
     return {
-      macros: `
-func (t ${title}) MarshalJSON() ([]byte, error) {
-	if t.${anyOfOneTit} != nil {
-		return json.Marshal(t.${anyOfOneTit})
-	}
-	return json.Marshal(t.${anyOfTwoTit})
-}
-
-func (t *${title}) UnmarshalJSON(data []byte) error {
-	var first byte
-	if len(data) > 1 {
-		first = data[0]
-	}
-	if first == '[' {
-		var parsed ${anyOfTwoTit}
-		if err := json.Unmarshal(data, &parsed); err != nil {
-			return err
-		}
-		t.${anyOfTwoTit} = &parsed
-		return nil
-	}
-	var single ${anyOfOneTit}
-	if err := json.Unmarshal(data, &single); err != nil {
-		return err
-	}
-	t.${anyOfOneTit} = &single
-	return nil
-}`,
+      macros: [this.unmarshalOfMacro(title, titles), this.marshalOfMacro(title, titles)].join(""),
       prefix: "struct",
       typing: ["{", ...anyOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),
@@ -194,72 +200,19 @@ func (t *${title}) UnmarshalJSON(data []byte) error {
     const titles = sOne.map((ss: JSONSchema) => this.getSafeTitle(this.refToTitle(ss)));
     const titleMaxLength = Math.max(...titles.map((t: string) => t.length));
     const oneOfType = sOne.reduce((typings: string[], oneOfSchema: JSONSchema, i: number) => {
-      const title = titles[i];
-
+      const oneOfTitle = titles[i];
       return [
-        macros,
         ...typings,
         "\t" + [
-          title.padEnd(titleMaxLength),
-          `*${title}`,
+          oneOfTitle.padEnd(titleMaxLength),
+          `*${oneOfTitle}`,
         ].join(" "),
       ];
     }, []);
 
-    // We need different templates for titles depending
-    // on if they'll be used in the un/marshal function
-    // last or not. For error handling.
-
-    // Non-last.
-    const titleMarshalers = titles.map((oneOfTitle: string) => {
-      return `\tif t.${oneOfTitle} != nil {
-\t\treturn json.Marshal(t.${oneOfTitle})
-\t}
-`;
-    });
-
-    const titleUnmarshalers = titles.map((oneOfTitle: string, ind: number) => {
-      return `
-\tvar myVar${ind} ${oneOfTitle}
-\terr = json.Unmarshal(bytes, &myVar${ind})
-\tif err == nil {
-\t\tt.${oneOfTitle} = &myVar${ind}
-\t\treturn nil
-}`;
-    });
-
-    const lastTitIndex = titles.length - 1;
-    const lastTit = titles[lastTitIndex];
-
-    const tit = this.getSafeTitle(s.title as string);
-
-    const marshaler = `
-func (t ${tit}) MarshalJSON() ([]byte, error) {
-${titleMarshalers.slice(0, lastTitIndex).join("\t\n")}
-\treturn json.Marshal(t.${lastTit})
-}`;
-
-    const unmarshaler = `
-func (t *${tit}) UnmarshalJSON(bytes []byte) error {
-\tvar err error
-${titleUnmarshalers.slice(0, lastTitIndex).join("\t\n")}
-\tvar myVar${lastTitIndex} ${lastTit}
-\terr = json.Unmarshal(bytes, &myVar${lastTitIndex})
-\tif err != nil {
-\t\treturn err
-\t}
-\tt.${lastTit} = &myVar${lastTitIndex}
-\treturn nil
-}
-`;
-
-    const macros = [
-      marshaler,
-      unmarshaler,
-    ].join("\n");
-
+    const title = this.getSafeTitle(s.title as string);
     return {
-      macros,
+      macros: [this.unmarshalOfMacro(title, titles), this.marshalOfMacro(title, titles)].join(""),
       prefix: "struct",
       typing: [`{`, ...oneOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),

@@ -8,37 +8,42 @@ type UnorderedSetOfFooz1UBFn8B []Foo
 type Bar int64
 type BunchaNumbers (Bar)
 type OneOfStuff struct {
-
-
 	UnorderedSetOfFooz1UBFn8B *UnorderedSetOfFooz1UBFn8B
 	BunchaNumbers             *BunchaNumbers
 }
-func (t OneOfStuff) MarshalJSON() ([]byte, error) {
-	if t.UnorderedSetOfFooz1UBFn8B != nil {
-		return json.Marshal(t.UnorderedSetOfFooz1UBFn8B)
-	}
-
-	return json.Marshal(t.BunchaNumbers)
-}
-
-func (t *OneOfStuff) UnmarshalJSON(bytes []byte) error {
-	var err error
-
-	var myVar0 UnorderedSetOfFooz1UBFn8B
-	err = json.Unmarshal(bytes, &myVar0)
-	if err == nil {
-		t.UnorderedSetOfFooz1UBFn8B = &myVar0
-		return nil
-}
-	var myVar1 BunchaNumbers
-	err = json.Unmarshal(bytes, &myVar1)
-	if err != nil {
+func (a *OneOfStuff) UnmarshalJSON(bytes []byte) error {
+	// Unmarshaling should assume the input is an array.
+	in := []interface{}{}
+	if err := json.Unmarshal(bytes, &in); err != nil {
 		return err
 	}
-	t.BunchaNumbers = &myVar1
+	if len(in) == 0 {
+		return nil
+	}
+	for _, i := range in {
+		// This does not handle the case of duplicates in the incoming
+		// array. Assuming that is not allowed by JSON schema spec.
+		if c, ok := i.(*UnorderedSetOfFooz1UBFn8B); ok {
+			a.UnorderedSetOfFooz1UBFn8B = c
+		} else if c, ok := i.(*BunchaNumbers); ok {
+			a.BunchaNumbers = c
+		} else {
+			return errors.New("unknown anyOf type")
+		}
+	}
 	return nil
 }
-
+func (a OneOfStuff) MarshalJSON() ([]byte, error) {
+	// Marshaling should always return an array.
+	out := []interface{}{}
+		if a.UnorderedSetOfFooz1UBFn8B != nil {
+		out = append(out, a.UnorderedSetOfFooz1UBFn8B)
+	}
+	if a.BunchaNumbers != nil {
+		out = append(out, a.BunchaNumbers)
+	}
+	return json.Marshal(out)
+}
 // Generated! Represents an alias to any of the provided schemas
 type AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar struct {
 	Foo                 *Foo
@@ -46,30 +51,46 @@ type AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar struct {
 	OneOfStuff          *OneOfStuff
 	Bar                 *Bar
 }
-func (t AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar) MarshalJSON() ([]byte, error) {
-	if t.Foo != nil {
-		return json.Marshal(t.Foo)
-	}
-	return json.Marshal(t.ObjectOfBazX101YId8)
-}
-
-func (t *AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar) UnmarshalJSON(data []byte) error {
-	var first byte
-	if len(data) > 1 {
-		first = data[0]
-	}
-	if first == '[' {
-		var parsed ObjectOfBazX101YId8
-		if err := json.Unmarshal(data, &parsed); err != nil {
-			return err
-		}
-		t.ObjectOfBazX101YId8 = &parsed
-		return nil
-	}
-	var single Foo
-	if err := json.Unmarshal(data, &single); err != nil {
+func (a *AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar) UnmarshalJSON(bytes []byte) error {
+	// Unmarshaling should assume the input is an array.
+	in := []interface{}{}
+	if err := json.Unmarshal(bytes, &in); err != nil {
 		return err
 	}
-	t.Foo = &single
+	if len(in) == 0 {
+		return nil
+	}
+	for _, i := range in {
+		// This does not handle the case of duplicates in the incoming
+		// array. Assuming that is not allowed by JSON schema spec.
+		if c, ok := i.(*Foo); ok {
+			a.Foo = c
+		} else if c, ok := i.(*ObjectOfBazX101YId8); ok {
+			a.ObjectOfBazX101YId8 = c
+		} else if c, ok := i.(*OneOfStuff); ok {
+			a.OneOfStuff = c
+		} else if c, ok := i.(*Bar); ok {
+			a.Bar = c
+		} else {
+			return errors.New("unknown anyOf type")
+		}
+	}
 	return nil
+}
+func (a AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar) MarshalJSON() ([]byte, error) {
+	// Marshaling should always return an array.
+	out := []interface{}{}
+		if a.Foo != nil {
+		out = append(out, a.Foo)
+	}
+	if a.ObjectOfBazX101YId8 != nil {
+		out = append(out, a.ObjectOfBazX101YId8)
+	}
+	if a.OneOfStuff != nil {
+		out = append(out, a.OneOfStuff)
+	}
+	if a.Bar != nil {
+		out = append(out, a.Bar)
+	}
+	return json.Marshal(out)
 }

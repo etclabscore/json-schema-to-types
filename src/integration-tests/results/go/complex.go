@@ -60,63 +60,80 @@ type Skorpionuts struct {
 	Zip      *Zip
 	Nullgasm *Nullgasm
 }
-func (t Skorpionuts) MarshalJSON() ([]byte, error) {
-	if t.Skip != nil {
-		return json.Marshal(t.Skip)
-	}
-	return json.Marshal(t.Zip)
-}
-
-func (t *Skorpionuts) UnmarshalJSON(data []byte) error {
-	var first byte
-	if len(data) > 1 {
-		first = data[0]
-	}
-	if first == '[' {
-		var parsed Zip
-		if err := json.Unmarshal(data, &parsed); err != nil {
-			return err
-		}
-		t.Zip = &parsed
-		return nil
-	}
-	var single Skip
-	if err := json.Unmarshal(data, &single); err != nil {
+func (a *Skorpionuts) UnmarshalJSON(bytes []byte) error {
+	// Unmarshaling should assume the input is an array.
+	in := []interface{}{}
+	if err := json.Unmarshal(bytes, &in); err != nil {
 		return err
 	}
-	t.Skip = &single
+	if len(in) == 0 {
+		return nil
+	}
+	for _, i := range in {
+		// This does not handle the case of duplicates in the incoming
+		// array. Assuming that is not allowed by JSON schema spec.
+		if c, ok := i.(*Skip); ok {
+			a.Skip = c
+		} else if c, ok := i.(*Zip); ok {
+			a.Zip = c
+		} else if c, ok := i.(*Nullgasm); ok {
+			a.Nullgasm = c
+		} else {
+			return errors.New("unknown anyOf type")
+		}
+	}
 	return nil
+}
+func (a Skorpionuts) MarshalJSON() ([]byte, error) {
+	// Marshaling should always return an array.
+	out := []interface{}{}
+		if a.Skip != nil {
+		out = append(out, a.Skip)
+	}
+	if a.Zip != nil {
+		out = append(out, a.Zip)
+	}
+	if a.Nullgasm != nil {
+		out = append(out, a.Nullgasm)
+	}
+	return json.Marshal(out)
 }
 type Chikypoops struct {
 	Skip *Skip
 	Zip  *Zip
 }
-func (t Chikypoops) MarshalJSON() ([]byte, error) {
-	if t.Skip != nil {
-		return json.Marshal(t.Skip)
-	}
-	return json.Marshal(t.Zip)
-}
-
-func (t *Chikypoops) UnmarshalJSON(data []byte) error {
-	var first byte
-	if len(data) > 1 {
-		first = data[0]
-	}
-	if first == '[' {
-		var parsed Zip
-		if err := json.Unmarshal(data, &parsed); err != nil {
-			return err
-		}
-		t.Zip = &parsed
-		return nil
-	}
-	var single Skip
-	if err := json.Unmarshal(data, &single); err != nil {
+func (a *Chikypoops) UnmarshalJSON(bytes []byte) error {
+	// Unmarshaling should assume the input is an array.
+	in := []interface{}{}
+	if err := json.Unmarshal(bytes, &in); err != nil {
 		return err
 	}
-	t.Skip = &single
+	if len(in) == 0 {
+		return nil
+	}
+	for _, i := range in {
+		// This does not handle the case of duplicates in the incoming
+		// array. Assuming that is not allowed by JSON schema spec.
+		if c, ok := i.(*Skip); ok {
+			a.Skip = c
+		} else if c, ok := i.(*Zip); ok {
+			a.Zip = c
+		} else {
+			return errors.New("unknown anyOf type")
+		}
+	}
 	return nil
+}
+func (a Chikypoops) MarshalJSON() ([]byte, error) {
+	// Marshaling should always return an array.
+	out := []interface{}{}
+		if a.Skip != nil {
+		out = append(out, a.Skip)
+	}
+	if a.Zip != nil {
+		out = append(out, a.Zip)
+	}
+	return json.Marshal(out)
 }
 type BippyskippyBoppy struct {
 	Bool           *Skip            `json:"bool,omitempty"`

@@ -1,36 +1,41 @@
 type StringDoaGddGA string
 type OneOfStringDoaGddGAStringDoaGddGABERs71N5 struct {
-
-
 	StringDoaGddGA *StringDoaGddGA
 	StringDoaGddGA *StringDoaGddGA
 }
-func (t OneOfStringDoaGddGAStringDoaGddGABERs71N5) MarshalJSON() ([]byte, error) {
-	if t.StringDoaGddGA != nil {
-		return json.Marshal(t.StringDoaGddGA)
-	}
-
-	return json.Marshal(t.StringDoaGddGA)
-}
-
-func (t *OneOfStringDoaGddGAStringDoaGddGABERs71N5) UnmarshalJSON(bytes []byte) error {
-	var err error
-
-	var myVar0 StringDoaGddGA
-	err = json.Unmarshal(bytes, &myVar0)
-	if err == nil {
-		t.StringDoaGddGA = &myVar0
-		return nil
-}
-	var myVar1 StringDoaGddGA
-	err = json.Unmarshal(bytes, &myVar1)
-	if err != nil {
+func (a *OneOfStringDoaGddGAStringDoaGddGABERs71N5) UnmarshalJSON(bytes []byte) error {
+	// Unmarshaling should assume the input is an array.
+	in := []interface{}{}
+	if err := json.Unmarshal(bytes, &in); err != nil {
 		return err
 	}
-	t.StringDoaGddGA = &myVar1
+	if len(in) == 0 {
+		return nil
+	}
+	for _, i := range in {
+		// This does not handle the case of duplicates in the incoming
+		// array. Assuming that is not allowed by JSON schema spec.
+		if c, ok := i.(*StringDoaGddGA); ok {
+			a.StringDoaGddGA = c
+		} else if c, ok := i.(*StringDoaGddGA); ok {
+			a.StringDoaGddGA = c
+		} else {
+			return errors.New("unknown anyOf type")
+		}
+	}
 	return nil
 }
-
+func (a OneOfStringDoaGddGAStringDoaGddGABERs71N5) MarshalJSON() ([]byte, error) {
+	// Marshaling should always return an array.
+	out := []interface{}{}
+		if a.StringDoaGddGA != nil {
+		out = append(out, a.StringDoaGddGA)
+	}
+	if a.StringDoaGddGA != nil {
+		out = append(out, a.StringDoaGddGA)
+	}
+	return json.Marshal(out)
+}
 // a bunch of pets
 type Pets []OneOfStringDoaGddGAStringDoaGddGABERs71N5
 // simplest test case
@@ -42,30 +47,41 @@ type AnyOfPetsStringLxWtMXSJMan struct {
 	StringLxWtMXSJ *StringLxWtMXSJ
 	Man            *Man
 }
-func (t AnyOfPetsStringLxWtMXSJMan) MarshalJSON() ([]byte, error) {
-	if t.Pets != nil {
-		return json.Marshal(t.Pets)
-	}
-	return json.Marshal(t.StringLxWtMXSJ)
-}
-
-func (t *AnyOfPetsStringLxWtMXSJMan) UnmarshalJSON(data []byte) error {
-	var first byte
-	if len(data) > 1 {
-		first = data[0]
-	}
-	if first == '[' {
-		var parsed StringLxWtMXSJ
-		if err := json.Unmarshal(data, &parsed); err != nil {
-			return err
-		}
-		t.StringLxWtMXSJ = &parsed
-		return nil
-	}
-	var single Pets
-	if err := json.Unmarshal(data, &single); err != nil {
+func (a *AnyOfPetsStringLxWtMXSJMan) UnmarshalJSON(bytes []byte) error {
+	// Unmarshaling should assume the input is an array.
+	in := []interface{}{}
+	if err := json.Unmarshal(bytes, &in); err != nil {
 		return err
 	}
-	t.Pets = &single
+	if len(in) == 0 {
+		return nil
+	}
+	for _, i := range in {
+		// This does not handle the case of duplicates in the incoming
+		// array. Assuming that is not allowed by JSON schema spec.
+		if c, ok := i.(*Pets); ok {
+			a.Pets = c
+		} else if c, ok := i.(*StringLxWtMXSJ); ok {
+			a.StringLxWtMXSJ = c
+		} else if c, ok := i.(*Man); ok {
+			a.Man = c
+		} else {
+			return errors.New("unknown anyOf type")
+		}
+	}
 	return nil
+}
+func (a AnyOfPetsStringLxWtMXSJMan) MarshalJSON() ([]byte, error) {
+	// Marshaling should always return an array.
+	out := []interface{}{}
+		if a.Pets != nil {
+		out = append(out, a.Pets)
+	}
+	if a.StringLxWtMXSJ != nil {
+		out = append(out, a.StringLxWtMXSJ)
+	}
+	if a.Man != nil {
+		out = append(out, a.Man)
+	}
+	return json.Marshal(out)
 }
