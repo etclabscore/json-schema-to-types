@@ -150,31 +150,31 @@ export default class Golang extends CodeGen {
     return {
       macros: `
 func (t ${tit}) MarshalJSON() ([]byte, error) {
-  if t.${anyOfOneTit} != nil {
-    return json.Marshal(t.${anyOfOneTit})
-  }
-  return json.Marshal(t.${anyOfTwoTit})
+	if t.${anyOfOneTit} != nil {
+		return json.Marshal(t.${anyOfOneTit})
+	}
+	return json.Marshal(t.${anyOfTwoTit})
 }
 
 func (t *${tit}) UnmarshalJSON(data []byte) error {
-  var first byte
-  if len(data) > 1 {
-    first = data[0]
-  }
-  if first == '[' {
-    var parsed = ${anyOfTwoTit}{}
-    if err := json.Unmarshal(data, &parsed); err != nil {
-      return err
-    }
-    t.${anyOfTwoTit} = &parsed
-    return nil
-  }
-  var single ${anyOfOneTit}
-  if err := json.Unmarshal(data, &single); err != nil {
-    return err
-  }
-  t.${anyOfOneTit} = &single
-  return nil
+	var first byte
+	if len(data) > 1 {
+		first = data[0]
+	}
+	if first == '[' {
+		var parsed = ${anyOfTwoTit}{}
+		if err := json.Unmarshal(data, &parsed); err != nil {
+			return err
+		}
+		t.${anyOfTwoTit} = &parsed
+		return nil
+	}
+	var single ${anyOfOneTit}
+	if err := json.Unmarshal(data, &single); err != nil {
+		return err
+	}
+	t.${anyOfOneTit} = &single
+	return nil
 }`,
       prefix: "struct",
       typing: ["{", ...anyOfType, "}"].join("\n"),
