@@ -19,6 +19,33 @@ type AnyOfJSONSchemaSchemaArrayCotc6H6U struct {
 	JSONSchema  *JSONSchema
 	SchemaArray *SchemaArray
 }
+func (t AnyOfJSONSchemaSchemaArrayCotc6H6U) MarshalJSON() ([]byte, error) {
+	if t.JSONSchema != nil {
+		return json.Marshal(t.JSONSchema)
+	}
+	return json.Marshal(t.SchemaArray)
+}
+
+func (t *AnyOfJSONSchemaSchemaArrayCotc6H6U) UnmarshalJSON(data []byte) error {
+	var first byte
+	if len(data) > 1 {
+		first = data[0]
+	}
+	if first == '[' {
+		var parsed = SchemaArray{}
+		if err := json.Unmarshal(data, &parsed); err != nil {
+			return err
+		}
+		t.SchemaArray = &parsed
+		return nil
+	}
+	var single JSONSchema
+	if err := json.Unmarshal(data, &single); err != nil {
+		return err
+	}
+	t.JSONSchema = &single
+	return nil
+}
 //
 // --- Default ---
 //
@@ -36,6 +63,33 @@ type UnorderedSetOfAny17L18NF5VWcS9ROi []Any17L18NF5
 type SchemaType struct {
 	Any17L18NF5                       *Any17L18NF5
 	UnorderedSetOfAny17L18NF5VWcS9ROi *UnorderedSetOfAny17L18NF5VWcS9ROi
+}
+func (t SchemaType) MarshalJSON() ([]byte, error) {
+	if t.Any17L18NF5 != nil {
+		return json.Marshal(t.Any17L18NF5)
+	}
+	return json.Marshal(t.UnorderedSetOfAny17L18NF5VWcS9ROi)
+}
+
+func (t *SchemaType) UnmarshalJSON(data []byte) error {
+	var first byte
+	if len(data) > 1 {
+		first = data[0]
+	}
+	if first == '[' {
+		var parsed = UnorderedSetOfAny17L18NF5VWcS9ROi{}
+		if err := json.Unmarshal(data, &parsed); err != nil {
+			return err
+		}
+		t.UnorderedSetOfAny17L18NF5VWcS9ROi = &parsed
+		return nil
+	}
+	var single Any17L18NF5
+	if err := json.Unmarshal(data, &single); err != nil {
+		return err
+	}
+	t.Any17L18NF5 = &single
+	return nil
 }
 //
 // --- Default ---

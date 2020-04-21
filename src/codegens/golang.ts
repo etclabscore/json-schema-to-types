@@ -212,20 +212,20 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
 
     // Non-last.
     const titleMarshalers = titles.map((oneOfTitle: string) => {
-      return `
-  if t.${oneOfTitle} != nil {
-    return json.Marshal(t.${oneOfTitle})
-  }`;
+      return `\tif t.${oneOfTitle} != nil {
+\t\treturn json.Marshal(t.${oneOfTitle})
+\t}
+`;
     });
 
     const titleUnmarshalers = titles.map((oneOfTitle: string, ind: number) => {
       return `
-  try${ind} := ${oneOfTitle}{}
-  err = json.Unmarshal(bytes, &try${ind})
-  if err == nil {
-    t.${oneOfTitle} = &try${ind}
-    return nil
-  }`;
+\ttry${ind} := ${oneOfTitle}{}
+\terr = json.Unmarshal(bytes, &try${ind})
+\tif err == nil {
+\t\tt.${oneOfTitle} = &try${ind}
+\t\treturn nil
+}`;
     });
 
     const lastTitIndex = titles.length - 1;
@@ -233,26 +233,28 @@ func (t *${tit}) UnmarshalJSON(data []byte) error {
 
     const tit = this.getSafeTitle(s.title as string);
 
-    const marshaler = `func (t ${tit}) MarshalJSON() ([]byte, error) {
-  ${titleMarshalers.slice(0, lastTitIndex).join("\n")}
-  return json.Marshal(t.${lastTit})
+    const marshaler = `
+func (t ${tit}) MarshalJSON() ([]byte, error) {
+${titleMarshalers.slice(0, lastTitIndex).join("\t\n")}
+\treturn json.Marshal(t.${lastTit})
 }`;
 
-    const unmarshaler = `func (t *${tit}) UnmarshalJSON(bytes []byte) error {
-  var err error
-  ${titleUnmarshalers.slice(0, lastTitIndex).join("\n")}
-  try${lastTitIndex} := ${lastTit}{}
-  err = json.Unmarshal(bytes, &try${lastTitIndex})
-  if err != nil {
-    return err
-  }
-  t.${lastTit} = &try${lastTitIndex}
-  return nil
-}`;
+    const unmarshaler = `
+func (t *${tit}) UnmarshalJSON(bytes []byte) error {
+\tvar err error
+${titleUnmarshalers.slice(0, lastTitIndex).join("\t\n")}
+\ttry${lastTitIndex} := ${lastTit}{}
+\terr = json.Unmarshal(bytes, &try${lastTitIndex})
+\tif err != nil {
+\t\treturn err
+\t}
+\tt.${lastTit} = &try${lastTitIndex}
+\treturn nil
+}
+`;
 
     const macros = [
       marshaler,
-      "",
       unmarshaler,
     ].join("\n");
 
