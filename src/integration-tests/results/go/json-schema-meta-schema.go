@@ -20,37 +20,25 @@ type AnyOfJSONSchemaSchemaArrayCotc6H6U struct {
 	SchemaArray *SchemaArray
 }
 func (a *AnyOfJSONSchemaSchemaArrayCotc6H6U) UnmarshalJSON(bytes []byte) error {
-	// Unmarshaling should assume the input is an array.
-	in := []interface{}{}
-	if err := json.Unmarshal(bytes, &in); err != nil {
-		return err
+	var ok bool
+
+	var myJSONSchema JSONSchema
+	if err := json.Unmarshal(bytes, &myJSONSchema); err == nil {
+		ok = true
+		a.JSONSchema = &myJSONSchema
 	}
-	if len(in) == 0 {
+
+	var mySchemaArray SchemaArray
+	if err := json.Unmarshal(bytes, &mySchemaArray); err == nil {
+		ok = true
+		a.SchemaArray = &mySchemaArray
+	}
+
+	// Did unmarshal at least one of the simple objects.
+	if ok {
 		return nil
 	}
-	for _, i := range in {
-		// This does not handle the case of duplicates in the incoming
-		// array. Assuming that is not allowed by JSON schema spec.
-		if c, ok := i.(*JSONSchema); ok {
-			a.JSONSchema = c
-		} else if c, ok := i.(*SchemaArray); ok {
-			a.SchemaArray = c
-		} else {
-			return errors.New("unknown anyOf type")
-		}
-	}
-	return nil
-}
-func (a AnyOfJSONSchemaSchemaArrayCotc6H6U) MarshalJSON() ([]byte, error) {
-	// Marshaling should always return an array.
-	out := []interface{}{}
-		if a.JSONSchema != nil {
-		out = append(out, a.JSONSchema)
-	}
-	if a.SchemaArray != nil {
-		out = append(out, a.SchemaArray)
-	}
-	return json.Marshal(out)
+	return errors.New("failed to unmarshal any of the object properties")
 }
 //
 // --- Default ---
@@ -71,37 +59,25 @@ type SchemaType struct {
 	UnorderedSetOfAny17L18NF5VWcS9ROi *UnorderedSetOfAny17L18NF5VWcS9ROi
 }
 func (a *SchemaType) UnmarshalJSON(bytes []byte) error {
-	// Unmarshaling should assume the input is an array.
-	in := []interface{}{}
-	if err := json.Unmarshal(bytes, &in); err != nil {
-		return err
+	var ok bool
+
+	var myAny17L18NF5 Any17L18NF5
+	if err := json.Unmarshal(bytes, &myAny17L18NF5); err == nil {
+		ok = true
+		a.Any17L18NF5 = &myAny17L18NF5
 	}
-	if len(in) == 0 {
+
+	var myUnorderedSetOfAny17L18NF5VWcS9ROi UnorderedSetOfAny17L18NF5VWcS9ROi
+	if err := json.Unmarshal(bytes, &myUnorderedSetOfAny17L18NF5VWcS9ROi); err == nil {
+		ok = true
+		a.UnorderedSetOfAny17L18NF5VWcS9ROi = &myUnorderedSetOfAny17L18NF5VWcS9ROi
+	}
+
+	// Did unmarshal at least one of the simple objects.
+	if ok {
 		return nil
 	}
-	for _, i := range in {
-		// This does not handle the case of duplicates in the incoming
-		// array. Assuming that is not allowed by JSON schema spec.
-		if c, ok := i.(*Any17L18NF5); ok {
-			a.Any17L18NF5 = c
-		} else if c, ok := i.(*UnorderedSetOfAny17L18NF5VWcS9ROi); ok {
-			a.UnorderedSetOfAny17L18NF5VWcS9ROi = c
-		} else {
-			return errors.New("unknown anyOf type")
-		}
-	}
-	return nil
-}
-func (a SchemaType) MarshalJSON() ([]byte, error) {
-	// Marshaling should always return an array.
-	out := []interface{}{}
-		if a.Any17L18NF5 != nil {
-		out = append(out, a.Any17L18NF5)
-	}
-	if a.UnorderedSetOfAny17L18NF5VWcS9ROi != nil {
-		out = append(out, a.UnorderedSetOfAny17L18NF5VWcS9ROi)
-	}
-	return json.Marshal(out)
+	return errors.New("failed to unmarshal any of the object properties")
 }
 //
 // --- Default ---

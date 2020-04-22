@@ -126,47 +126,65 @@ export default class Golang extends CodeGen {
     return ir;
   }
 
-  protected unmarshalOfMacro(typeTitle: string, items: string[]): any {
-    const conditions = items.map((itemTitle) => {
-        return `if c, ok := i.(*${itemTitle}); ok {
-\t\t\ta.${itemTitle} = c
-\t\t}`;
-     }).join(" else ");
+  protected unmarshalAnyOfMacro(typeTitle: string, items: string[]): any {
+    const components = items.map((itemTitle) => {
+        return `
+	var my${itemTitle} ${itemTitle}
+	if err := json.Unmarshal(bytes, &my${itemTitle}); err == nil {
+		ok = true
+		a.${itemTitle} = &my${itemTitle}
+	}`;
+
+     }).join("\n");
 
     return `
 func (a *${typeTitle}) UnmarshalJSON(bytes []byte) error {
-\t// Unmarshaling should assume the input is an array.
-\tin := []interface{}{}
-\tif err := json.Unmarshal(bytes, &in); err != nil {
-\t\treturn err
-\t}
-\tif len(in) == 0 {
-\t\treturn nil
-\t}
-\tfor _, i := range in {
-\t\t// This does not handle the case of duplicates in the incoming
-\t\t// array. Assuming that is not allowed by JSON schema spec.
-\t\t${conditions} else {
-\t\t\treturn errors.New("unknown anyOf type")
-\t\t}
-\t}
-\treturn nil
+	var ok bool
+${components}
+
+	// Did unmarshal at least one of the simple objects.
+	if ok {
+		return nil
+	}
+	return errors.New("failed to unmarshal any of the object properties")
 }`;
   }
 
-  protected marshalOfMacro(typeTitle: string, items: string[]): any {
-    const conditions = items.map((itemTitle: string) => {
-      return `\tif a.${itemTitle} != nil {
-\t\tout = append(out, a.${itemTitle})
-\t}`;
+  protected unmarshalOneOfMacro(typeTitle: string, items: string[]): any {
+    const components = items.map((itemTitle) => {
+      return `
+	var my${itemTitle} ${itemTitle}
+	if err := json.Unmarshal(bytes, &my${itemTitle}); err == nil {
+		o.${itemTitle} = &my${itemTitle}
+		return nil
+	}`;
     }).join("\n");
 
     return `
-func (a ${typeTitle}) MarshalJSON() ([]byte, error) {
-\t// Marshaling should always return an array.
-\tout := []interface{}{}
-\t${conditions}
-\treturn json.Marshal(out)
+// UnmarshalJSON implements the json Unmarshaler interface.
+// This implementation DOES NOT assert that ONE AND ONLY ONE
+// of the simple properties is satisfied; it lazily uses the first one that is satisfied.
+// Ergo, it will not return an error if more than one property is valid.
+func (o *${typeTitle}) UnmarshalJSON(bytes []byte) error {
+${components}
+
+	return errors.New("failed to unmarshal one of the object properties")
+}`;
+  }
+
+  protected marshalOneOfMacro(typeTitle: string, items: string[]): any {
+    const components = items.map((itemTitle: string) => {
+      return `
+	if o.${itemTitle} != nil {
+		return json.Marshal(o.${itemTitle})
+	}`;
+    }).join("");
+
+    return `
+func (o ${typeTitle}) MarshalJSON() ([]byte, error) {
+${components}
+
+	return nil, errors.New("failed to marshal any one of the object properties")
 }`;
   }
 
@@ -180,7 +198,7 @@ func (a ${typeTitle}) MarshalJSON() ([]byte, error) {
 
     const title = this.getSafeTitle(s.title as string);
     return {
-      macros: [this.unmarshalOfMacro(title, titles), this.marshalOfMacro(title, titles)].join(""),
+      macros: this.unmarshalAnyOfMacro(title, titles), // No special Marshaling method is needed.
       prefix: "struct",
       typing: ["{", ...anyOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),
@@ -212,7 +230,7 @@ func (a ${typeTitle}) MarshalJSON() ([]byte, error) {
 
     const title = this.getSafeTitle(s.title as string);
     return {
-      macros: [this.unmarshalOfMacro(title, titles), this.marshalOfMacro(title, titles)].join(""),
+      macros: [this.unmarshalOneOfMacro(title, titles), this.marshalOneOfMacro(title, titles)].join(""),
       prefix: "struct",
       typing: [`{`, ...oneOfType, "}"].join("\n"),
       documentationComment: this.buildDocs(s),

@@ -6,43 +6,45 @@ type OneOfBearManPigRIVnq1Ij struct {
 	Bear *Bear
 	Pig  *Pig
 }
-func (a *OneOfBearManPigRIVnq1Ij) UnmarshalJSON(bytes []byte) error {
-	// Unmarshaling should assume the input is an array.
-	in := []interface{}{}
-	if err := json.Unmarshal(bytes, &in); err != nil {
-		return err
-	}
-	if len(in) == 0 {
+// UnmarshalJSON implements the json Unmarshaler interface.
+// This implementation DOES NOT assert that ONE AND ONLY ONE
+// of the simple properties is satisfied; it lazily uses the first one that is satisfied.
+// Ergo, it will not return an error if more than one property is valid.
+func (o *OneOfBearManPigRIVnq1Ij) UnmarshalJSON(bytes []byte) error {
+
+	var myMan Man
+	if err := json.Unmarshal(bytes, &myMan); err == nil {
+		o.Man = &myMan
 		return nil
 	}
-	for _, i := range in {
-		// This does not handle the case of duplicates in the incoming
-		// array. Assuming that is not allowed by JSON schema spec.
-		if c, ok := i.(*Man); ok {
-			a.Man = c
-		} else if c, ok := i.(*Bear); ok {
-			a.Bear = c
-		} else if c, ok := i.(*Pig); ok {
-			a.Pig = c
-		} else {
-			return errors.New("unknown anyOf type")
-		}
+
+	var myBear Bear
+	if err := json.Unmarshal(bytes, &myBear); err == nil {
+		o.Bear = &myBear
+		return nil
 	}
-	return nil
+
+	var myPig Pig
+	if err := json.Unmarshal(bytes, &myPig); err == nil {
+		o.Pig = &myPig
+		return nil
+	}
+
+	return errors.New("failed to unmarshal one of the object properties")
 }
-func (a OneOfBearManPigRIVnq1Ij) MarshalJSON() ([]byte, error) {
-	// Marshaling should always return an array.
-	out := []interface{}{}
-		if a.Man != nil {
-		out = append(out, a.Man)
+func (o OneOfBearManPigRIVnq1Ij) MarshalJSON() ([]byte, error) {
+
+	if o.Man != nil {
+		return json.Marshal(o.Man)
 	}
-	if a.Bear != nil {
-		out = append(out, a.Bear)
+	if o.Bear != nil {
+		return json.Marshal(o.Bear)
 	}
-	if a.Pig != nil {
-		out = append(out, a.Pig)
+	if o.Pig != nil {
+		return json.Marshal(o.Pig)
 	}
-	return json.Marshal(out)
+
+	return nil, errors.New("failed to marshal any one of the object properties")
 }
 // a bunch of pets
 type Pets []OneOfBearManPigRIVnq1Ij
