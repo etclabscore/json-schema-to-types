@@ -89,7 +89,6 @@ describe("Integration tests", () => {
     const proms = testCases.map(async (testCase: TestCase) => {
       const transpiler = new JsonSchemaToTypes(await testCase.schema);
       const typings = transpiler[`to${capitalize(testCase.language)}`]();
-      fs.writeFileSync(testCase.name + "." + testCase.language, typings);
       return expect(typings).toBe(await testCase.expectedTypings);
     });
 
