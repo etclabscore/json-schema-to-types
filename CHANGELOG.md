@@ -1,3 +1,25 @@
+## [1.11.2](https://github.com/etclabscore/json-schema-to-types/compare/1.11.1...1.11.2) (2020-04-23)
+
+
+### Bug Fixes
+
+* **go:** add multiline with anchor ([c3a28a0](https://github.com/etclabscore/json-schema-to-types/commit/c3a28a02f9c4300afbd527e332259c6316a21848))
+* **go:** add tabs to marshal code ([57d6bea](https://github.com/etclabscore/json-schema-to-types/commit/57d6bea2adebbaebe4286c6206dce369d8d743d1))
+* **go:** custom json marshaling methods of OneOf types ([2c8985a](https://github.com/etclabscore/json-schema-to-types/commit/2c8985a69433597d5bcd58e4eb8c619990e097f1))
+* **go:** dont use pointer for AnyOf Marshal receiver ([4f10d16](https://github.com/etclabscore/json-schema-to-types/commit/4f10d1677f065e9d12a14136fb13c6e7bc07d635))
+* **go:** implement AnyOf and OneOf un/marshaling methods ([2fdd5b0](https://github.com/etclabscore/json-schema-to-types/commit/2fdd5b03e381075a466b04eae2a94708c600abaf))
+* **go:** integration test: complex.go ([1e98f8a](https://github.com/etclabscore/json-schema-to-types/commit/1e98f8a9070c830187b9b0bb62c0bf24702ca593))
+* **go:** integration tests with un/marshalers passing ([059fd1b](https://github.com/etclabscore/json-schema-to-types/commit/059fd1bc09f8ac6c82de4781f7e62fa097239d8d))
+* **go:** json un/marshaling for AnyOf types ([6bed6ed](https://github.com/etclabscore/json-schema-to-types/commit/6bed6ed57cadc933199f660e4e1d770048d9f3e0))
+* **go:** rename variable for readability ([98fc78d](https://github.com/etclabscore/json-schema-to-types/commit/98fc78ddf4143676c6d44271b4c60c2c7cd75aca)), closes [/github.com/etclabscore/json-schema-to-types/pull/60#discussion_r410376087](https://github.com//github.com/etclabscore/json-schema-to-types/pull/60/issues/discussion_r410376087)
+* **go:** the naive way of un/marshaling macros ([f28aa64](https://github.com/etclabscore/json-schema-to-types/commit/f28aa648a9df17fc3d634b3d9c4bd4c81e629a13))
+* **go:** zero variable statements and better names ([4d34ab7](https://github.com/etclabscore/json-schema-to-types/commit/4d34ab7c52f38a179d7abc816c8a7f4e45cf95f6))
+* **test:** remove test results file writer (development only) ([942a4b0](https://github.com/etclabscore/json-schema-to-types/commit/942a4b03e888e9963656767d13b6a2878e89cf44))
+* make test fail as it should ([0d60ef9](https://github.com/etclabscore/json-schema-to-types/commit/0d60ef9785394c93c829edb59f2a9b26d1227333))
+* make tests pass again ([bacfa71](https://github.com/etclabscore/json-schema-to-types/commit/bacfa7116e24a3f7dac4f7e4b5f5607d3c964fad))
+* shadowed variable name ([cb9dc33](https://github.com/etclabscore/json-schema-to-types/commit/cb9dc33c8bc7e4cec238170d2648822d6492d171))
+* use " in array declaration for code consistency ([0a15e70](https://github.com/etclabscore/json-schema-to-types/commit/0a15e704406f8f9b1db156e087efa0e3eb7c3fb2))
+
 ## [1.11.1](https://github.com/etclabscore/json-schema-to-types/compare/1.11.0...1.11.1) (2020-04-11)
 
 
