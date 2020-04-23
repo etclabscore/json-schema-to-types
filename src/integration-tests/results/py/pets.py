@@ -1,16 +1,16 @@
 from typing import Any, NewType
 
-Man = NewType("Man", Any)
+Ox = NewType("Ox", Any)
 from typing import Any, NewType
 
-Bear = NewType("Bear", Any)
+Horse = NewType("Horse", Any)
 from typing import Any, NewType
 
-Pig = NewType("Pig", Any)
+Donkey = NewType("Donkey", Any)
 from typing import NewType, Union
 
-OneOfBearManPigRIVnq1Ij = NewType("OneOfBearManPigRIVnq1Ij", Union[Man, Bear, Pig])
+OneOfDonkeyHorseOxP55NQZsj = NewType("OneOfDonkeyHorseOxP55NQZsj", Union[Ox, Horse, Donkey])
 from typing import List, NewType
-"""a bunch of pets
+"""an array of animals that are good at pulling things
 """
-Pets = NewType("Pets", List[OneOfBearManPigRIVnq1Ij])
+PlowAnimals = NewType("PlowAnimals", List[OneOfDonkeyHorseOxP55NQZsj])

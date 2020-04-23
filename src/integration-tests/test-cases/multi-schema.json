@@ -1,7 +1,7 @@
 [
   {
-    "title": "pets",
-    "description": "a bunch of pets",
+    "title":  "RGBOrHex",
+    "description": "A way to describe color",
     "type": "array",
     "items": {
       "oneOf": [
@@ -11,8 +11,8 @@
     }
   },
   {
-    "description": "simplest test case",
+    "description": "Human word for color",
     "type": "string"
   },
-  { "title": "Man" }
+  { "title": "ColorAsAnything" }
 ]

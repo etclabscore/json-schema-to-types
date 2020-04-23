@@ -1,5 +1,5 @@
-type Skip bool
-// abc 123
+type IsMetal bool
+// Fill amounts
 //
 // --- Default ---
 //
@@ -16,69 +16,79 @@ type Skip bool
 // --- Example ---
 //
 // `789`
-type Bip int64
-type Bipper float64
-type Bop float64
-type Bopper string
+type FillAmount int64
+type NumDrains float64
+type FeelToTouch string
+type Orientation string
 const (
-	BopperEnum0 Bopper = "asd"
-	BopperEnum1 Bopper = "bca"
+	OrientationEnum0 Orientation = "north"
+	OrientationEnum1 Orientation = "south"
+	OrientationEnum2 Orientation = "west"
+	OrientationEnum3 Orientation = "east"
 )
-type Swicker float64
+type UserAvailability float64
 const (
-	SwickerEnum0 Swicker = 123
-	SwickerEnum1 Swicker = 321
+	UserAvailabilityEnum0 UserAvailability = 1
+	UserAvailabilityEnum1 UserAvailability = 2
 )
-type Slicker int64
+type LightsNearby int64
 const (
-	SlickerEnum0 Slicker = 123
-	SlickerEnum1 Slicker = 321
+	LightsNearbyEnum0 LightsNearby = 1
+	LightsNearbyEnum1 LightsNearby = 2
+	LightsNearbyEnum2 LightsNearby = 3
 )
-type Splinter []interface{}
-type Skibb interface{}
-type Skibbidippy []Bop
-type Bopskippity string
-type Floopdidoop struct {
-	Fooberdoober *Bop         `json:"fooberdoober"`
-	Gibbledybits *Bopskippity `json:"gibbledybits,omitempty"`
+type Dishes []interface{}
+type Warranty float64
+type ProfessionallyInstalled interface{}
+type Accessories (Warranty, ProfessionallyInstalled)
+type ServiceYear float64
+type YearsInService []ServiceYear
+type WaterLiters float64
+type SoapBrand string
+type WashEquipment struct {
+	Water *WaterLiters `json:"water"`
+	Soap  *SoapBrand   `json:"soap,omitempty"`
 }
-type Skiperydippery struct {
-	Fooberdoober *Bop         `json:"fooberdoober,omitempty"`
-	Gibbledybits *Bopskippity `json:"gibbledybits,omitempty"`
+type SinkUserNumHands float64
+type SinkUserName string
+type SinkUser struct {
+	Hands *SinkUserNumHands `json:"hands,omitempty"`
+	Name  *SinkUserName     `json:"name,omitempty"`
 }
-type Doppler map[string]interface{}
-type Gorbelchov float64
-type Bonkiedonky struct {
-	Shopper     *Doppler    `json:"shopper,omitempty"`
-	Badmirputin *Gorbelchov `json:"badmirputin,omitempty"`
+type StreetName map[string]interface{}
+type StreetNumber float64
+type SinkLocation struct {
+	ResidenceStreet *StreetName   `json:"residenceStreet,omitempty"`
+	ResidenceNumber *StreetNumber `json:"residenceNumber,omitempty"`
 }
-type Justworkalready map[string]interface{}
-type Zip int64
-type Nullgasm interface{}
-type Skorpionuts struct {
-	Skip     *Skip
-	Zip      *Zip
-	Nullgasm *Nullgasm
+type SinkResource map[string]interface{}
+type Whining bool
+type Burns int64
+type FeelingOfEmptiness interface{}
+type SinkComplaints struct {
+	Whining            *Whining
+	Burns              *Burns
+	FeelingOfEmptiness *FeelingOfEmptiness
 }
-func (a *Skorpionuts) UnmarshalJSON(bytes []byte) error {
+func (a *SinkComplaints) UnmarshalJSON(bytes []byte) error {
 	var ok bool
 
-	var mySkip Skip
-	if err := json.Unmarshal(bytes, &mySkip); err == nil {
+	var myWhining Whining
+	if err := json.Unmarshal(bytes, &myWhining); err == nil {
 		ok = true
-		a.Skip = &mySkip
+		a.Whining = &myWhining
 	}
 
-	var myZip Zip
-	if err := json.Unmarshal(bytes, &myZip); err == nil {
+	var myBurns Burns
+	if err := json.Unmarshal(bytes, &myBurns); err == nil {
 		ok = true
-		a.Zip = &myZip
+		a.Burns = &myBurns
 	}
 
-	var myNullgasm Nullgasm
-	if err := json.Unmarshal(bytes, &myNullgasm); err == nil {
+	var myFeelingOfEmptiness FeelingOfEmptiness
+	if err := json.Unmarshal(bytes, &myFeelingOfEmptiness); err == nil {
 		ok = true
-		a.Nullgasm = &myNullgasm
+		a.FeelingOfEmptiness = &myFeelingOfEmptiness
 	}
 
 	// Did unmarshal at least one of the simple objects.
@@ -87,23 +97,25 @@ func (a *Skorpionuts) UnmarshalJSON(bytes []byte) error {
 	}
 	return errors.New("failed to unmarshal any of the object properties")
 }
-type Chikypoops struct {
-	Skip *Skip
-	Zip  *Zip
+type European bool
+type DrainPipeInches int64
+type MeasurementStandard struct {
+	European        *European
+	DrainPipeInches *DrainPipeInches
 }
-func (a *Chikypoops) UnmarshalJSON(bytes []byte) error {
+func (a *MeasurementStandard) UnmarshalJSON(bytes []byte) error {
 	var ok bool
 
-	var mySkip Skip
-	if err := json.Unmarshal(bytes, &mySkip); err == nil {
+	var myEuropean European
+	if err := json.Unmarshal(bytes, &myEuropean); err == nil {
 		ok = true
-		a.Skip = &mySkip
+		a.European = &myEuropean
 	}
 
-	var myZip Zip
-	if err := json.Unmarshal(bytes, &myZip); err == nil {
+	var myDrainPipeInches DrainPipeInches
+	if err := json.Unmarshal(bytes, &myDrainPipeInches); err == nil {
 		ok = true
-		a.Zip = &myZip
+		a.DrainPipeInches = &myDrainPipeInches
 	}
 
 	// Did unmarshal at least one of the simple objects.
@@ -112,19 +124,19 @@ func (a *Chikypoops) UnmarshalJSON(bytes []byte) error {
 	}
 	return errors.New("failed to unmarshal any of the object properties")
 }
-type BippyskippyBoppy struct {
-	Bool           *Skip            `json:"bool,omitempty"`
-	Int            *Bip             `json:"int,omitempty"`
-	Number         *Bipper          `json:"number,omitempty"`
-	String         *Bop             `json:"string,omitempty"`
-	StringEnum     *Bopper          `json:"stringEnum,omitempty"`
-	NumbericalEnum *Swicker         `json:"numbericalEnum,omitempty"`
-	IntegerEnum    *Slicker         `json:"integerEnum,omitempty"`
-	UntypedArray   *Splinter        `json:"untypedArray,omitempty"`
-	OrderedArray   *Skibbidippy     `json:"orderedArray,omitempty"`
-	UnorderedArray *Skibbidippy     `json:"unorderedArray,omitempty"`
-	Object         *Floopdidoop     `json:"object,omitempty"`
-	AllOf          *Justworkalready `json:"allOf,omitempty"`
-	AnyOf          *Skorpionuts     `json:"anyOf,omitempty"`
-	OneOf          *Chikypoops      `json:"oneOf,omitempty"`
+type KitchenSink struct {
+	Bool           *IsMetal             `json:"bool,omitempty"`
+	Int            *FillAmount          `json:"int,omitempty"`
+	Number         *NumDrains           `json:"number,omitempty"`
+	String         *FeelToTouch         `json:"string,omitempty"`
+	StringEnum     *Orientation         `json:"stringEnum,omitempty"`
+	NumbericalEnum *UserAvailability    `json:"numbericalEnum,omitempty"`
+	IntegerEnum    *LightsNearby        `json:"integerEnum,omitempty"`
+	UntypedArray   *Dishes              `json:"untypedArray,omitempty"`
+	OrderedArray   *Accessories         `json:"orderedArray,omitempty"`
+	UnorderedArray *YearsInService      `json:"unorderedArray,omitempty"`
+	Object         *WashEquipment       `json:"object,omitempty"`
+	AllOf          *SinkResource        `json:"allOf,omitempty"`
+	AnyOf          *SinkComplaints      `json:"anyOf,omitempty"`
+	OneOf          *MeasurementStandard `json:"oneOf,omitempty"`
 }

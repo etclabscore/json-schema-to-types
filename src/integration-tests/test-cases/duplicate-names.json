@@ -9,7 +9,7 @@
   },
   {
     "properties": {
-      "ripslip": {
+      "NotFoo": {
         "title": "baz",
         "type": "boolean"
       }
@@ -28,7 +28,7 @@
         "type": "array"
       },
       {
-        "title": "Buncha Numbers",
+        "title": "SetOfNumbers",
         "items": [
           {
             "title": "bar",

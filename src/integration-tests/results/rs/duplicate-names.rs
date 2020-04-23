@@ -5,8 +5,8 @@ extern crate serde_json;
 pub type Foo = String;
 pub type Baz = bool;
 #[derive(Serialize, Deserialize)]
-pub struct ObjectOfBazX101YId8 {
-    pub(crate) ripslip: Option<Baz>,
+pub struct ObjectOfBazLEtnUJ56 {
+    pub(crate) NotFoo: Option<Baz>,
 }
 /// UnorderedSetOfFooz1UBFn8B
 ///
@@ -14,16 +14,16 @@ pub struct ObjectOfBazX101YId8 {
 ///
 pub type UnorderedSetOfFooz1UBFn8B = Vec<Foo>;
 pub type Bar = i64;
-pub type BunchaNumbers = (Bar);
+pub type SetOfNumbers = (Bar);
 #[derive(Serialize, Deserialize)]
 pub enum OneOfStuff {
     UnorderedSetOfFooz1UBFn8B,
-    BunchaNumbers
+    SetOfNumbers
 }
 #[derive(Serialize, Deserialize)]
-pub enum AnyOfFooFooObjectOfBazX101YId8OneOfStuffBar {
+pub enum AnyOfFooFooObjectOfBazLEtnUJ56OneOfStuffBar {
     Foo,
-    ObjectOfBazX101YId8,
+    ObjectOfBazLEtnUJ56,
     OneOfStuff,
     Bar
 }

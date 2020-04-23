@@ -1,50 +1,50 @@
-type Man interface{}
-type Bear interface{}
-type Pig interface{}
-type OneOfBearManPigRIVnq1Ij struct {
-	Man  *Man
-	Bear *Bear
-	Pig  *Pig
+type Ox interface{}
+type Horse interface{}
+type Donkey interface{}
+type OneOfDonkeyHorseOxP55NQZsj struct {
+	Ox     *Ox
+	Horse  *Horse
+	Donkey *Donkey
 }
 // UnmarshalJSON implements the json Unmarshaler interface.
 // This implementation DOES NOT assert that ONE AND ONLY ONE
 // of the simple properties is satisfied; it lazily uses the first one that is satisfied.
 // Ergo, it will not return an error if more than one property is valid.
-func (o *OneOfBearManPigRIVnq1Ij) UnmarshalJSON(bytes []byte) error {
+func (o *OneOfDonkeyHorseOxP55NQZsj) UnmarshalJSON(bytes []byte) error {
 
-	var myMan Man
-	if err := json.Unmarshal(bytes, &myMan); err == nil {
-		o.Man = &myMan
+	var myOx Ox
+	if err := json.Unmarshal(bytes, &myOx); err == nil {
+		o.Ox = &myOx
 		return nil
 	}
 
-	var myBear Bear
-	if err := json.Unmarshal(bytes, &myBear); err == nil {
-		o.Bear = &myBear
+	var myHorse Horse
+	if err := json.Unmarshal(bytes, &myHorse); err == nil {
+		o.Horse = &myHorse
 		return nil
 	}
 
-	var myPig Pig
-	if err := json.Unmarshal(bytes, &myPig); err == nil {
-		o.Pig = &myPig
+	var myDonkey Donkey
+	if err := json.Unmarshal(bytes, &myDonkey); err == nil {
+		o.Donkey = &myDonkey
 		return nil
 	}
 
 	return errors.New("failed to unmarshal one of the object properties")
 }
-func (o OneOfBearManPigRIVnq1Ij) MarshalJSON() ([]byte, error) {
+func (o OneOfDonkeyHorseOxP55NQZsj) MarshalJSON() ([]byte, error) {
 
-	if o.Man != nil {
-		return json.Marshal(o.Man)
+	if o.Ox != nil {
+		return json.Marshal(o.Ox)
 	}
-	if o.Bear != nil {
-		return json.Marshal(o.Bear)
+	if o.Horse != nil {
+		return json.Marshal(o.Horse)
 	}
-	if o.Pig != nil {
-		return json.Marshal(o.Pig)
+	if o.Donkey != nil {
+		return json.Marshal(o.Donkey)
 	}
 
 	return nil, errors.New("failed to marshal any one of the object properties")
 }
-// a bunch of pets
-type Pets []OneOfBearManPigRIVnq1Ij
+// an array of animals that are good at pulling things
+type PlowAnimals []OneOfDonkeyHorseOxP55NQZsj

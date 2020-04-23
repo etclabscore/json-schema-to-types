@@ -1,10 +1,10 @@
-export type Man = any;
-export type Bear = any;
-export type Pig = any;
-export type OneOfBearManPigRIVnq1Ij = Man | Bear | Pig;
+export type Ox = any;
+export type Horse = any;
+export type Donkey = any;
+export type OneOfDonkeyHorseOxP55NQZsj = Ox | Horse | Donkey;
 /**
  *
- * a bunch of pets
+ * an array of animals that are good at pulling things
  *
  */
-export type Pets = OneOfBearManPigRIVnq1Ij[];
+export type PlowAnimals = OneOfDonkeyHorseOxP55NQZsj[];

@@ -2,20 +2,20 @@ export type StringDoaGddGA = string;
 export type OneOfStringDoaGddGAStringDoaGddGABERs71N5 = StringDoaGddGA | StringDoaGddGA;
 /**
  *
- * a bunch of pets
+ * A way to describe color
  *
  */
-export type Pets = OneOfStringDoaGddGAStringDoaGddGABERs71N5[];
+export type RGBOrHex = OneOfStringDoaGddGAStringDoaGddGABERs71N5[];
 /**
  *
- * simplest test case
+ * Human word for color
  *
  */
-export type StringLxWtMXSJ = string;
-export type Man = any;
+export type StringDBm1TnLT = string;
+export type ColorAsAnything = any;
 /**
  *
  * Generated! Represents an alias to any of the provided schemas
  *
  */
-export type AnyOfPetsStringLxWtMXSJMan = Pets | StringLxWtMXSJ | Man;
+export type AnyOfRGBOrHexStringDBm1TnLTColorAsAnything = RGBOrHex | StringDBm1TnLT | ColorAsAnything;

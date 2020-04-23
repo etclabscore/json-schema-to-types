@@ -1,71 +1,71 @@
 {
-  "title": "BippyskippyBoppy",
+  "title": "kitchenSink",
   "type": "object",
   "properties": {
-    "bool": { "type": "boolean", "title": "skip" },
-    "int": {  "examples": [ 123, 456, 789 ], "description": "abc 123", "type": "integer", "title": "bip", "default": 123 },
-    "number": { "type": "number", "title": "bipper" },
-    "string": { "type": "string", "title": "bop" },
-    "stringEnum": { "type": "string", "title": "bopper", "enum": [ "asd", "bca" ] },
-    "numbericalEnum": { "type": "number", "title": "swicker", "enum": [ 123, 321 ] },
-    "integerEnum": { "type": "integer", "title": "slicker", "enum": [ 123, 321 ] },
-    "untypedArray": { "type": "array", "title": "splinter" },
+    "bool": { "type": "boolean", "title": "isMetal" },
+    "int": {  "examples": [ 123, 456, 789 ], "description": "Fill amounts", "type": "integer", "title": "fillAmount", "default": 123 },
+    "number": { "type": "number", "title": "numDrains" },
+    "string": { "type": "string", "title": "feelToTouch" },
+    "stringEnum": { "type": "string", "title": "orientation", "enum": [ "north", "south", "west", "east" ] },
+    "numbericalEnum": { "type": "number", "title": "userAvailability", "enum": [ 1, 2 ] },
+    "integerEnum": { "type": "integer", "title": "lightsNearby", "enum": [ 1, 2, 3 ] },
+    "untypedArray": { "type": "array", "title": "dishes" },
     "orderedArray": {
       "type": "array",
-      "title": "skibbidippy",
-      "items": [ { "type": "number", "title": "bop" }, { "type": "bool", "title": "skibb" } ]
+      "title": "accessories",
+      "items": [ { "type": "number", "title": "warranty" }, { "type": "bool", "title": "professionallyInstalled" } ]
     },
     "unorderedArray": {
       "type": "array",
-      "title": "skibbidippy",
-      "items": { "type": "number", "title": "bop" }
+      "title": "yearsInService",
+      "items": { "type": "number", "title": "serviceYear" }
     },
     "object": {
-      "required": ["fooberdoober"],
+      "required": ["water"],
       "type": "object",
-      "title": "floopdidoop",
+      "title": "washEquipment",
       "additionalProperties": false,
       "properties": {
-        "fooberdoober": { "type": "number", "title": "bop" },
-        "gibbledybits": { "type": "string", "title": "bopskippity" }
+        "water": { "type": "number", "title": "waterLiters" },
+        "soap": { "type": "string", "title": "soapBrand" }
       }
     },
     "allOf": {
-      "title": "justworkalready",
+      "title": "sinkResource",
       "allOf": [
         {
           "type": "object",
-          "title": "skiperydippery",
+          "title": "sinkUser",
           "additionalProperties": false,
           "properties": {
-            "fooberdoober": { "type": "number", "title": "bop" },
-            "gibbledybits": { "type": "string", "title": "bopskippity" }
+            "hands": { "type": "number", "title": "sinkUserNumHands" },
+            "name": { "type": "string", "title": "sinkUserName" }
           }
         },
         {
           "type": "object",
-          "title": "bonkiedonky",
+          "title": "sinkLocation",
           "additionalProperties": false,
           "properties": {
-            "shopper": { "type": "object", "title": "doppler" },
-            "badmirputin": { "type": "number", "title": "gorbelchov" }
+            "residenceStreet": { "type": "object", "title": "streetName" },
+            "residenceNumber": { "type": "number", "title": "streetNumber" }
           }
         }
       ]
     },
     "anyOf": {
-      "title": "skorpionuts",
+      "title": "sinkComplaints",
       "anyOf": [
-        { "type": "boolean", "title": "skip" },
-        { "type": "integer", "title": "zip" },
-        { "type": "null", "title": "nullgasm" }
+        { "type": "boolean", "title": "whining" },
+        { "type": "integer", "title": "burns" },
+        { "type": "null", "title": "feelingOfEmptiness" }
       ]
     },
     "oneOf": {
-      "title": "chikypoops",
+      "title": "measurementStandard",
       "anyOf": [
-        { "type": "boolean", "title": "skip" },
-        { "type": "integer", "title": "zip" }
+        { "type": "boolean", "title": "European" },
+        { "type": "integer", "title": "drainPipeInches" }
       ]
     }
 

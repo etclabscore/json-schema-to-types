@@ -5,17 +5,17 @@ from typing import NewType, Union
 
 OneOfStringDoaGddGAStringDoaGddGABERs71N5 = NewType("OneOfStringDoaGddGAStringDoaGddGABERs71N5", Union[StringDoaGddGA, StringDoaGddGA])
 from typing import List, NewType
-"""a bunch of pets
+"""A way to describe color
 """
-Pets = NewType("Pets", List[OneOfStringDoaGddGAStringDoaGddGABERs71N5])
+RGBOrHex = NewType("RGBOrHex", List[OneOfStringDoaGddGAStringDoaGddGABERs71N5])
 from typing import NewType
-"""simplest test case
+"""Human word for color
 """
-StringLxWtMXSJ = NewType("StringLxWtMXSJ", str)
+StringDBm1TnLT = NewType("StringDBm1TnLT", str)
 from typing import Any, NewType
 
-Man = NewType("Man", Any)
+ColorAsAnything = NewType("ColorAsAnything", Any)
 from typing import NewType, Union
 """Generated! Represents an alias to any of the provided schemas
 """
-AnyOfPetsStringLxWtMXSJMan = NewType("AnyOfPetsStringLxWtMXSJMan", Union[Pets, StringLxWtMXSJ, Man])
+AnyOfRGBOrHexStringDBm1TnLTColorAsAnything = NewType("AnyOfRGBOrHexStringDBm1TnLTColorAsAnything", Union[RGBOrHex, StringDBm1TnLT, ColorAsAnything])

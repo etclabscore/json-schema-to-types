@@ -1,89 +1,118 @@
 from typing import NewType
 
-Skip = NewType("Skip", bool)
+IsMetal = NewType("IsMetal", bool)
 from typing import NewType
-"""abc 123
+"""Fill amounts
 """
-Bip = NewType("Bip", int)
+FillAmount = NewType("FillAmount", int)
 from typing import NewType
 
-Bipper = NewType("Bipper", float)
+NumDrains = NewType("NumDrains", float)
 from typing import NewType
 
-Bop = NewType("Bop", float)
+FeelToTouch = NewType("FeelToTouch", str)
 from enum import Enum
 
-class Bopper(Enum):
-    ASD = 0
-    BCA = 1
+class Orientation(Enum):
+    NORTH = 0
+    SOUTH = 1
+    WEST = 2
+    EAST = 3
 from typing import NewType
 
-Swicker = NewType("Swicker", float)
+UserAvailability = NewType("UserAvailability", float)
 from typing import NewType
 
-Slicker = NewType("Slicker", int)
+LightsNearby = NewType("LightsNearby", int)
 from typing import List, Any, NewType
 
-Splinter = NewType("Splinter", List[Any])
+Dishes = NewType("Dishes", List[Any])
+from typing import NewType
+
+Warranty = NewType("Warranty", float)
 from typing import Any, NewType
 
-Skibb = NewType("Skibb", Any)
+ProfessionallyInstalled = NewType("ProfessionallyInstalled", Any)
+from typing import NewType, Tuple
+
+Accessories = NewType("Accessories", Tuple[Warranty, ProfessionallyInstalled])
+from typing import NewType
+
+ServiceYear = NewType("ServiceYear", float)
 from typing import List, NewType
 
-Skibbidippy = NewType("Skibbidippy", List[Bop])
+YearsInService = NewType("YearsInService", List[ServiceYear])
 from typing import NewType
 
-Bopskippity = NewType("Bopskippity", str)
+WaterLiters = NewType("WaterLiters", float)
+from typing import NewType
+
+SoapBrand = NewType("SoapBrand", str)
 from typing import TypedDict, Optional
 
-class Floopdidoop(TypedDict):
-    fooberdoober: Optional[Bop]
-    gibbledybits: Optional[Bopskippity]
+class WashEquipment(TypedDict):
+    water: Optional[WaterLiters]
+    soap: Optional[SoapBrand]
+from typing import NewType
+
+SinkUserNumHands = NewType("SinkUserNumHands", float)
+from typing import NewType
+
+SinkUserName = NewType("SinkUserName", str)
 from typing import TypedDict, Optional
 
-class Skiperydippery(TypedDict):
-    fooberdoober: Optional[Bop]
-    gibbledybits: Optional[Bopskippity]
+class SinkUser(TypedDict):
+    hands: Optional[SinkUserNumHands]
+    name: Optional[SinkUserName]
 from typing import NewType, Any, Mapping
 
-Doppler = NewType("Doppler", Mapping[Any, Any])
+StreetName = NewType("StreetName", Mapping[Any, Any])
 from typing import NewType
 
-Gorbelchov = NewType("Gorbelchov", float)
+StreetNumber = NewType("StreetNumber", float)
 from typing import TypedDict, Optional
 
-class Bonkiedonky(TypedDict):
-    shopper: Optional[Doppler]
-    badmirputin: Optional[Gorbelchov]
+class SinkLocation(TypedDict):
+    residenceStreet: Optional[StreetName]
+    residenceNumber: Optional[StreetNumber]
 from typing import NewType, Any, Mapping
 
-Justworkalready = NewType("Justworkalready", Mapping[Any, Any])
+SinkResource = NewType("SinkResource", Mapping[Any, Any])
 from typing import NewType
 
-Zip = NewType("Zip", int)
+Whining = NewType("Whining", bool)
 from typing import NewType
 
-Nullgasm = NewType("Nullgasm", None)
+Burns = NewType("Burns", int)
+from typing import NewType
+
+FeelingOfEmptiness = NewType("FeelingOfEmptiness", None)
 from typing import NewType, Union
 
-Skorpionuts = NewType("Skorpionuts", Union[Skip, Zip, Nullgasm])
+SinkComplaints = NewType("SinkComplaints", Union[Whining, Burns, FeelingOfEmptiness])
+from typing import NewType
+
+European = NewType("European", bool)
+from typing import NewType
+
+DrainPipeInches = NewType("DrainPipeInches", int)
 from typing import NewType, Union
 
-Chikypoops = NewType("Chikypoops", Union[Skip, Zip])
+MeasurementStandard = NewType("MeasurementStandard", Union[European, DrainPipeInches])
 from typing import TypedDict, Optional
 
-class BippyskippyBoppy(TypedDict):
-    bool: Optional[Skip]
-    int: Optional[Bip]
-    number: Optional[Bipper]
-    string: Optional[Bop]
-    stringEnum: Optional[Bopper]
-    numbericalEnum: Optional[Swicker]
-    integerEnum: Optional[Slicker]
-    untypedArray: Optional[Splinter]
-    orderedArray: Optional[Skibbidippy]
-    unorderedArray: Optional[Skibbidippy]
-    object: Optional[Floopdidoop]
-    allOf: Optional[Justworkalready]
-    anyOf: Optional[Skorpionuts]
-    oneOf: Optional[Chikypoops]
+class KitchenSink(TypedDict):
+    bool: Optional[IsMetal]
+    int: Optional[FillAmount]
+    number: Optional[NumDrains]
+    string: Optional[FeelToTouch]
+    stringEnum: Optional[Orientation]
+    numbericalEnum: Optional[UserAvailability]
+    integerEnum: Optional[LightsNearby]
+    untypedArray: Optional[Dishes]
+    orderedArray: Optional[Accessories]
+    unorderedArray: Optional[YearsInService]
+    object: Optional[WashEquipment]
+    allOf: Optional[SinkResource]
+    anyOf: Optional[SinkComplaints]
+    oneOf: Optional[MeasurementStandard]

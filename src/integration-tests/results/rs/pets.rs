@@ -2,17 +2,17 @@ use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 extern crate serde_json;
 
-pub type Man = serde_json::Value;
-pub type Bear = serde_json::Value;
-pub type Pig = serde_json::Value;
+pub type Ox = serde_json::Value;
+pub type Horse = serde_json::Value;
+pub type Donkey = serde_json::Value;
 #[derive(Serialize, Deserialize)]
-pub enum OneOfBearManPigRIVnq1Ij {
-    Man,
-    Bear,
-    Pig
+pub enum OneOfDonkeyHorseOxP55NQZsj {
+    Ox,
+    Horse,
+    Donkey
 }
-/// Pets
+/// PlowAnimals
 ///
-/// a bunch of pets
+/// an array of animals that are good at pulling things
 ///
-pub type Pets = Vec<OneOfBearManPigRIVnq1Ij>;
+pub type PlowAnimals = Vec<OneOfDonkeyHorseOxP55NQZsj>;

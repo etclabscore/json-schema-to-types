@@ -1,7 +1,7 @@
-export type Skip = boolean;
+export type IsMetal = boolean;
 /**
  *
- * abc 123
+ * Fill amounts
  *
  * @default 123
  *
@@ -15,49 +15,58 @@ export type Skip = boolean;
  * `789`
  *
  */
-export type Bip = number;
-export type Bipper = number;
-export type Bop = number;
-export type Bopper = "asd" | "bca";
-export type Swicker = 123 | 321;
-export type Slicker = 123 | 321;
-export type Splinter = any[];
-export type Skibb = any;
-export type Skibbidippy = Bop[];
-export type Bopskippity = string;
-export interface Floopdidoop {
-  fooberdoober: Bop;
-  gibbledybits?: Bopskippity;
+export type FillAmount = number;
+export type NumDrains = number;
+export type FeelToTouch = string;
+export type Orientation = "north" | "south" | "west" | "east";
+export type UserAvailability = 1 | 2;
+export type LightsNearby = 1 | 2 | 3;
+export type Dishes = any[];
+export type Warranty = number;
+export type ProfessionallyInstalled = any;
+export type Accessories = [Warranty, ProfessionallyInstalled];
+export type ServiceYear = number;
+export type YearsInService = ServiceYear[];
+export type WaterLiters = number;
+export type SoapBrand = string;
+export interface WashEquipment {
+  water: WaterLiters;
+  soap?: SoapBrand;
 }
-export interface Skiperydippery {
-  fooberdoober?: Bop;
-  gibbledybits?: Bopskippity;
+export type SinkUserNumHands = number;
+export type SinkUserName = string;
+export interface SinkUser {
+  hands?: SinkUserNumHands;
+  name?: SinkUserName;
 }
-export interface Doppler { [key: string]: any; }
-export type Gorbelchov = number;
-export interface Bonkiedonky {
-  shopper?: Doppler;
-  badmirputin?: Gorbelchov;
+export interface StreetName { [key: string]: any; }
+export type StreetNumber = number;
+export interface SinkLocation {
+  residenceStreet?: StreetName;
+  residenceNumber?: StreetNumber;
 }
-export type Justworkalready = Skiperydippery & Bonkiedonky;
-export type Zip = number;
-export type Nullgasm = null;
-export type Skorpionuts = Skip | Zip | Nullgasm;
-export type Chikypoops = Skip | Zip;
-export interface BippyskippyBoppy {
-  bool?: Skip;
-  int?: Bip;
-  number?: Bipper;
-  string?: Bop;
-  stringEnum?: Bopper;
-  numbericalEnum?: Swicker;
-  integerEnum?: Slicker;
-  untypedArray?: Splinter;
-  orderedArray?: Skibbidippy;
-  unorderedArray?: Skibbidippy;
-  object?: Floopdidoop;
-  allOf?: Justworkalready;
-  anyOf?: Skorpionuts;
-  oneOf?: Chikypoops;
+export type SinkResource = SinkUser & SinkLocation;
+export type Whining = boolean;
+export type Burns = number;
+export type FeelingOfEmptiness = null;
+export type SinkComplaints = Whining | Burns | FeelingOfEmptiness;
+export type European = boolean;
+export type DrainPipeInches = number;
+export type MeasurementStandard = European | DrainPipeInches;
+export interface KitchenSink {
+  bool?: IsMetal;
+  int?: FillAmount;
+  number?: NumDrains;
+  string?: FeelToTouch;
+  stringEnum?: Orientation;
+  numbericalEnum?: UserAvailability;
+  integerEnum?: LightsNearby;
+  untypedArray?: Dishes;
+  orderedArray?: Accessories;
+  unorderedArray?: YearsInService;
+  object?: WashEquipment;
+  allOf?: SinkResource;
+  anyOf?: SinkComplaints;
+  oneOf?: MeasurementStandard;
   [k: string]: any;
 }

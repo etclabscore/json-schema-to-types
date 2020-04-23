@@ -2,10 +2,10 @@ use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 extern crate serde_json;
 
-pub type Skip = bool;
-/// Bip
+pub type IsMetal = bool;
+/// FillAmount
 ///
-/// abc 123
+/// Fill amounts
 ///
 /// # Default
 ///
@@ -23,67 +23,80 @@ pub type Skip = bool;
 ///
 /// `789`
 ///
-pub type Bip = i64;
-pub type Bipper = f64;
-pub type Bop = f64;
+pub type FillAmount = i64;
+pub type NumDrains = f64;
+pub type FeelToTouch = String;
 #[derive(Serialize, Deserialize)]
-pub enum Bopper {
-    #[serde(rename = "asd")]
-    Asd,
-    #[serde(rename = "bca")]
-    Bca,
+pub enum Orientation {
+    #[serde(rename = "north")]
+    North,
+    #[serde(rename = "south")]
+    South,
+    #[serde(rename = "west")]
+    West,
+    #[serde(rename = "east")]
+    East,
 }
-pub type Swicker = f64;
-pub type Slicker = i64;
-pub type Splinter = Vec<serde_json::Value>;
-pub type Skibb = serde_json::Value;
-pub type Skibbidippy = Vec<Bop>;
-pub type Bopskippity = String;
+pub type UserAvailability = f64;
+pub type LightsNearby = i64;
+pub type Dishes = Vec<serde_json::Value>;
+pub type Warranty = f64;
+pub type ProfessionallyInstalled = serde_json::Value;
+pub type Accessories = (Warranty, ProfessionallyInstalled);
+pub type ServiceYear = f64;
+pub type YearsInService = Vec<ServiceYear>;
+pub type WaterLiters = f64;
+pub type SoapBrand = String;
 #[derive(Serialize, Deserialize)]
-pub struct Floopdidoop {
-    pub(crate) fooberdoober: Bop,
-    pub(crate) gibbledybits: Option<Bopskippity>,
+pub struct WashEquipment {
+    pub(crate) water: WaterLiters,
+    pub(crate) soap: Option<SoapBrand>,
+}
+pub type SinkUserNumHands = f64;
+pub type SinkUserName = String;
+#[derive(Serialize, Deserialize)]
+pub struct SinkUser {
+    pub(crate) hands: Option<SinkUserNumHands>,
+    pub(crate) name: Option<SinkUserName>,
+}
+pub type StreetName = HashMap<String, Option<serde_json::Value>>;
+pub type StreetNumber = f64;
+#[derive(Serialize, Deserialize)]
+pub struct SinkLocation {
+    pub(crate) residenceStreet: Option<StreetName>,
+    pub(crate) residenceNumber: Option<StreetNumber>,
+}
+pub type SinkResource = HashMap<String, Option<serde_json::Value>>;
+pub type Whining = bool;
+pub type Burns = i64;
+pub type FeelingOfEmptiness = serde_json::Value;
+#[derive(Serialize, Deserialize)]
+pub enum SinkComplaints {
+    Whining,
+    Burns,
+    FeelingOfEmptiness
+}
+pub type European = bool;
+pub type DrainPipeInches = i64;
+#[derive(Serialize, Deserialize)]
+pub enum MeasurementStandard {
+    European,
+    DrainPipeInches
 }
 #[derive(Serialize, Deserialize)]
-pub struct Skiperydippery {
-    pub(crate) fooberdoober: Option<Bop>,
-    pub(crate) gibbledybits: Option<Bopskippity>,
-}
-pub type Doppler = HashMap<String, Option<serde_json::Value>>;
-pub type Gorbelchov = f64;
-#[derive(Serialize, Deserialize)]
-pub struct Bonkiedonky {
-    pub(crate) shopper: Option<Doppler>,
-    pub(crate) badmirputin: Option<Gorbelchov>,
-}
-pub type Justworkalready = HashMap<String, Option<serde_json::Value>>;
-pub type Zip = i64;
-pub type Nullgasm = serde_json::Value;
-#[derive(Serialize, Deserialize)]
-pub enum Skorpionuts {
-    Skip,
-    Zip,
-    Nullgasm
-}
-#[derive(Serialize, Deserialize)]
-pub enum Chikypoops {
-    Skip,
-    Zip
-}
-#[derive(Serialize, Deserialize)]
-pub struct BippyskippyBoppy {
-    pub(crate) bool: Option<Skip>,
-    pub(crate) int: Option<Bip>,
-    pub(crate) number: Option<Bipper>,
-    pub(crate) string: Option<Bop>,
-    pub(crate) stringEnum: Option<Bopper>,
-    pub(crate) numbericalEnum: Option<Swicker>,
-    pub(crate) integerEnum: Option<Slicker>,
-    pub(crate) untypedArray: Option<Splinter>,
-    pub(crate) orderedArray: Option<Skibbidippy>,
-    pub(crate) unorderedArray: Option<Skibbidippy>,
-    pub(crate) object: Option<Floopdidoop>,
-    pub(crate) allOf: Option<Justworkalready>,
-    pub(crate) anyOf: Option<Skorpionuts>,
-    pub(crate) oneOf: Option<Chikypoops>,
+pub struct KitchenSink {
+    pub(crate) bool: Option<IsMetal>,
+    pub(crate) int: Option<FillAmount>,
+    pub(crate) number: Option<NumDrains>,
+    pub(crate) string: Option<FeelToTouch>,
+    pub(crate) stringEnum: Option<Orientation>,
+    pub(crate) numbericalEnum: Option<UserAvailability>,
+    pub(crate) integerEnum: Option<LightsNearby>,
+    pub(crate) untypedArray: Option<Dishes>,
+    pub(crate) orderedArray: Option<Accessories>,
+    pub(crate) unorderedArray: Option<YearsInService>,
+    pub(crate) object: Option<WashEquipment>,
+    pub(crate) allOf: Option<SinkResource>,
+    pub(crate) anyOf: Option<SinkComplaints>,
+    pub(crate) oneOf: Option<MeasurementStandard>,
 }

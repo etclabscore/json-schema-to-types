@@ -1,3 +1,3 @@
-type CircularRefs struct {
-	LeFoo *CircularRefs `json:"LeFoo,omitempty"`
+type MoebiusSchema struct {
+	MoebiusProperty *MoebiusSchema `json:"MoebiusProperty,omitempty"`
 }

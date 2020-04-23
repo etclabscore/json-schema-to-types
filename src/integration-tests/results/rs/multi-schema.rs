@@ -8,20 +8,20 @@ pub enum OneOfStringDoaGddGAStringDoaGddGABERs71N5 {
     StringDoaGddGA,
     StringDoaGddGA
 }
-/// Pets
+/// RGBOrHex
 ///
-/// a bunch of pets
+/// A way to describe color
 ///
-pub type Pets = Vec<OneOfStringDoaGddGAStringDoaGddGABERs71N5>;
-/// StringLxWtMXSJ
+pub type RGBOrHex = Vec<OneOfStringDoaGddGAStringDoaGddGABERs71N5>;
+/// StringDBm1TnLT
 ///
-/// simplest test case
+/// Human word for color
 ///
-pub type StringLxWtMXSJ = String;
-pub type Man = serde_json::Value;
+pub type StringDBm1TnLT = String;
+pub type ColorAsAnything = serde_json::Value;
 #[derive(Serialize, Deserialize)]
-pub enum AnyOfPetsStringLxWtMXSJMan {
-    Pets,
-    StringLxWtMXSJ,
-    Man
+pub enum AnyOfRGBOrHexStringDBm1TnLTColorAsAnything {
+    RGBOrHex,
+    StringDBm1TnLT,
+    ColorAsAnything
 }

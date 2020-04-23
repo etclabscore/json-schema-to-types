@@ -34,36 +34,36 @@ func (o OneOfStringDoaGddGAStringDoaGddGABERs71N5) MarshalJSON() ([]byte, error)
 
 	return nil, errors.New("failed to marshal any one of the object properties")
 }
-// a bunch of pets
-type Pets []OneOfStringDoaGddGAStringDoaGddGABERs71N5
-// simplest test case
-type StringLxWtMXSJ string
-type Man interface{}
+// A way to describe color
+type RGBOrHex []OneOfStringDoaGddGAStringDoaGddGABERs71N5
+// Human word for color
+type StringDBm1TnLT string
+type ColorAsAnything interface{}
 // Generated! Represents an alias to any of the provided schemas
-type AnyOfPetsStringLxWtMXSJMan struct {
-	Pets           *Pets
-	StringLxWtMXSJ *StringLxWtMXSJ
-	Man            *Man
+type AnyOfRGBOrHexStringDBm1TnLTColorAsAnything struct {
+	RGBOrHex        *RGBOrHex
+	StringDBm1TnLT  *StringDBm1TnLT
+	ColorAsAnything *ColorAsAnything
 }
-func (a *AnyOfPetsStringLxWtMXSJMan) UnmarshalJSON(bytes []byte) error {
+func (a *AnyOfRGBOrHexStringDBm1TnLTColorAsAnything) UnmarshalJSON(bytes []byte) error {
 	var ok bool
 
-	var myPets Pets
-	if err := json.Unmarshal(bytes, &myPets); err == nil {
+	var myRGBOrHex RGBOrHex
+	if err := json.Unmarshal(bytes, &myRGBOrHex); err == nil {
 		ok = true
-		a.Pets = &myPets
+		a.RGBOrHex = &myRGBOrHex
 	}
 
-	var myStringLxWtMXSJ StringLxWtMXSJ
-	if err := json.Unmarshal(bytes, &myStringLxWtMXSJ); err == nil {
+	var myStringDBm1TnLT StringDBm1TnLT
+	if err := json.Unmarshal(bytes, &myStringDBm1TnLT); err == nil {
 		ok = true
-		a.StringLxWtMXSJ = &myStringLxWtMXSJ
+		a.StringDBm1TnLT = &myStringDBm1TnLT
 	}
 
-	var myMan Man
-	if err := json.Unmarshal(bytes, &myMan); err == nil {
+	var myColorAsAnything ColorAsAnything
+	if err := json.Unmarshal(bytes, &myColorAsAnything); err == nil {
 		ok = true
-		a.Man = &myMan
+		a.ColorAsAnything = &myColorAsAnything
 	}
 
 	// Did unmarshal at least one of the simple objects.

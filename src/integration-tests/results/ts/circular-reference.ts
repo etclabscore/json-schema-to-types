@@ -1,4 +1,4 @@
-export interface CircularRefs {
-  LeFoo?: CircularRefs;
+export interface MoebiusSchema {
+  MoebiusProperty?: MoebiusSchema;
   [k: string]: any;
 }
