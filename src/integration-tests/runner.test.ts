@@ -16,15 +16,15 @@ interface TestCase {
 
 const [readDir, readFile] = [promisify(fs.readdir), promisify(fs.readFile)];
 
-const resultsDir = `${__dirname}/results`;
+const expectedsDir = `${__dirname}/expecteds`;
 const testCaseDir = `${__dirname}/test-cases`;
 
 const ensureAllHaveExpectedResult = async (names: string[], languages: string[]) => {
   const result = await Promise.all(languages.map(async (lang: string) => {
-    const resultsForLang = await readDir(`${resultsDir}/${lang}`);
-    const missingResultsForLang = resultsForLang.filter((r) => names.indexOf(r.replace(`.${lang}`, "")) === -1);
+    const expectedsForLang = await readDir(`${expectedsDir}/${lang}`);
+    const missingResultsForLang = expectedsForLang.filter((r) => names.indexOf(r.replace(`.${lang}`, "")) === -1);
     if (missingResultsForLang.length > 0) {
-      throw new Error(`missing test case results for language: ${missingResultsForLang}`);
+      throw new Error(`missing test case expecteds for language: ${missingResultsForLang}`);
     }
   }));
   if (result.length > 0) { return true; }
@@ -37,7 +37,7 @@ const getTestCases = async (names: string[], languages: string[]): Promise<TestC
       return Promise.all(names.map(async (name) => ({
         name,
         language,
-        expectedTypings: readFile(`${resultsDir}/${language}/${name}.${language}`, "utf8").then((s) => s.trim()),
+        expectedTypings: readFile(`${expectedsDir}/${language}/${name}.${language}`, "utf8").then((s) => s.trim()),
         schema: refParser.dereference(
           JSON.parse(await readFile(`${testCaseDir}/${name}.json`, "utf8")),
         ) as Promise<JSONSchema>,

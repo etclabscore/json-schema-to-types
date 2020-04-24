@@ -4,11 +4,11 @@ import { promisify } from "util";
 const [readDir] = [promisify(fs.readdir)];
 
 const cwd = `${process.cwd()}/src/integration-tests`;
-const resultsDir = `${cwd}/results`;
+const expectedsDir = `${cwd}/expecteds`;
 const testCaseDir = `${cwd}/test-cases`;
 
 export const getAvailableLanguages = (): Promise<any> => {
-  return readDir(resultsDir);
+  return readDir(expectedsDir);
 };
 
 export const getTestCasesNames = async (): Promise<string[]> => {
