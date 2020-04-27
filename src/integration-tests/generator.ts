@@ -35,7 +35,7 @@ inquirer.prompt([
   }
 
   const cwd = `${process.cwd()}/src/integration-tests`;
-  const rfname = `${cwd}/results`;
+  const rfname = `${cwd}/expecteds`;
   const tcfname = `${cwd}/test-cases/${schemaName}.json`;
 
   await writeFile(tcfname, schemaToWrite);
