@@ -151,18 +151,6 @@ ${components}
   }
 
   protected marshalAnyOfMacro(typeTitle: string, items: string[]): any {
-    /*
-    func (a AnyOfAny17L18NF5UnorderedSetOfAny17L18NF5VWcS9ROiRlIv9QVc) MarshalJSON() (bytes []byte, err error) {
-      var out []interface{}
-      if a.Any17L18NF5 != nil {
-        out = append(out, a.Any17L18NF5)
-      }
-      if a.UnorderedSetOfAny17L18NF5VWcS9ROi != nil {
-        out = append(out, a.UnorderedSetOfAny17L18NF5VWcS9ROi)
-      }
-      return json.Marshal(out)
-    }
-     */
    const components = items.map((itemTitle: string) => {
      return `
   if o.${itemTitle} != nil {
