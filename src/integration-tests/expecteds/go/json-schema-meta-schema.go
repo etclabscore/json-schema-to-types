@@ -40,6 +40,18 @@ func (a *AnyOfJSONSchemaSchemaArrayCotc6H6U) UnmarshalJSON(bytes []byte) error {
 	}
 	return errors.New("failed to unmarshal any of the object properties")
 }
+func(o AnyOfJSONSchemaSchemaArrayCotc6H6U) MarshalJSON() ([]byte, error) {
+  out := []interface{}
+  
+  if o.JSONSchema != nil {
+    out = append(out, o.JSONSchema)
+  }
+  if o.SchemaArray != nil {
+    out = append(out, o.SchemaArray)
+  }
+
+  return json.Marshal(out)
+}
 //
 // --- Default ---
 //
@@ -78,6 +90,18 @@ func (a *SchemaType) UnmarshalJSON(bytes []byte) error {
 		return nil
 	}
 	return errors.New("failed to unmarshal any of the object properties")
+}
+func(o SchemaType) MarshalJSON() ([]byte, error) {
+  out := []interface{}
+  
+  if o.Any17L18NF5 != nil {
+    out = append(out, o.Any17L18NF5)
+  }
+  if o.UnorderedSetOfAny17L18NF5VWcS9ROi != nil {
+    out = append(out, o.UnorderedSetOfAny17L18NF5VWcS9ROi)
+  }
+
+  return json.Marshal(out)
 }
 //
 // --- Default ---

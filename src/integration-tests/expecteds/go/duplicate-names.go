@@ -82,3 +82,21 @@ func (a *AnyOfFooFooObjectOfBazLEtnUJ56OneOfStuffBar) UnmarshalJSON(bytes []byte
 	}
 	return errors.New("failed to unmarshal any of the object properties")
 }
+func(o AnyOfFooFooObjectOfBazLEtnUJ56OneOfStuffBar) MarshalJSON() ([]byte, error) {
+  out := []interface{}
+  
+  if o.Foo != nil {
+    out = append(out, o.Foo)
+  }
+  if o.ObjectOfBazLEtnUJ56 != nil {
+    out = append(out, o.ObjectOfBazLEtnUJ56)
+  }
+  if o.OneOfStuff != nil {
+    out = append(out, o.OneOfStuff)
+  }
+  if o.Bar != nil {
+    out = append(out, o.Bar)
+  }
+
+  return json.Marshal(out)
+}

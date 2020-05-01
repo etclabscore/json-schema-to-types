@@ -72,3 +72,18 @@ func (a *AnyOfRGBOrHexStringDBm1TnLTColorAsAnything) UnmarshalJSON(bytes []byte)
 	}
 	return errors.New("failed to unmarshal any of the object properties")
 }
+func(o AnyOfRGBOrHexStringDBm1TnLTColorAsAnything) MarshalJSON() ([]byte, error) {
+  out := []interface{}
+  
+  if o.RGBOrHex != nil {
+    out = append(out, o.RGBOrHex)
+  }
+  if o.StringDBm1TnLT != nil {
+    out = append(out, o.StringDBm1TnLT)
+  }
+  if o.ColorAsAnything != nil {
+    out = append(out, o.ColorAsAnything)
+  }
+
+  return json.Marshal(out)
+}

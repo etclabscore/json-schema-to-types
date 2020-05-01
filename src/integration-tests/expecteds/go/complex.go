@@ -97,6 +97,21 @@ func (a *SinkComplaints) UnmarshalJSON(bytes []byte) error {
 	}
 	return errors.New("failed to unmarshal any of the object properties")
 }
+func(o SinkComplaints) MarshalJSON() ([]byte, error) {
+  out := []interface{}
+  
+  if o.Whining != nil {
+    out = append(out, o.Whining)
+  }
+  if o.Burns != nil {
+    out = append(out, o.Burns)
+  }
+  if o.FeelingOfEmptiness != nil {
+    out = append(out, o.FeelingOfEmptiness)
+  }
+
+  return json.Marshal(out)
+}
 type European bool
 type DrainPipeInches int64
 type MeasurementStandard struct {
@@ -123,6 +138,18 @@ func (a *MeasurementStandard) UnmarshalJSON(bytes []byte) error {
 		return nil
 	}
 	return errors.New("failed to unmarshal any of the object properties")
+}
+func(o MeasurementStandard) MarshalJSON() ([]byte, error) {
+  out := []interface{}
+  
+  if o.European != nil {
+    out = append(out, o.European)
+  }
+  if o.DrainPipeInches != nil {
+    out = append(out, o.DrainPipeInches)
+  }
+
+  return json.Marshal(out)
 }
 type KitchenSink struct {
 	Bool           *IsMetal             `json:"bool,omitempty"`
