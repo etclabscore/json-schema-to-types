@@ -1,3 +1,17 @@
+# [1.12.0](https://github.com/etclabscore/json-schema-to-types/compare/1.11.2...1.12.0) (2020-06-25)
+
+
+### Bug Fixes
+
+* **go:** anyof marshaling DOES need a MarshalJSON method ([2d0d5cf](https://github.com/etclabscore/json-schema-to-types/commit/2d0d5cfb54c7e383ad2ae909cdbe1c036dcdc11f))
+* **go:** remove reference expectation comment ([e8c56e5](https://github.com/etclabscore/json-schema-to-types/commit/e8c56e512d4ce6ef61f446c518bb9e64c6c782b7))
+* **integration-tests:** readable fake-object field names ([1ba720b](https://github.com/etclabscore/json-schema-to-types/commit/1ba720b26312411337b89f96a7f37c0afec6cbd0)), closes [#2](https://github.com/etclabscore/json-schema-to-types/issues/2) [#3](https://github.com/etclabscore/json-schema-to-types/issues/3) [#4](https://github.com/etclabscore/json-schema-to-types/issues/4) [#5](https://github.com/etclabscore/json-schema-to-types/issues/5) [#6](https://github.com/etclabscore/json-schema-to-types/issues/6) [#2](https://github.com/etclabscore/json-schema-to-types/issues/2)
+
+
+### Features
+
+* rename integration test target path ([a831dd9](https://github.com/etclabscore/json-schema-to-types/commit/a831dd944862a11fc254cf6d47ee4f4d9bc47b1f))
+
 ## [1.11.2](https://github.com/etclabscore/json-schema-to-types/compare/1.11.1...1.11.2) (2020-04-23)
 
 
